@@ -1,0 +1,33 @@
+[sqlfluff]
+
+# Supported dialects https://docs.sqlfluff.com/en/stable/dialects.html
+# Or run 'sqlfluff dialects'
+dialect = tsql
+ignore=parsing
+
+# Comma separated list of rules to exclude, or None
+# See https://docs.sqlfluff.com/en/stable/configuration.html#enabling-and-disabling-rules
+# AM04 (ambiguous.column_count) and ST06 (structure.column_order) are
+# two of the more controversial rules included to illustrate usage.
+exclude_rules = LT01,LT02,LT03,LT04,LT05,LT09,LT12,CV01,CP01,CP02,CP03,CP05,RF06,AM04,CV11,AL01,LT06,ST06,RF05,ST09,LT08,RF03 
+
+# One of [raw|jinja|python|placeholder]
+templater = placeholder
+
+[sqlfluff:templater:placeholder]
+param_style = dollar
+flyway:defaultSchema = sch
+flyway:database = db
+database_name = db
+environment_name=build
+alter_database_compatibility=140
+alter_database_scoped_config_legacy_cardinality_estimation=OFF
+alter_database_scoped_config_query_optimizer_hotfixes=OFF
+alter_database_scoped_config_parameter_sniffing=ON
+alter_database_scoped_config_maxdop=0
+alter_database_recovery=SIMPLE
+alter_database_data_path=/var/opt/mssql/data/
+alter_database_data_size_small=1MB
+alter_database_data_growth_small=1MB
+alter_database_data_size_medium=1MB
+alter_database_data_growth_medium=1MB

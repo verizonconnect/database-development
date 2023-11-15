@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+    tsqlt:
+        image: flyway/flyway:10-alpine
+        command: migrate
+        environment:
+          - FLYWAY_URL=jdbc:sqlserver://test_container:1433;DatabaseName=sample_mssql;trustServerCertificate=true;
+          - FLYWAY_USER=SA
+          - FLYWAY_PASSWORD=Flyway1234#
+          - FLYWAY_DEFAULT_SCHEMA=flyway_test
+          - FLYWAY_SQL_MIGRATION_PREFIX=v
+          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=r
+        volumes:
+          - ./test/:/flyway/sql
+        depends_on:
+            flyway:
+                condition: "service_completed_successfully"
+    flyway:
+        image: flyway/flyway:10-alpine
+        command: migrate
+        environment:
+          - FLYWAY_URL=jdbc:sqlserver://test_container:1433;DatabaseName=sample_mssql;trustServerCertificate=true;
+          - FLYWAY_USER=SA
+          - FLYWAY_PASSWORD=Flyway1234#
+          - FLYWAY_DEFAULT_SCHEMA=flyway
+          - FLYWAY_SQL_MIGRATION_PREFIX=v
+          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=r
+          - FLYWAY_MIXED=true
+          - FLYWAY_PLACEHOLDERS_database_name=sample_mssql
+          - FLYWAY_PLACEHOLDERS_environment_name=build
+          - FLYWAY_PLACEHOLDERS_alter_database_compatibility=140
+          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_legacy_cardinality_estimation=OFF
+          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_query_optimizer_hotfixes=OFF
+          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_parameter_sniffing=ON
+          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_maxdop=0
+          - FLYWAY_PLACEHOLDERS_alter_database_recovery=SIMPLE
+          - FLYWAY_PLACEHOLDERS_alter_database_data_path=/var/opt/mssql/data/
+          - FLYWAY_PLACEHOLDERS_alter_database_data_size_small=1MB
+          - FLYWAY_PLACEHOLDERS_alter_database_data_growth_small=1MB
+          - FLYWAY_PLACEHOLDERS_alter_database_data_size_medium=1MB
+          - FLYWAY_PLACEHOLDERS_alter_database_data_growth_medium=1MB
+        volumes:
+          - ./src/:/flyway/sql
+        healthcheck:
+          test: ["CMD", "validate || exit 1"]
+          interval: 5s
+          retries: 10
+          start_period: 5s
+          timeout: 3s
+        depends_on:
+            sqlserver:
+                condition: service_healthy
+    sqlserver:
+        build: ../../docker-buildfiles/mssql
+        container_name: test_container
+        environment:
+          - ACCEPT_EULA=Y
+          - SA_PASSWORD=Flyway1234#
+        ports:
+          - 14330:1433
+        restart: always
+        healthcheck:
+          test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Flyway1234# -Q 'SELECT 1' || exit 1"]
+          interval: 5s
+          retries: 10
+          start_period: 5s
+          timeout: 3s
+    sqlserver.configurator:
+        build: ../../docker-buildfiles/mssql
+        volumes:
+          - ./init:/docker-entrypoint-initdb.d
+        depends_on:
+            sqlserver:
+                condition: service_healthy
+        command: >
+          bash -c '/opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P Flyway1234# -d master -i docker-entrypoint-initdb.d/create-database.sql; echo "All done!";'
+    sqlserver.coverage:
+        build: ../../docker-buildfiles/mssql
+        volumes:
+          - ./coverage:/opt/coverage
+        depends_on:
+            tsqlt:
+                condition: "service_completed_successfully"
+        command: dotnet /opt/sqlcover/SQLServerCoverageCore.dll -c Get-CoverTSql -d sample_mssql -t 1440 -q "EXEC tsqlt.RunAll;" -e Export-Html -o "/opt/coverage" -k "Server=test_container;User Id=SA;Password=Flyway1234#;"
+
