@@ -1,0 +1,3 @@
+[ignore]
+/14_constraint_foreign_key/r__14.00_privacy_framework.fk_dml_hierarchy_configuration__dml_retention_configuration_child.sql
+/14_constraint_foreign_key/r__14.00_privacy_framework.fk_dml_hierarchy_configuration__dml_retention_configuration_parent.sql
