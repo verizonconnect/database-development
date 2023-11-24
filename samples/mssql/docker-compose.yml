@@ -8,12 +8,12 @@ services:
           - ACCEPT_EULA=Y
           - SA_PASSWORD=${password}
         ports:
-          - 14330:1433
+          - ${host_port}:1433
         restart: always
         healthcheck:
           test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U ${user} -P ${password} -Q 'SELECT 1' || exit 1"]
           interval: 5s
-          retries: 10
+          retries: 5
           start_period: 5s
           timeout: 3s
     sqlserver.configurator:
@@ -42,23 +42,22 @@ services:
           - FLYWAY_URL=jdbc:sqlserver://${container_name}:1433;DatabaseName=${database_name};trustServerCertificate=true;
           - FLYWAY_USER=${user}
           - FLYWAY_PASSWORD=${password}
-          - FLYWAY_DEFAULT_SCHEMA=flyway
-          - FLYWAY_SQL_MIGRATION_PREFIX=v
-          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=r
-          - FLYWAY_MIXED=true
-          - FLYWAY_PLACEHOLDERS_database_name=${database_name}
-          - FLYWAY_PLACEHOLDERS_environment_name=build
-          - FLYWAY_PLACEHOLDERS_alter_database_compatibility=140
-          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_legacy_cardinality_estimation=OFF
-          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_query_optimizer_hotfixes=OFF
-          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_parameter_sniffing=ON
-          - FLYWAY_PLACEHOLDERS_alter_database_scoped_config_maxdop=0
-          - FLYWAY_PLACEHOLDERS_alter_database_recovery=SIMPLE
-          - FLYWAY_PLACEHOLDERS_alter_database_data_path=/var/opt/mssql/data/
-          - FLYWAY_PLACEHOLDERS_alter_database_data_size_small=1MB
-          - FLYWAY_PLACEHOLDERS_alter_database_data_growth_small=1MB
-          - FLYWAY_PLACEHOLDERS_alter_database_data_size_medium=1MB
-          - FLYWAY_PLACEHOLDERS_alter_database_data_growth_medium=1MB
+          - FLYWAY_DEFAULT_SCHEMA=${default_schema}
+          - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
+          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
+          - FLYWAY_MIXED=${mixed}
+          - FLYWAY_PLACEHOLDERS_environment_name=${environment_name}
+          - FLYWAY_PLACEHOLDERS_database_compatibility=${database_compatibility}
+          - FLYWAY_PLACEHOLDERS_database_scoped_config_legacy_cardinality_estimation=${database_scoped_config_legacy_cardinality_estimation}
+          - FLYWAY_PLACEHOLDERS_database_scoped_config_query_optimizer_hotfixes=${database_scoped_config_query_optimizer_hotfixes}
+          - FLYWAY_PLACEHOLDERS_database_scoped_config_parameter_sniffing=${database_scoped_config_parameter_sniffing}
+          - FLYWAY_PLACEHOLDERS_database_scoped_config_maxdop=${database_scoped_config_maxdop}
+          - FLYWAY_PLACEHOLDERS_database_recovery=${database_recovery}
+          - FLYWAY_PLACEHOLDERS_database_data_path=${database_data_path}
+          - FLYWAY_PLACEHOLDERS_database_data_size=${database_data_size}
+          - FLYWAY_PLACEHOLDERS_database_data_growth=${database_data_growth}
+          - FLYWAY_PLACEHOLDERS_database_data_size=${database_data_size}
+          - FLYWAY_PLACEHOLDERS_database_data_growth=${database_data_growth}
         volumes:
           - ./src/:/flyway/sql
         depends_on:
@@ -71,9 +70,9 @@ services:
           - FLYWAY_URL=jdbc:sqlserver://${container_name}:1433;DatabaseName=${database_name};trustServerCertificate=true;
           - FLYWAY_USER=${user}
           - FLYWAY_PASSWORD=${password}
-          - FLYWAY_DEFAULT_SCHEMA=flyway_test
-          - FLYWAY_SQL_MIGRATION_PREFIX=v
-          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=r
+          - FLYWAY_DEFAULT_SCHEMA=build_test
+          - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
+          - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
         volumes:
           - ./test/:/flyway/sql
         depends_on:
@@ -86,5 +85,5 @@ services:
         depends_on:
             unit_test:
                 condition: "service_completed_successfully"
-        command: dotnet /opt/sqlcover/SQLServerCoverageCore.dll -c Get-CoverTSql -d ${database_name} -t 1440 -q "EXEC tsqlt.RunAll;" -e Export-Html -o "/opt/coverage" -k "Server=${container_name};User Id=${user};Password=${password};"
+        command: dotnet /opt/sqlcover/SQLServerCoverageCore.dll -c Get-CoverTSql -d ${database_name} -t ${coverage_timeout} -q "${coverage_command}" -e Export-Html -o "/opt/coverage" -k "Server=${container_name};User Id=${user};Password=${password};"
 

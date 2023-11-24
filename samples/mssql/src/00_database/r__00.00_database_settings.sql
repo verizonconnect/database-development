@@ -1,0 +1,76 @@
+﻿ALTER DATABASE [${flyway:database}] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [${flyway:database}].[common].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [${flyway:database}] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET ANSI_NULLS ON 
+GO
+ALTER DATABASE [${flyway:database}] SET ANSI_PADDING ON 
+GO
+ALTER DATABASE [${flyway:database}] SET ANSI_WARNINGS ON 
+GO
+ALTER DATABASE [${flyway:database}] SET ARITHABORT ON 
+GO
+ALTER DATABASE [${flyway:database}] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [${flyway:database}] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [${flyway:database}] SET CONCAT_NULL_YIELDS_NULL ON 
+GO
+ALTER DATABASE [${flyway:database}] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET QUOTED_IDENTIFIER ON 
+GO
+ALTER DATABASE [${flyway:database}] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET DISABLE_BROKER 
+GO
+ALTER DATABASE [${flyway:database}] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [${flyway:database}] SET READ_COMMITTED_SNAPSHOT ON 
+GO
+ALTER DATABASE [${flyway:database}] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [${flyway:database}] SET MULTI_USER 
+GO
+ALTER DATABASE [${flyway:database}] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [${flyway:database}] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [${flyway:database}] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [${flyway:database}] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+ALTER DATABASE [${flyway:database}] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [${flyway:database}] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'${flyway:database}', N'ON'
+GO
+ALTER DATABASE [${flyway:database}] SET QUERY_STORE = OFF
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , NULL,NULL, NULL,NULL, NULL,NULL))
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Sample OLTP Database' 
+GO
+ALTER DATABASE [${flyway:database}] SET READ_WRITE 
+GO
