@@ -56,8 +56,6 @@ services:
           - FLYWAY_PLACEHOLDERS_database_data_path=${database_data_path}
           - FLYWAY_PLACEHOLDERS_database_data_size=${database_data_size}
           - FLYWAY_PLACEHOLDERS_database_data_growth=${database_data_growth}
-          - FLYWAY_PLACEHOLDERS_database_data_size=${database_data_size}
-          - FLYWAY_PLACEHOLDERS_database_data_growth=${database_data_growth}
         volumes:
           - ./src/:/flyway/sql
         depends_on:
