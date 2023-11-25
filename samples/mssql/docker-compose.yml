@@ -2,7 +2,7 @@ version: '3'
 
 services:
     sqlserver:
-        build: ../../docker-buildfiles/mssql
+        build: ${image}
         container_name: ${container_name}
         environment:
           - ACCEPT_EULA=Y
@@ -17,7 +17,7 @@ services:
           start_period: 5s
           timeout: 3s
     sqlserver.configurator:
-        build: ../../docker-buildfiles/mssql
+        build: ${image}
         volumes:
           - ./init:/docker-entrypoint-initdb.d
         depends_on:
@@ -27,7 +27,7 @@ services:
           bash -c '/opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d master -i docker-entrypoint-initdb.d/create-database.sql; 
           echo "All done!";'
     lint:
-        image: sqlfluff/sqlfluff:2.3.5
+        image: ${sqlfluff_image}
         command: lint --write-output /lint/sqlfluff.output
         volumes:
           - ./src/:/sql
@@ -36,7 +36,7 @@ services:
             sqlserver:
                 condition: service_healthy
     flyway:
-        image: flyway/flyway:10
+        image: ${flyway_image}
         command: migrate
         environment:
           - FLYWAY_URL=jdbc:sqlserver://${container_name}:1433;DatabaseName=${database_name};trustServerCertificate=true;
@@ -62,7 +62,7 @@ services:
             lint:
                 condition: "service_completed_successfully"
     unit_test:
-        image: flyway/flyway:10
+        image: ${flyway_image}
         command: migrate
         environment:
           - FLYWAY_URL=jdbc:sqlserver://${container_name}:1433;DatabaseName=${database_name};trustServerCertificate=true;
@@ -77,11 +77,18 @@ services:
             flyway:
                 condition: "service_completed_successfully"
     sqlserver.coverage:
-        build: ../../docker-buildfiles/mssql
+        build: ${image}
         volumes:
           - ./coverage:/opt/coverage
         depends_on:
             unit_test:
                 condition: "service_completed_successfully"
         command: dotnet /opt/sqlcover/SQLServerCoverageCore.dll -c Get-CoverTSql -d ${database_name} -t ${coverage_timeout} -q "${coverage_command}" -e Export-Html -o "/opt/coverage" -k "Server=${container_name};User Id=${user};Password=${password};"
+    # Example post deployment processing
+    #sqlserver.test_results:
+    #    build: ${image}
+    #    depends_on:
+    #        sqlserver.coverage:
+    #            condition: "service_completed_successfully"
+    #    command: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d ${database_name} -Q "SELECT SUM(CASE WHEN Result = 'Success' THEN 1 ELSE 0 END) AS Success, SUM(CASE WHEN Result = 'Failure' THEN 1 ELSE 0 END) AS Failure, SUM(CASE WHEN Result = 'Error' THEN 1 ELSE 0 END) AS Error FROM tSQLt.TestResult;"
 
