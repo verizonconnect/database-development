@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[scrap_reason]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [AK_scrap_reason_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[scrap_reason]') AND name = N'AK_scrap_reason_name')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_scrap_reason_name] ON [production].[scrap_reason]
 (

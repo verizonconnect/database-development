@@ -6,11 +6,11 @@ BEGIN
     CREATE TABLE [person].[person_tsqlt](
         [business_entity_id] int NOT NULL
        ,[person_type] nchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-       ,[name_style] name_style NOT NULL
+       ,[name_style] [common].[name_style] NOT NULL
        ,[title] nvarchar(8) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
-       ,[first_name] name NOT NULL
-       ,[middle_name] name NULL
-       ,[last_name] name NOT NULL
+       ,[first_name] [common].[name] NOT NULL
+       ,[middle_name] [common].[name] NULL
+       ,[last_name] [common].[name] NOT NULL
        ,[suffix] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
        ,[email_promotion] int NOT NULL
        ,[additional_contact_info] xml NULL

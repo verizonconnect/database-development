@@ -1,4 +1,4 @@
-﻿/****** Object:  View [sales].[store_with_addresses]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

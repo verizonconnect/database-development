@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [person].[person_phone]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -15,7 +15,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_person_phone_phone_number]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[person_phone]') AND name = N'IX_person_phone_phone_number')
 CREATE NONCLUSTERED INDEX [IX_person_phone_phone_number] ON [person].[person_phone]
 (

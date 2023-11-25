@@ -12,7 +12,7 @@ CREATE TABLE [human_resources].[job_candidate](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
-/****** Object:  Index [IX_job_candidate_business_entity_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[human_resources].[job_candidate]') AND name = N'IX_job_candidate_business_entity_id')
 CREATE NONCLUSTERED INDEX [IX_job_candidate_business_entity_id] ON [human_resources].[job_candidate]
 (

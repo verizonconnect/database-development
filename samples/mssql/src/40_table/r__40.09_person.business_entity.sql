@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [person].[business_entity]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -12,7 +12,7 @@ CREATE TABLE [person].[business_entity](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_business_entity_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[business_entity]') AND name = N'AK_business_entity_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_business_entity_rowguid] ON [person].[business_entity]
 (

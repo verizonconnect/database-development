@@ -30,7 +30,7 @@ SET ANSI_PADDING ON
 SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 GO
-/****** Object:  Index [AK_document_document_level_document_node]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[document]') AND name = N'AK_document_document_level_document_node')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_document_document_level_document_node] ON [production].[document]
 (
@@ -38,7 +38,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [AK_document_document_level_document_node] ON [
     [document_node] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [AK_document_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[document]') AND name = N'AK_document_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_document_rowguid] ON [production].[document]
 (
@@ -47,7 +47,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [AK_document_rowguid] ON [production].[document
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_document_file_name_revision]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[document]') AND name = N'IX_document_file_name_revision')
 CREATE NONCLUSTERED INDEX [IX_document_file_name_revision] ON [production].[document]
 (

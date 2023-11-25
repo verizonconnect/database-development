@@ -1,4 +1,4 @@
-﻿ALTER DATABASE [${flyway:database}] SET COMPATIBILITY_LEVEL = 150
+﻿ALTER DATABASE [${flyway:database}] SET COMPATIBILITY_LEVEL = ${database_compatibility}
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin

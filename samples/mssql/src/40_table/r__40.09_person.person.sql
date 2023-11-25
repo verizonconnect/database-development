@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [person].[person]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -22,7 +22,7 @@ CREATE TABLE [person].[person](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_person_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[person]') AND name = N'AK_person_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_person_rowguid] ON [person].[person]
 (
@@ -31,7 +31,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [AK_person_rowguid] ON [person].[person]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_person_last_name_first_name_middle_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[person]') AND name = N'IX_person_last_name_first_name_middle_name')
 CREATE NONCLUSTERED INDEX [IX_person_last_name_first_name_middle_name] ON [person].[person]
 (

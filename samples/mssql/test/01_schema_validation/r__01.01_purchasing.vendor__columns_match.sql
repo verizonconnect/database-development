@@ -5,11 +5,11 @@ BEGIN
  
     CREATE TABLE [purchasing].[vendor_tsqlt](
         [business_entity_id] int NOT NULL
-       ,[account_number] account_number NOT NULL
+       ,[account_number] [common].[account_number] NOT NULL
        ,[name] [common].[name] NOT NULL
        ,[credit_rating] tinyint NOT NULL
-       ,[preferred_vendor_status] flag NOT NULL
-       ,[active_flag] flag NOT NULL
+       ,[preferred_vendor_status] [common].[flag] NOT NULL
+       ,[active_flag] [common].[flag] NOT NULL
        ,[purchasing_web_service_url] nvarchar(1024) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
        ,[modified_date] datetime NOT NULL 
     );

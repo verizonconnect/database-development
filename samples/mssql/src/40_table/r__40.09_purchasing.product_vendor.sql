@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [purchasing].[product_vendor]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +20,7 @@ CREATE TABLE [purchasing].[product_vendor](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [IX_product_vendor_business_entity_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[product_vendor]') AND name = N'IX_product_vendor_business_entity_id')
 CREATE NONCLUSTERED INDEX [IX_product_vendor_business_entity_id] ON [purchasing].[product_vendor]
 (
@@ -29,7 +29,7 @@ CREATE NONCLUSTERED INDEX [IX_product_vendor_business_entity_id] ON [purchasing]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_product_vendor_unit_measure_code]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[product_vendor]') AND name = N'IX_product_vendor_unit_measure_code')
 CREATE NONCLUSTERED INDEX [IX_product_vendor_unit_measure_code] ON [purchasing].[product_vendor]
 (

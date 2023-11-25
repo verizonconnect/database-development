@@ -1,15 +1,8 @@
-
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[common].[uspGetWhereUsedproduct_id]') AND type in (N'P', N'PC'))
-BEGIN
-EXEC sys.sp_executesql @statement = N'CREATE PROCEDURE [common].[uspGetWhereUsedproduct_id] AS' 
-END
-GO
-
-ALTER PROCEDURE [common].[uspGetWhereUsedproduct_id]
+CREATE OR ALTER PROCEDURE [common].[get_where_used__product_id]
     @Startproduct_id [int],
     @CheckDate [datetime]
 AS
@@ -44,12 +37,12 @@ BEGIN
     OPTION (MAXRECURSION 25) 
 END;
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'uspGetWhereUsedproduct_id', NULL,NULL))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'stored procedure using a recursive query to return all components or assemblies that directly or indirectly use the specified product_id.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'uspGetWhereUsedproduct_id'
+IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'get_where_used__product_id', NULL,NULL))
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'stored procedure using a recursive query to return all components or assemblies that directly or indirectly use the specified product_id.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'get_where_used__product_id'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'uspGetWhereUsedproduct_id', N'PARAMETER',N'@Startproduct_id'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Input parameter for the stored procedure uspGetWhereUsedproduct_id. Enter a valid product_id from the production.product table.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'uspGetWhereUsedproduct_id', @level2type=N'PARAMETER',@level2name=N'@Startproduct_id'
+IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'get_where_used__product_id', N'PARAMETER',N'@Startproduct_id'))
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Input parameter for the stored procedure get_where_used__product_id. Enter a valid product_id from the production.product table.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'get_where_used__product_id', @level2type=N'PARAMETER',@level2name=N'@Startproduct_id'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'uspGetWhereUsedproduct_id', N'PARAMETER',N'@CheckDate'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Input parameter for the stored procedure uspGetWhereUsedproduct_id used to eliminate components not used after that date. Enter a valid date.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'uspGetWhereUsedproduct_id', @level2type=N'PARAMETER',@level2name=N'@CheckDate'
+IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'common', N'PROCEDURE',N'get_where_used__product_id', N'PARAMETER',N'@CheckDate'))
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Input parameter for the stored procedure get_where_used__product_id used to eliminate components not used after that date. Enter a valid date.' , @level0type=N'SCHEMA',@level0name=N'common', @level1type=N'PROCEDURE',@level1name=N'get_where_used__product_id', @level2type=N'PARAMETER',@level2name=N'@CheckDate'
 GO

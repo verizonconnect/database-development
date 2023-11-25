@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[product_review]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -19,7 +19,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_product_review_product_id_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[product_review]') AND name = N'IX_product_review_product_id_name')
 CREATE NONCLUSTERED INDEX [IX_product_review_product_id_name] ON [production].[product_review]
 (

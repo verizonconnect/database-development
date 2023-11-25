@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [person].[business_entity_address]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,21 +14,21 @@ CREATE TABLE [person].[business_entity_address](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_business_entity_address_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[business_entity_address]') AND name = N'AK_business_entity_address_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_business_entity_address_rowguid] ON [person].[business_entity_address]
 (
     [rowguid] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_business_entity_address_address_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[business_entity_address]') AND name = N'IX_business_entity_address_address_id')
 CREATE NONCLUSTERED INDEX [IX_business_entity_address_address_id] ON [person].[business_entity_address]
 (
     [address_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_business_entity_address_address_type_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[business_entity_address]') AND name = N'IX_business_entity_address_address_type_id')
 CREATE NONCLUSTERED INDEX [IX_business_entity_address_address_type_id] ON [person].[business_entity_address]
 (

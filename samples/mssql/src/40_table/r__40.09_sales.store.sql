@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [sales].[store]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -15,14 +15,14 @@ CREATE TABLE [sales].[store](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_store_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[store]') AND name = N'AK_store_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_store_rowguid] ON [sales].[store]
 (
     [rowguid] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_store_sales_person_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[store]') AND name = N'IX_store_sales_person_id')
 CREATE NONCLUSTERED INDEX [IX_store_sales_person_id] ON [sales].[store]
 (

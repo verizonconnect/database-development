@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[unit_measure]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [AK_unit_measure_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[unit_measure]') AND name = N'AK_unit_measure_name')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_unit_measure_name] ON [production].[unit_measure]
 (

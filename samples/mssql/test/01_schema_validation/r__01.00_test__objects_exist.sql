@@ -423,7 +423,7 @@ BEGIN
     ,('SQL_STORED_PROCEDURE','common','add_log__error')
     ,('SQL_STORED_PROCEDURE','common','get_manager__per_employee')
     ,('SQL_STORED_PROCEDURE','common','print_error')
-    ,('SQL_STORED_PROCEDURE','common','get_where_used_product_id')
+    ,('SQL_STORED_PROCEDURE','common','get_where_used__product_id')
     ,('SQL_STORED_PROCEDURE','human_resources','set_employee__hire_info')
     ,('SQL_STORED_PROCEDURE','human_resources','set_employee__login')
     ,('SQL_STORED_PROCEDURE','human_resources','set_employee__personal_info')
@@ -437,7 +437,7 @@ BEGIN
     ,('SQL_TRIGGER','purchasing','i_purchase_order_detail')
     ,('SQL_TRIGGER','purchasing','u_purchase_order_detail')
     ,('SQL_TRIGGER','purchasing','u_purchase_order_header')
-    ,('SQL_TRIGGER','sales','i_dusales_order_detail')
+    ,('SQL_TRIGGER','sales','idu_sales_order_detail')
     ,('SQL_TRIGGER','sales','u_sales_order_header')
     ,('USER_TABLE','common','database_log')
     ,('USER_TABLE','common','error_log')
@@ -542,7 +542,9 @@ BEGIN
     INSERT INTO @exclude_schema (
         schema_id
     ) VALUES (ISNULL(SCHEMA_ID('tsqlt'), -1))
-            ,(ISNULL(SCHEMA_ID('sys'), -1));
+            ,(ISNULL(SCHEMA_ID('sys'), -1))
+            ,(ISNULL(SCHEMA_ID('flyway'), -1))
+            ,(ISNULL(SCHEMA_ID('build_test'), -1));
 
     INSERT INTO #actual(
         obj_type
@@ -556,8 +558,7 @@ BEGIN
     WHERE   1 = 1
             AND NOT EXISTS (SELECT 1 FROM @exclude_schema AS e
                             WHERE   e.schema_id = o.schema_id)
-            AND SCHEMA_NAME(o.schema_id) NOT LIKE 'test_%' -- exclude tsqlt
-            AND o.name <> 'flyway_schema_history' -- exclude flyway_schema_history
+            AND SCHEMA_NAME(o.schema_id) NOT LIKE 'test_%' -- exclude tsqlt test cases
             AND o.type_desc IN ('CLR_STORED_PROCEDURE'
                                ,'VIEW'
                                ,'SQL_TABLE_VALUED_FUNCTION'

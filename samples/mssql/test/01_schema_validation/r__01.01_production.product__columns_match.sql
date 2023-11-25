@@ -7,8 +7,8 @@ BEGIN
         [product_id] int NOT NULL
        ,[name] [common].[name] NOT NULL
        ,[product_number] nvarchar(25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-       ,[make_flag] flag NOT NULL
-       ,[finished_goods_flag] flag NOT NULL
+       ,[make_flag] [common].[flag] NOT NULL
+       ,[finished_goods_flag] [common].[flag] NOT NULL
        ,[colour] nvarchar(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
        ,[safety_stock_level] smallint NOT NULL
        ,[reorder_point] smallint NOT NULL

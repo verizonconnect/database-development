@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[product_description]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -13,7 +13,7 @@ CREATE TABLE [production].[product_description](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_product_description_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[product_description]') AND name = N'AK_product_description_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_product_description_rowguid] ON [production].[product_description]
 (

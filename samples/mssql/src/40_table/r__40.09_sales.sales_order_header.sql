@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [sales].[sales_order_header]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -35,7 +35,7 @@ CREATE TABLE [sales].[sales_order_header](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_sales_order_header_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[sales_order_header]') AND name = N'AK_sales_order_header_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_sales_order_header_rowguid] ON [sales].[sales_order_header]
 (
@@ -50,105 +50,26 @@ SET ANSI_PADDING ON
 SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 GO
-/****** Object:  Index [AK_sales_order_header_sales_order_number]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[sales_order_header]') AND name = N'AK_sales_order_header_sales_order_number')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_sales_order_header_sales_order_number] ON [sales].[sales_order_header]
 (
     [sales_order_number] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_sales_order_header_customer_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[sales_order_header]') AND name = N'IX_sales_order_header_customer_id')
 CREATE NONCLUSTERED INDEX [IX_sales_order_header_customer_id] ON [sales].[sales_order_header]
 (
     [customer_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_sales_order_header_sales_person_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[sales_order_header]') AND name = N'IX_sales_order_header_sales_person_id')
 CREATE NONCLUSTERED INDEX [IX_sales_order_header_sales_person_id] ON [sales].[sales_order_header]
 (
     [sales_person_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-/****** Object:  Trigger [sales].[usales_order_header]    Script Date: 16/11/2023 08:45:06 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.triggers WHERE object_id = OBJECT_ID(N'[sales].[usales_order_header]'))
-EXEC sys.sp_executesql @statement = N'
-CREATE TRIGGER [sales].[usales_order_header] ON [sales].[sales_order_header] 
-AFTER UPDATE NOT FOR REPLICATION AS 
-BEGIN
-    DECLARE @Count int;
-
-    SET @Count = @@ROWCOUNT;
-    IF @Count = 0 
-        RETURN;
-
-    SET NOCOUNT ON;
-
-    BEGIN TRY
-        -- Update revision_number for modification of any field EXCEPT the status.
-        IF NOT UPDATE([status])
-        BEGIN
-            UPDATE [sales].[sales_order_header]
-            SET [sales].[sales_order_header].[revision_number] = 
-                [sales].[sales_order_header].[revision_number] + 1
-            WHERE [sales].[sales_order_header].[sales_order_id] IN 
-                (SELECT inserted.[sales_order_id] FROM inserted);
-        END;
-
-        -- Update the sales_person sales_ytd when sub_total is updated
-        IF UPDATE([sub_total])
-        BEGIN
-            DECLARE @start_date datetime,
-                    @end_date datetime
-
-            SET @start_date = [common].[ufnGetAccountingstart_date]();
-            SET @end_date = [common].[get_accounting_end_date]();
-
-            UPDATE [sales].[sales_person]
-            SET [sales].[sales_person].[sales_ytd] = 
-                (SELECT SUM([sales].[sales_order_header].[sub_total])
-                FROM [sales].[sales_order_header] 
-                WHERE [sales].[sales_person].[business_entity_id] = [sales].[sales_order_header].[sales_person_id]
-                    AND ([sales].[sales_order_header].[status] = 5) -- Shipped
-                    AND [sales].[sales_order_header].[order_date] BETWEEN @start_date AND @end_date)
-            WHERE [sales].[sales_person].[business_entity_id] 
-                IN (SELECT DISTINCT inserted.[sales_person_id] FROM inserted 
-                    WHERE inserted.[order_date] BETWEEN @start_date AND @end_date);
-
-            -- Update the sales_territory sales_ytd when sub_total is updated
-            UPDATE [sales].[sales_territory]
-            SET [sales].[sales_territory].[sales_ytd] = 
-                (SELECT SUM([sales].[sales_order_header].[sub_total])
-                FROM [sales].[sales_order_header] 
-                WHERE [sales].[sales_territory].[territory_id] = [sales].[sales_order_header].[territory_id]
-                    AND ([sales].[sales_order_header].[status] = 5) -- Shipped
-                    AND [sales].[sales_order_header].[order_date] BETWEEN @start_date AND @end_date)
-            WHERE [sales].[sales_territory].[territory_id] 
-                IN (SELECT DISTINCT inserted.[territory_id] FROM inserted 
-                    WHERE inserted.[order_date] BETWEEN @start_date AND @end_date);
-        END;
-    END TRY
-    BEGIN CATCH
-        EXECUTE [common].[print_error];
-
-        -- Rollback any active or uncommittable transactions before
-        -- inserting information in the error_log
-        IF @@TRANCOUNT > 0
-        BEGIN
-            ROLLBACK TRANSACTION;
-        END
-
-        EXECUTE [common].[add_log__error];
-    END CATCH;
-END;
-' 
-GO
-ALTER TABLE [sales].[sales_order_header] ENABLE TRIGGER [usales_order_header]
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'sales', N'TABLE',N'sales_order_header', N'COLUMN',N'sales_order_id'))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Primary key.' , @level0type=N'SCHEMA',@level0name=N'sales', @level1type=N'TABLE',@level1name=N'sales_order_header', @level2type=N'COLUMN',@level2name=N'sales_order_id'
@@ -242,7 +163,4 @@ IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'S
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'sales', N'TABLE',N'sales_order_header', NULL,NULL))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'General sales order information.' , @level0type=N'SCHEMA',@level0name=N'sales', @level1type=N'TABLE',@level1name=N'sales_order_header'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'sales', N'TABLE',N'sales_order_header', N'TRIGGER',N'usales_order_header'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'AFTER UPDATE trigger that updates the revision_number and modified_date columns in the sales_order_header table.Updates the sales_ytd column in the sales_person and sales_territory tables.' , @level0type=N'SCHEMA',@level0name=N'sales', @level1type=N'TABLE',@level1name=N'sales_order_header', @level2type=N'TRIGGER',@level2name=N'usales_order_header'
 GO

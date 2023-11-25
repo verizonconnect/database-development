@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [sales].[special_offer]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -20,7 +20,7 @@ CREATE TABLE [sales].[special_offer](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_special_offer_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[special_offer]') AND name = N'AK_special_offer_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_special_offer_rowguid] ON [sales].[special_offer]
 (

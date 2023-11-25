@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [person].[country_region]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +14,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [AK_country_region_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[country_region]') AND name = N'AK_country_region_name')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_country_region_name] ON [person].[country_region]
 (

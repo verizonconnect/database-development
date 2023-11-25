@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [human_resources].[department]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -15,7 +15,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [AK_department_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[human_resources].[department]') AND name = N'AK_department_name')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_department_name] ON [human_resources].[department]
 (

@@ -1,4 +1,4 @@
-﻿/****** Object:  View [person].[state_province_country_region]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29,7 +29,7 @@ SET ANSI_PADDING ON
 SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 GO
-/****** Object:  Index [IX_state_province_country_region]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[person].[state_province_country_region]') AND name = N'IX_state_province_country_region')
 CREATE UNIQUE CLUSTERED INDEX [IX_state_province_country_region] ON [person].[state_province_country_region]
 (

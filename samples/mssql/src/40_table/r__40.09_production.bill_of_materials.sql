@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[bill_of_materials]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,7 +18,7 @@ CREATE TABLE [production].[bill_of_materials](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_bill_of_materials_product_assembly_id_component_id_start_date]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[bill_of_materials]') AND name = N'AK_bill_of_materials_product_assembly_id_component_id_start_date')
 CREATE UNIQUE CLUSTERED INDEX [AK_bill_of_materials_product_assembly_id_component_id_start_date] ON [production].[bill_of_materials]
 (
@@ -29,7 +29,7 @@ CREATE UNIQUE CLUSTERED INDEX [AK_bill_of_materials_product_assembly_id_componen
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_bill_of_materials_unit_measure_code]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[bill_of_materials]') AND name = N'IX_bill_of_materials_unit_measure_code')
 CREATE NONCLUSTERED INDEX [IX_bill_of_materials_unit_measure_code] ON [production].[bill_of_materials]
 (

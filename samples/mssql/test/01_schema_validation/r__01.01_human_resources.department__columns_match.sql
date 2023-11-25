@@ -6,7 +6,7 @@ BEGIN
     CREATE TABLE [human_resources].[department_tsqlt](
         [department_id] smallint NOT NULL
        ,[name] [common].[name] NOT NULL
-       ,[group_name] name NOT NULL
+       ,[group_name] [common].[name] NOT NULL
        ,[modified_date] datetime NOT NULL 
     );
  

@@ -1,4 +1,4 @@
-﻿/****** Object:  View [production].[product_and_description]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32,7 +32,7 @@ SET ANSI_PADDING ON
 SET ANSI_WARNINGS ON
 SET NUMERIC_ROUNDABORT OFF
 GO
-/****** Object:  Index [IX_product_and_description]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[product_and_description]') AND name = N'IX_product_and_description')
 CREATE UNIQUE CLUSTERED INDEX [IX_product_and_description] ON [production].[product_and_description]
 (

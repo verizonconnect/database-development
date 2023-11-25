@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [sales].[sales_territory_history]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -15,7 +15,7 @@ CREATE TABLE [sales].[sales_territory_history](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [AK_sales_territory_history_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[sales_territory_history]') AND name = N'AK_sales_territory_history_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_sales_territory_history_rowguid] ON [sales].[sales_territory_history]
 (

@@ -1,4 +1,4 @@
-﻿/****** Object:  Schema [person]    Script Date: 16/11/2023 08:45:04 ******/
+﻿
 IF NOT EXISTS (SELECT 1 FROM sys.schemas WHERE name = N'person')
 EXEC sys.sp_executesql N'CREATE SCHEMA [person]'
 GO

@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [purchasing].[ship_method]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -17,14 +17,14 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [AK_ship_method_name]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[ship_method]') AND name = N'AK_ship_method_name')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_ship_method_name] ON [purchasing].[ship_method]
 (
     [name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [AK_ship_method_rowguid]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[ship_method]') AND name = N'AK_ship_method_rowguid')
 CREATE UNIQUE NONCLUSTERED INDEX [AK_ship_method_rowguid] ON [purchasing].[ship_method]
 (

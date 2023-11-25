@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [sales].[shopping_cart_item]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -17,7 +17,7 @@ END
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [IX_shopping_cart_item_shopping_cart_id_product_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[sales].[shopping_cart_item]') AND name = N'IX_shopping_cart_item_shopping_cart_id_product_id')
 CREATE NONCLUSTERED INDEX [IX_shopping_cart_item_shopping_cart_id_product_id] ON [sales].[shopping_cart_item]
 (

@@ -1,4 +1,4 @@
-﻿/****** Object:  Table [production].[transaction_history_archive]    Script Date: 16/11/2023 08:45:05 ******/
+﻿
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,14 +18,14 @@ CREATE TABLE [production].[transaction_history_archive](
 ) ON [PRIMARY]
 END
 GO
-/****** Object:  Index [IX_transaction_history_archive_product_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[transaction_history_archive]') AND name = N'IX_transaction_history_archive_product_id')
 CREATE NONCLUSTERED INDEX [IX_transaction_history_archive_product_id] ON [production].[transaction_history_archive]
 (
     [product_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [IX_transaction_history_archive_reference_order_id_reference_order_line_id]    Script Date: 16/11/2023 08:45:05 ******/
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[transaction_history_archive]') AND name = N'IX_transaction_history_archive_reference_order_id_reference_order_line_id')
 CREATE NONCLUSTERED INDEX [IX_transaction_history_archive_reference_order_id_reference_order_line_id] ON [production].[transaction_history_archive]
 (
