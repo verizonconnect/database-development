@@ -23,9 +23,7 @@ services:
         depends_on:
             sqlserver:
                 condition: service_healthy
-        command: >
-          bash -c '/opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d master -i docker-entrypoint-initdb.d/create-database.sql; 
-          echo "All done!";'
+        command: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d master -Q "IF DB_ID('${database_name}') IS NULL CREATE DATABASE [${database_name}];" 
     lint:
         image: ${sqlfluff_image}
         command: lint --write-output /lint/sqlfluff.output
