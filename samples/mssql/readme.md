@@ -62,7 +62,7 @@ Anything that support the `CREATE OR REPLACE/ALTER` statement should use that ap
 
 ## Tables
 Tables will be created once and schema modifications will be 
-```
+```TSQL
 --SQL Server Example r__40.10_foo.fruit.sql
 IF OBJECT_ID('[foo].[fruit]', 'U') IS NULL
 BEGIN
@@ -80,7 +80,7 @@ BEGIN
     ADD [modified_date] DATETIME2(3) NULL;
 END;
 
---Later again it was found the [family] column needs to be 
+--Later again it was found the [family] column needs to be 150 chars
 IF COLUMNPROPERTY(OBJECT_ID('[foo].[fruit]', 'U'), 'family', 'Precision') = 100
 BEGIN
     ALTER TABLE [foo].[fruit] 
@@ -90,7 +90,7 @@ GO
 ```
 
 The "model" for what is expected resides in the unit tests. 
-```
+```TSQL
 --
 CREATE OR ALTER PROCEDURE test_schema_validation.test_foo_fruit__columns_match
 AS
@@ -126,7 +126,7 @@ Sometimes you just need to know it will not be run again.
 This Repeatable file syntax will ensure the body is only executed once. 
 Having this run as a post deployment script will ensure any dependecies exist before the script is executed as part of a build. A migration script could also be used but that then requires conditional logic to check for object dependencies. 
 Up to you how you do it yourself.
-```
+```TSQL
 --r__99.00_post_custom_data_update.sql
 IF NOT EXISTS (SELECT   1 --Ensure BEGIN/END block is only executed once
                FROM     ${flyway:defaultSchema}.${flyway:table} AS ft
