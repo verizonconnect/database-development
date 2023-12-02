@@ -1,5 +1,4 @@
-﻿
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -17,24 +16,6 @@ CREATE TABLE [production].[bill_of_materials](
     [modified_date] [datetime] NOT NULL
 ) ON [PRIMARY]
 END
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[bill_of_materials]') AND name = N'AK_bill_of_materials_product_assembly_id_component_id_start_date')
-CREATE UNIQUE CLUSTERED INDEX [AK_bill_of_materials_product_assembly_id_component_id_start_date] ON [production].[bill_of_materials]
-(
-    [product_assembly_id] ASC,
-    [component_id] ASC,
-    [start_date] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[production].[bill_of_materials]') AND name = N'IX_bill_of_materials_unit_measure_code')
-CREATE NONCLUSTERED INDEX [IX_bill_of_materials_unit_measure_code] ON [production].[bill_of_materials]
-(
-    [unit_measure_code] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'production', N'TABLE',N'bill_of_materials', N'COLUMN',N'bill_of_materials_id'))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Primary key for bill_of_materials records.' , @level0type=N'SCHEMA',@level0name=N'production', @level1type=N'TABLE',@level1name=N'bill_of_materials', @level2type=N'COLUMN',@level2name=N'bill_of_materials_id'
@@ -62,12 +43,6 @@ IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'S
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'production', N'TABLE',N'bill_of_materials', N'COLUMN',N'modified_date'))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Date and time the record was last updated.' , @level0type=N'SCHEMA',@level0name=N'production', @level1type=N'TABLE',@level1name=N'bill_of_materials', @level2type=N'COLUMN',@level2name=N'modified_date'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'production', N'TABLE',N'bill_of_materials', N'INDEX',N'AK_bill_of_materials_product_assembly_id_component_id_start_date'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Clustered index.' , @level0type=N'SCHEMA',@level0name=N'production', @level1type=N'TABLE',@level1name=N'bill_of_materials', @level2type=N'INDEX',@level2name=N'AK_bill_of_materials_product_assembly_id_component_id_start_date'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'production', N'TABLE',N'bill_of_materials', N'INDEX',N'IX_bill_of_materials_unit_measure_code'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Nonclustered index.' , @level0type=N'SCHEMA',@level0name=N'production', @level1type=N'TABLE',@level1name=N'bill_of_materials', @level2type=N'INDEX',@level2name=N'IX_bill_of_materials_unit_measure_code'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'production', N'TABLE',N'bill_of_materials', NULL,NULL))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Items required to make bicycles and bicycle subassemblies. It identifies the heirarchical relationship between a parent product and its components.' , @level0type=N'SCHEMA',@level0name=N'production', @level1type=N'TABLE',@level1name=N'bill_of_materials'

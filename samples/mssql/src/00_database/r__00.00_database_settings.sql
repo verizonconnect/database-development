@@ -1,9 +1,9 @@
 ﻿ALTER DATABASE [${flyway:database}] SET COMPATIBILITY_LEVEL = ${database_compatibility}
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
-begin
-EXEC [${flyway:database}].[common].[sp_fulltext_database] @action = 'enable'
-end
+BEGIN
+    EXEC [${flyway:database}].[common].[sp_fulltext_database] @action = 'enable';
+END;
 GO
 ALTER DATABASE [${flyway:database}] SET ANSI_NULL_DEFAULT OFF 
 GO

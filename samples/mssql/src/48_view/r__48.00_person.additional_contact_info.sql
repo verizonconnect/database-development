@@ -7,10 +7,10 @@ EXEC sys.sp_executesql @statement = N'
 CREATE VIEW [person].[additional_contact_info] 
 AS 
 SELECT 
-    [BusinessEntityID] 
-    ,[FirstName]
-    ,[MiddleName]
-    ,[LastName]
+    [business_entity_id] 
+    ,[first_name]
+    ,[middle_name]
+    ,[last_name]
     ,[ContactInfo].ref.value(N''declare namespace ci="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"; 
         declare namespace act="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes"; 
         (act:telephoneNumber)[1]/act:number'', ''nvarchar(50)'') AS [telephone_number] 
@@ -45,14 +45,14 @@ SELECT
         declare namespace act="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes"; 
         (act:eMail/act:SpecialInstructions/act:telephoneNumber/act:number)[1]'', ''nvarchar(50)'') AS [email_telephone_number] 
     ,[rowguid] 
-    ,[ModifiedDate]
-FROM [Person].[Person]
-OUTER APPLY [AdditionalContactInfo].nodes(
+    ,[modified_date]
+FROM [person].[person]
+OUTER APPLY [additional_contact_info].nodes(
     ''declare namespace ci="http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo"; 
     /ci:AdditionalContactInfo'') AS ContactInfo(ref) 
-WHERE [AdditionalContactInfo] IS NOT NULL;
+WHERE [additional_contact_info] IS NOT NULL;
 ' 
 GO
 IF NOT EXISTS (SELECT * FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'person', N'VIEW',N'additional_contact_info', NULL,NULL))
-	EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Displays the contact name and content from each element in the xml column AdditionalContactInfo for that person.' , @level0type=N'SCHEMA',@level0name=N'person', @level1type=N'VIEW',@level1name=N'additional_contact_info'
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Displays the contact name and content from each element in the xml column AdditionalContactInfo for that person.' , @level0type=N'SCHEMA',@level0name=N'person', @level1type=N'VIEW',@level1name=N'additional_contact_info'
 GO
