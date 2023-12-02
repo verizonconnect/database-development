@@ -3,7 +3,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 --A stored procedure which demonstrates integrated full text search
-
+--See ../41_constraint_primary_key/r__41.00_human_resources.pk_job_candidate_job_candidate_id.sql
 CREATE OR ALTER PROCEDURE [common].[get_candidate__resumes]
     @searchString [nvarchar](1000),   
     @useInflectional [bit]=0,

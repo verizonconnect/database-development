@@ -8,6 +8,16 @@ IF OBJECT_ID('[human_resources].[pk_job_candidate_job_candidate_id]', 'PK') IS N
         ON [PRIMARY];
     END;
 GO
+/* --FTS Not Enabled on docker image by default
+
+
+CREATE FULLTEXT INDEX ON [human_resources].[job_candidate] 
+KEY INDEX [pk_job_candidate_job_candidate_id] ON [${flyway:database}_full_text_catalog];
+GO
+ALTER FULLTEXT INDEX ON [human_resources].[job_candidate] 
+ADD ([resume] LANGUAGE 1033);
+*/
+GO
 
 IF NOT EXISTS (SELECT 1 
                FROM sys.fn_listextendedproperty(N'MS_Description'

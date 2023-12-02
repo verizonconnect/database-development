@@ -14,10 +14,10 @@ BEGIN
        ,[marital_status] nchar(1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
        ,[gender] nchar(1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
        ,[hire_date] date NOT NULL
-       ,[salaried_flag] flag NOT NULL
+       ,[salaried_flag] [common].[flag] NOT NULL
        ,[holiday_hours] smallint NOT NULL
        ,[sick_leave_hours] smallint NOT NULL
-       ,[current_flag] flag NOT NULL
+       ,[current_flag] [common].[flag] NOT NULL
        ,[rowguid] uniqueidentifier NOT NULL
        ,[modified_date] datetime NOT NULL 
     );

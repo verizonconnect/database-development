@@ -1,5 +1,4 @@
-﻿/****** Object:  Table [person].[password]    Script Date: 16/11/2023 08:45:05 ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO

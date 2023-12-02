@@ -1,4 +1,4 @@
-/****** Object:  UserDefinedFunction [common].[get_accounting_start_date]    Script Date: 16/11/2023 08:45:05 ******/
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON

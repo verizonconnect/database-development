@@ -6,7 +6,7 @@ BEGIN
     CREATE TABLE [sales].[sales_reason_tsqlt](
         [sales_reason_id] int NOT NULL
        ,[name] [common].[name] NOT NULL
-       ,[reason_type] name NOT NULL
+       ,[reason_type] [common].[name] NOT NULL
        ,[modified_date] datetime NOT NULL 
     );
  

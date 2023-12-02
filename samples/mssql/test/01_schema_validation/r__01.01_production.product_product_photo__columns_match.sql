@@ -6,7 +6,7 @@ BEGIN
     CREATE TABLE [production].[product_product_photo_tsqlt](
         [product_id] int NOT NULL
        ,[product_photo_id] int NOT NULL
-       ,[primary] flag NOT NULL
+       ,[primary] [common].[flag] NOT NULL
        ,[modified_date] datetime NOT NULL 
     );
  

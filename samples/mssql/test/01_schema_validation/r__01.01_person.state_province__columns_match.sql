@@ -7,7 +7,7 @@ BEGIN
         [state_province_id] int NOT NULL
        ,[state_province_code] nchar(3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
        ,[country_region_code] nvarchar(3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-       ,[is_only_state_province_flag] flag NOT NULL
+       ,[is_only_state_province_flag] [common].[flag] NOT NULL
        ,[name] [common].[name] NOT NULL
        ,[territory_id] int NOT NULL
        ,[rowguid] uniqueidentifier NOT NULL

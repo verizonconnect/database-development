@@ -10,10 +10,10 @@ BEGIN
        ,[due_date] datetime NOT NULL
        ,[ship_date] datetime NULL
        ,[status] tinyint NOT NULL
-       ,[online_order_flag] flag NOT NULL
+       ,[online_order_flag] [common].[flag] NOT NULL
        ,[sales_order_number] nvarchar(25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-       ,[purchase_order_number] order_number NULL
-       ,[account_number] account_number NULL
+       ,[purchase_order_number] [common].[order_number] NULL
+       ,[account_number] [common].[account_number] NULL
        ,[customer_id] int NOT NULL
        ,[sales_person_id] int NULL
        ,[territory_id] int NULL

@@ -5,7 +5,7 @@ BEGIN
  
     CREATE TABLE [person].[person_phone_tsqlt](
         [business_entity_id] int NOT NULL
-       ,[phone_number] phone NOT NULL
+       ,[phone_number] [common].[phone] NOT NULL
        ,[phone_number_type_id] int NOT NULL
        ,[modified_date] datetime NOT NULL 
     );

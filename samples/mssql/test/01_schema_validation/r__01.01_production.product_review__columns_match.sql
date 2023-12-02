@@ -6,7 +6,7 @@ BEGIN
     CREATE TABLE [production].[product_review_tsqlt](
         [product_review_id] int NOT NULL
        ,[product_id] int NOT NULL
-       ,[reviewer_name] name NOT NULL
+       ,[reviewer_name] [common].[name] NOT NULL
        ,[review_date] datetime NOT NULL
        ,[email_address] nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
        ,[rating] int NOT NULL

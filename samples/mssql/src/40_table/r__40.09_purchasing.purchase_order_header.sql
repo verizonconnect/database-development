@@ -1,5 +1,4 @@
-﻿/****** Object:  Table [purchasing].[purchase_order_header]    Script Date: 16/11/2023 08:45:05 ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -21,66 +20,6 @@ CREATE TABLE [purchasing].[purchase_order_header](
     [modified_date] [datetime] NOT NULL
 ) ON [PRIMARY]
 END
-GO
-/****** Object:  Index [IX_purchase_order_header_employee_id]    Script Date: 16/11/2023 08:45:05 ******/
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[purchase_order_header]') AND name = N'IX_purchase_order_header_employee_id')
-CREATE NONCLUSTERED INDEX [IX_purchase_order_header_employee_id] ON [purchasing].[purchase_order_header]
-(
-    [employee_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-/****** Object:  Index [IX_purchase_order_header_vendor_id]    Script Date: 16/11/2023 08:45:05 ******/
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE object_id = OBJECT_ID(N'[purchasing].[purchase_order_header]') AND name = N'IX_purchase_order_header_vendor_id')
-CREATE NONCLUSTERED INDEX [IX_purchase_order_header_vendor_id] ON [purchasing].[purchase_order_header]
-(
-    [vendor_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-/****** Object:  Trigger [purchasing].[upurchase_order_header]    Script Date: 16/11/2023 08:45:06 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.triggers WHERE object_id = OBJECT_ID(N'[purchasing].[upurchase_order_header]'))
-EXEC sys.sp_executesql @statement = N'
-CREATE TRIGGER [purchasing].[upurchase_order_header] ON [purchasing].[purchase_order_header] 
-AFTER UPDATE AS 
-BEGIN
-    DECLARE @Count int;
-
-    SET @Count = @@ROWCOUNT;
-    IF @Count = 0 
-        RETURN;
-
-    SET NOCOUNT ON;
-
-    BEGIN TRY
-        -- Update revision_number for modification of any field EXCEPT the status.
-        IF NOT UPDATE([status])
-        BEGIN
-            UPDATE [purchasing].[purchase_order_header]
-            SET [purchasing].[purchase_order_header].[revision_number] = 
-                [purchasing].[purchase_order_header].[revision_number] + 1
-            WHERE [purchasing].[purchase_order_header].[purchase_order_id] IN 
-                (SELECT inserted.[purchase_order_id] FROM inserted);
-        END;
-    END TRY
-    BEGIN CATCH
-        EXECUTE [common].[print_error];
-
-        -- Rollback any active or uncommittable transactions before
-        -- inserting information in the error_log
-        IF @@TRANCOUNT > 0
-        BEGIN
-            ROLLBACK TRANSACTION;
-        END
-
-        EXECUTE [common].[add_log__error];
-    END CATCH;
-END;
-' 
-GO
-ALTER TABLE [purchasing].[purchase_order_header] ENABLE TRIGGER [upurchase_order_header]
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', N'COLUMN',N'purchase_order_id'))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Primary key.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header', @level2type=N'COLUMN',@level2name=N'purchase_order_id'
@@ -121,15 +60,6 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', N'COLUMN',N'modified_date'))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Date and time the record was last updated.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header', @level2type=N'COLUMN',@level2name=N'modified_date'
 GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', N'INDEX',N'IX_purchase_order_header_employee_id'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Nonclustered index.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header', @level2type=N'INDEX',@level2name=N'IX_purchase_order_header_employee_id'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', N'INDEX',N'IX_purchase_order_header_vendor_id'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'Nonclustered index.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header', @level2type=N'INDEX',@level2name=N'IX_purchase_order_header_vendor_id'
-GO
 IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', NULL,NULL))
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'General purchase order information. See purchase_order_detail.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header'
-GO
-IF NOT EXISTS (SELECT 1 FROM sys.fn_listextendedproperty(N'MS_Description' , N'SCHEMA',N'purchasing', N'TABLE',N'purchase_order_header', N'TRIGGER',N'upurchase_order_header'))
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'AFTER UPDATE trigger that updates the revision_number and modified_date columns in the purchase_order_header table.' , @level0type=N'SCHEMA',@level0name=N'purchasing', @level1type=N'TABLE',@level1name=N'purchase_order_header', @level2type=N'TRIGGER',@level2name=N'upurchase_order_header'
 GO
