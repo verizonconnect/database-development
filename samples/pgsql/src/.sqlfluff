@@ -1,0 +1,31 @@
+[sqlfluff]
+
+# Supported dialects https://docs.sqlfluff.com/en/stable/dialects.html
+# Or run 'sqlfluff dialects'
+dialect = PostgreSQL
+ignore=parsing,lexing
+
+# Comma separated list of rules to exclude, or None
+# See https://docs.sqlfluff.com/en/stable/configuration.html#enabling-and-disabling-rules
+# AM04 (ambiguous.column_count) and ST06 (structure.column_order) are
+# two of the more controversial rules included to illustrate usage.
+exclude_rules = all 
+
+rules = None
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
+# One of [raw|jinja|python|placeholder]
+templater = placeholder
+
+[sqlfluff:templater:placeholder]
+param_style = dollar
+flyway:defaultSchema = sch
+flyway:database = db
+database_name = db
+environment_name=build
+
+[sqlfluff:indentation]
+# See https://docs.sqlfluff.com/en/stable/layout.html#configuring-indent-locations
+indent_unit = space
+tab_space_size = 4
