@@ -1,1 +1,1 @@
-﻿CREATE SCHEMA IF NOT EXISTS [production];
+﻿CREATE SCHEMA IF NOT EXISTS production;

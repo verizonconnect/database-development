@@ -61,7 +61,9 @@ All files should be written with an expectation that they will be re-executed at
 Anything that support the `CREATE OR REPLACE/ALTER` statement should use that approach, i.e. functions/procedures/views/etc.
 
 ## Tables
-Tables will be created once and schema modifications will be 
+Tables will be created once and schema modifications will be appended in the same file.
+
+This is a salient diverson from the 'flyway' migration approach.
 ```TSQL
 --SQL Server Example r__40.10_foo.fruit.sql
 IF OBJECT_ID('[foo].[fruit]', 'U') IS NULL
@@ -95,7 +97,7 @@ The "model" for what is expected resides in the unit tests.
 CREATE OR ALTER PROCEDURE test_schema_validation.test_foo_fruit__columns_match
 AS
 BEGIN
-    CREATE TABLE [foo].[sales_reason_tsqlt](
+    CREATE TABLE [foo].[fruit_tsqlt](
         [name]          VARCHAR(50)  NOT NULL
        ,[family]        VARCHAR(150) NOT NULL
        ,[created_date]  DATETIME2(3) NOT NULL
@@ -108,7 +110,7 @@ END;
 GO
 ```
 # /test
-The test folder will contain all artefects required for executing unit tests.
+The test folder will contain all artifacts required for executing unit tests.
 The contents of this folder are only ever deployed to ephemeral databases. This is to ensure shared/production databases are not polluted with test objects and also to makes sure an improperly written test does not put production data at risk.
 
 The structure of the test folder will vary greatly depending on the relational engine being used. 

@@ -1,1 +1,1 @@
-﻿CREATE SCHEMA IF NOT EXISTS [purchasing];
+﻿CREATE SCHEMA IF NOT EXISTS purchasing;
