@@ -61,7 +61,9 @@ All files should be written with an expectation that they will be re-executed at
 Anything that support the `CREATE OR REPLACE/ALTER` statement should use that approach, i.e. functions/procedures/views/etc.
 
 ## Tables
-Tables will be created once and schema modifications will be 
+Tables will be created once and schema modifications will be appended in the same file.
+
+This is a salient diverson from the 'flyway' migration approach.
 ```TSQL
 --SQL Server Example r__40.10_foo.fruit.sql
 IF OBJECT_ID('[foo].[fruit]', 'U') IS NULL
@@ -95,7 +97,7 @@ The "model" for what is expected resides in the unit tests.
 CREATE OR ALTER PROCEDURE test_schema_validation.test_foo_fruit__columns_match
 AS
 BEGIN
-    CREATE TABLE [foo].[sales_reason_tsqlt](
+    CREATE TABLE [foo].[fruit_tsqlt](
         [name]          VARCHAR(50)  NOT NULL
        ,[family]        VARCHAR(150) NOT NULL
        ,[created_date]  DATETIME2(3) NOT NULL
@@ -108,7 +110,7 @@ END;
 GO
 ```
 # /test
-The test folder will contain all artefects required for executing unit tests.
+The test folder will contain all artifacts required for executing unit tests.
 The contents of this folder are only ever deployed to ephemeral databases. This is to ensure shared/production databases are not polluted with test objects and also to makes sure an improperly written test does not put production data at risk.
 
 The structure of the test folder will vary greatly depending on the relational engine being used. 
@@ -122,8 +124,10 @@ All keywords are in upper case.
 There is more than just the two lines above but you get the gist. Take personal opinion out of it, this is just the standard being applied. It's a bit like 30km speed limits: No-one needs to like it, they just need to follow it.
 
 # Guard Against Repeat Runs
-Sometimes you just need to know it will not be run again.
+Sometimes you need to know it will not be run again.
+
 This Repeatable file syntax will ensure the body is only executed once. 
+
 Having this run as a post deployment script will ensure any dependecies exist before the script is executed as part of a build. A migration script could also be used but that then requires conditional logic to check for object dependencies. 
 Up to you how you do it yourself.
 ```TSQL

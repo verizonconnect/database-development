@@ -1,0 +1,1 @@
+CREATE DATABASE adventure_postgres;
