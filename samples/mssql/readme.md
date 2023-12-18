@@ -123,6 +123,8 @@ All keywords are in upper case.
 
 There is more than just the two lines above but you get the gist. Take personal opinion out of it, this is just the standard being applied. It's a bit like 30km speed limits: No-one needs to like it, they just need to follow it.
 
+This makes a lot more sense when working in a polybase environment. Ensuring a consistent naming convention across all data stores enables more re-usable code within the applications which integrate with the data stores. In the example code across this repository the contracts remain largely consistent regardless of the relational engine one connects to.
+
 # Guard Against Repeat Runs
 Sometimes you need to know it will not be run again.
 
@@ -138,5 +140,6 @@ IF NOT EXISTS (SELECT   1 --Ensure BEGIN/END block is only executed once
                         AND ft.[success] = 1)
     BEGIN
         --Your code here
+        --Anything in this block will only be executed once.
     END;
 ```
