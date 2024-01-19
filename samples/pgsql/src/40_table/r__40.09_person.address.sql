@@ -6,7 +6,7 @@
    ,state_province_id INT NOT NULL
    ,postal_code VARCHAR(15) NOT NULL
    ,spatial_location bytea NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 COMMENT ON TABLE person.address IS 'Street address information for customers, employees, and vendors.';

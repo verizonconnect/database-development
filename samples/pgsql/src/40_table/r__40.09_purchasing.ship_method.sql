@@ -3,7 +3,7 @@
    ,name common.name NOT NULL
    ,ship_base NUMERIC NOT NULL DEFAULT (0.00)
    ,ship_rate NUMERIC NOT NULL DEFAULT (0.00)
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 

@@ -6,7 +6,7 @@
    ,commission_pct NUMERIC NOT NULL DEFAULT (0.00)
    ,sales_ytd NUMERIC NOT NULL DEFAULT (0.00)
    ,sales_last_year NUMERIC NOT NULL DEFAULT (0.00)
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_person IS 'Sales representative current information.';

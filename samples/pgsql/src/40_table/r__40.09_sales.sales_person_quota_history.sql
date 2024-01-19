@@ -2,7 +2,7 @@
     business_entity_id INT NOT NULL
    ,quota_date TIMESTAMP NOT NULL
    ,sales_quota NUMERIC NOT NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_person_quota_history IS 'Sales performance tracking.';

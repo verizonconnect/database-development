@@ -10,7 +10,7 @@
    ,status SMALLINT NOT NULL
    ,document_summary text NULL
    ,document bytea  NULL
-   ,rowguid uuid NOT NULL UNIQUE DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL UNIQUE DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
   

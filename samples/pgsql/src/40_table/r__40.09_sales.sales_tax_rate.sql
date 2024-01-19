@@ -4,7 +4,7 @@
    ,tax_type SMALLINT NOT NULL
    ,tax_rate NUMERIC NOT NULL DEFAULT (0.00)
    ,name common.name NOT NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_tax_rate IS 'Tax _rate lookup table.';

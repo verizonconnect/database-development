@@ -1,7 +1,7 @@
 ﻿CREATE TABLE IF NOT EXISTS person.address_type(
     address_type_id SERIAL
    ,name common.name NOT NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 COMMENT ON TABLE person.address_type IS 'Types of addresses stored in the address table.';

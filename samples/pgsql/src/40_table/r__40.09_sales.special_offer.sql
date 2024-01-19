@@ -8,7 +8,7 @@
    ,end_date TIMESTAMP NOT NULL
    ,min_qty INT NOT NULL DEFAULT (0)
    ,max_qty INT NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.special_offer IS 'Sale discounts lookup table.';

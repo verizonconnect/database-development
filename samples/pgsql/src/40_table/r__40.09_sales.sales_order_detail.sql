@@ -8,7 +8,7 @@
    ,unit_price NUMERIC NOT NULL
    ,unit_price_discount NUMERIC NOT NULL DEFAULT (0.0)
    ,line_total NUMERIC
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_order_detail IS 'Individual products associated with a specific sales order. see sales_order_header.';

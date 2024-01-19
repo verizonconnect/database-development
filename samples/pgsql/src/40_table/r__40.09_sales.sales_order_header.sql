@@ -23,7 +23,7 @@
    ,freight NUMERIC NOT NULL DEFAULT (0.00)
    ,total_due NUMERIC
    ,comment varchar(128) NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_order_header IS 'General sales order information.';

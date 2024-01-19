@@ -1,7 +1,7 @@
 ﻿CREATE TABLE IF NOT EXISTS production.product_description(
     product_description_id SERIAL NOT NULL
    ,description VARCHAR(400) NOT NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
   

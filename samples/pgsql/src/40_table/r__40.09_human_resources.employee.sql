@@ -12,7 +12,7 @@
    ,holiday_hours SMALLINT NOT NULL DEFAULT (0)
    ,sick_leave_hours SMALLINT NOT NULL DEFAULT (0)
    ,current_flag common.flag NOT NULL DEFAULT (true)
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 

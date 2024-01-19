@@ -2,7 +2,7 @@
     business_entity_id INT NOT NULL
    ,email_address_id SERIAL
    ,email_address VARCHAR(50) NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 COMMENT ON TABLE person.email_address IS 'Where to send a person email.';

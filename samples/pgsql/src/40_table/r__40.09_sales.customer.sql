@@ -4,7 +4,7 @@
    ,store_id INT NULL
    ,territory_id INT NULL
    ,account_number VARCHAR
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.customer IS 'Current customer information. also see the person and store tables.';

@@ -3,7 +3,7 @@
    ,territory_id INT NOT NULL
    ,start_date TIMESTAMP NOT NULL
    ,end_date TIMESTAMP NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.sales_territory_history IS 'Sales representative transfers to other sales territories.';

@@ -4,7 +4,7 @@
    ,shelf VARCHAR(10) NOT NULL
    ,bin SMALLINT NOT NULL
    ,quantity SMALLINT NOT NULL DEFAULT (0)
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
   

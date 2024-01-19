@@ -3,7 +3,7 @@
    ,name common.name NOT NULL
    ,catalog_description XML NULL
    ,instructions XML NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 COMMENT ON TABLE production.product_model IS 'product model classification.';

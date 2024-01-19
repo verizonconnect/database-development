@@ -1,6 +1,6 @@
 ﻿CREATE TABLE IF NOT EXISTS person.business_entity(
     business_entity_id  SERIAL 
-   ,rowguid             uuid      NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid             uuid      NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date       TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 

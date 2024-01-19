@@ -10,7 +10,7 @@
    ,email_promotion INT NOT NULL DEFAULT (0)
    ,additional_contact_info XML NULL 
    ,demographics XML NULL
-   ,rowguid uuid NOT NULL CONSTRAINT "df_person_rowguid" DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL CONSTRAINT "df_person_rowguid" DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 

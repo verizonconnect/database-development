@@ -3,7 +3,7 @@
    ,name common.name NOT NULL
    ,sales_person_id INT NULL
    ,demographics XML NULL
-   ,rowguid uuid NOT NULL DEFAULT (uuid_generate_v1())
+   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
    ,modified_date TIMESTAMP NOT NULL DEFAULT (now() at time zone 'utc')
 );
 COMMENT ON TABLE sales.store IS 'Customers (resellers) of adventure works products.';
