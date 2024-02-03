@@ -1,20 +1,25 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(16);
+SELECT plan(17);
 
 SELECT has_table(
     'person', 'country_region',
     'Should have table person.country_region'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'person', 'country_region',
     'Table person.country_region should have a primary key'
 );
+
+SELECT col_is_pk('person'::name, 'country_region'::name, ARRAY[
+    'country_region_code'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('person'::name, 'country_region'::name, ARRAY[
     'country_region_code'::name,
@@ -40,3 +45,4 @@ SELECT col_default_is(   'person', 'country_region', 'modified_date', 'timezone(
 
 SELECT * FROM finish();
 ROLLBACK;
+

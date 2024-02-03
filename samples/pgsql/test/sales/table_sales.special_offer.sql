@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(52);
+SELECT plan(58);
 
 SELECT has_table(
     'sales', 'special_offer',
     'Should have table sales.special_offer'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'special_offer',
     'Table sales.special_offer should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'special_offer',
+    'Table sales.special_offer should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'special_offer'::name, ARRAY[
+    'special_offer_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'special_offer'::name, ARRAY[
     'special_offer_id'::name,
@@ -46,6 +56,7 @@ SELECT col_type_is(      'sales', 'special_offer', 'discount_pct', 'numeric', 'C
 SELECT col_not_null(     'sales', 'special_offer', 'discount_pct', 'Column sales.special_offer.discount_pct should be NOT NULL');
 SELECT col_has_default(  'sales', 'special_offer', 'discount_pct', 'Column sales.special_offer.discount_pct should have a default');
 SELECT col_default_is(   'sales', 'special_offer', 'discount_pct', '0.00', 'Column sales.special_offer.discount_pct default is');
+SELECT col_has_check(    'sales', 'special_offer', 'discount_pct', 'Column sales.special_offer.discount_pct should have a check constraint');
 
 SELECT has_column(       'sales', 'special_offer', 'type', 'Column sales.special_offer.type should exist');
 SELECT col_type_is(      'sales', 'special_offer', 'type', 'character varying(50)', 'Column sales.special_offer.type should be type character varying(50)');
@@ -66,17 +77,20 @@ SELECT has_column(       'sales', 'special_offer', 'end_date', 'Column sales.spe
 SELECT col_type_is(      'sales', 'special_offer', 'end_date', 'timestamp without time zone', 'Column sales.special_offer.end_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'special_offer', 'end_date', 'Column sales.special_offer.end_date should be NOT NULL');
 SELECT col_hasnt_default('sales', 'special_offer', 'end_date', 'Column sales.special_offer.end_date should not have a default');
+SELECT col_has_check(    'sales', 'special_offer', ARRAY['end_date'::name,'start_date'::name], 'Columns sales.special_offer.[end_date,start_date] should have a check constraint');
 
 SELECT has_column(       'sales', 'special_offer', 'min_qty', 'Column sales.special_offer.min_qty should exist');
 SELECT col_type_is(      'sales', 'special_offer', 'min_qty', 'integer', 'Column sales.special_offer.min_qty should be type integer');
 SELECT col_not_null(     'sales', 'special_offer', 'min_qty', 'Column sales.special_offer.min_qty should be NOT NULL');
 SELECT col_has_default(  'sales', 'special_offer', 'min_qty', 'Column sales.special_offer.min_qty should have a default');
 SELECT col_default_is(   'sales', 'special_offer', 'min_qty', '0', 'Column sales.special_offer.min_qty default is');
+SELECT col_has_check(    'sales', 'special_offer', 'min_qty', 'Column sales.special_offer.min_qty should have a check constraint');
 
 SELECT has_column(       'sales', 'special_offer', 'max_qty', 'Column sales.special_offer.max_qty should exist');
 SELECT col_type_is(      'sales', 'special_offer', 'max_qty', 'integer', 'Column sales.special_offer.max_qty should be type integer');
 SELECT col_is_null(      'sales', 'special_offer', 'max_qty', 'Column sales.special_offer.max_qty should allow NULL');
 SELECT col_hasnt_default('sales', 'special_offer', 'max_qty', 'Column sales.special_offer.max_qty should not have a default');
+SELECT col_has_check(    'sales', 'special_offer', 'max_qty', 'Column sales.special_offer.max_qty should have a check constraint');
 
 SELECT has_column(       'sales', 'special_offer', 'rowguid', 'Column sales.special_offer.rowguid should exist');
 SELECT col_type_is(      'sales', 'special_offer', 'rowguid', 'uuid', 'Column sales.special_offer.rowguid should be type uuid');
@@ -92,3 +106,4 @@ SELECT col_default_is(   'sales', 'special_offer', 'modified_date', 'timezone(''
 
 SELECT * FROM finish();
 ROLLBACK;
+

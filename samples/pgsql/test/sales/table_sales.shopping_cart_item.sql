@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(31);
+SELECT plan(34);
 
 SELECT has_table(
     'sales', 'shopping_cart_item',
     'Should have table sales.shopping_cart_item'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'shopping_cart_item',
     'Table sales.shopping_cart_item should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'shopping_cart_item',
+    'Table sales.shopping_cart_item should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'shopping_cart_item'::name, ARRAY[
+    'shopping_cart_item_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'shopping_cart_item'::name, ARRAY[
     'shopping_cart_item_id'::name,
@@ -41,6 +51,7 @@ SELECT col_type_is(      'sales', 'shopping_cart_item', 'quantity', 'integer', '
 SELECT col_not_null(     'sales', 'shopping_cart_item', 'quantity', 'Column sales.shopping_cart_item.quantity should be NOT NULL');
 SELECT col_has_default(  'sales', 'shopping_cart_item', 'quantity', 'Column sales.shopping_cart_item.quantity should have a default');
 SELECT col_default_is(   'sales', 'shopping_cart_item', 'quantity', '1', 'Column sales.shopping_cart_item.quantity default is');
+SELECT col_has_check(    'sales', 'shopping_cart_item', 'quantity', 'Column sales.shopping_cart_item.quantity should have a check constraint');
 
 SELECT has_column(       'sales', 'shopping_cart_item', 'product_id', 'Column sales.shopping_cart_item.product_id should exist');
 SELECT col_type_is(      'sales', 'shopping_cart_item', 'product_id', 'integer', 'Column sales.shopping_cart_item.product_id should be type integer');
@@ -61,3 +72,4 @@ SELECT col_default_is(   'sales', 'shopping_cart_item', 'modified_date', 'timezo
 
 SELECT * FROM finish();
 ROLLBACK;
+

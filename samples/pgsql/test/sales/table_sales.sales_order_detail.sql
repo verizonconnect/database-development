@@ -1,20 +1,31 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(51);
+SELECT plan(56);
 
 SELECT has_table(
     'sales', 'sales_order_detail',
     'Should have table sales.sales_order_detail'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'sales_order_detail',
     'Table sales.sales_order_detail should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'sales_order_detail',
+    'Table sales.sales_order_detail should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'sales_order_detail'::name, ARRAY[
+    'sales_order_id'::name,
+    'sales_order_detail_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'sales_order_detail'::name, ARRAY[
     'sales_order_id'::name,
@@ -50,6 +61,7 @@ SELECT has_column(       'sales', 'sales_order_detail', 'order_qty', 'Column sal
 SELECT col_type_is(      'sales', 'sales_order_detail', 'order_qty', 'smallint', 'Column sales.sales_order_detail.order_qty should be type smallint');
 SELECT col_not_null(     'sales', 'sales_order_detail', 'order_qty', 'Column sales.sales_order_detail.order_qty should be NOT NULL');
 SELECT col_hasnt_default('sales', 'sales_order_detail', 'order_qty', 'Column sales.sales_order_detail.order_qty should not have a default');
+SELECT col_has_check(    'sales', 'sales_order_detail', 'order_qty', 'Column sales.sales_order_detail.order_qty should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_detail', 'product_id', 'Column sales.sales_order_detail.product_id should exist');
 SELECT col_type_is(      'sales', 'sales_order_detail', 'product_id', 'integer', 'Column sales.sales_order_detail.product_id should be type integer');
@@ -65,12 +77,14 @@ SELECT has_column(       'sales', 'sales_order_detail', 'unit_price', 'Column sa
 SELECT col_type_is(      'sales', 'sales_order_detail', 'unit_price', 'numeric', 'Column sales.sales_order_detail.unit_price should be type numeric');
 SELECT col_not_null(     'sales', 'sales_order_detail', 'unit_price', 'Column sales.sales_order_detail.unit_price should be NOT NULL');
 SELECT col_hasnt_default('sales', 'sales_order_detail', 'unit_price', 'Column sales.sales_order_detail.unit_price should not have a default');
+SELECT col_has_check(    'sales', 'sales_order_detail', 'unit_price', 'Column sales.sales_order_detail.unit_price should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_detail', 'unit_price_discount', 'Column sales.sales_order_detail.unit_price_discount should exist');
 SELECT col_type_is(      'sales', 'sales_order_detail', 'unit_price_discount', 'numeric', 'Column sales.sales_order_detail.unit_price_discount should be type numeric');
 SELECT col_not_null(     'sales', 'sales_order_detail', 'unit_price_discount', 'Column sales.sales_order_detail.unit_price_discount should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_order_detail', 'unit_price_discount', 'Column sales.sales_order_detail.unit_price_discount should have a default');
 SELECT col_default_is(   'sales', 'sales_order_detail', 'unit_price_discount', '0.0', 'Column sales.sales_order_detail.unit_price_discount default is');
+SELECT col_has_check(    'sales', 'sales_order_detail', 'unit_price_discount', 'Column sales.sales_order_detail.unit_price_discount should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_detail', 'line_total', 'Column sales.sales_order_detail.line_total should exist');
 SELECT col_type_is(      'sales', 'sales_order_detail', 'line_total', 'numeric', 'Column sales.sales_order_detail.line_total should be type numeric');
@@ -91,3 +105,4 @@ SELECT col_default_is(   'sales', 'sales_order_detail', 'modified_date', 'timezo
 
 SELECT * FROM finish();
 ROLLBACK;
+

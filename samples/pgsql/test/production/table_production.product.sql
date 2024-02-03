@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(108);
+SELECT plan(120);
 
 SELECT has_table(
     'production', 'product',
     'Should have table production.product'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'product',
     'Table production.product should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'product',
+    'Table production.product should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'product'::name, ARRAY[
+    'product_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'product'::name, ARRAY[
     'product_id'::name,
@@ -81,21 +91,25 @@ SELECT has_column(       'production', 'product', 'safety_stock_level', 'Column 
 SELECT col_type_is(      'production', 'product', 'safety_stock_level', 'smallint', 'Column production.product.safety_stock_level should be type smallint');
 SELECT col_not_null(     'production', 'product', 'safety_stock_level', 'Column production.product.safety_stock_level should be NOT NULL');
 SELECT col_hasnt_default('production', 'product', 'safety_stock_level', 'Column production.product.safety_stock_level should not have a default');
+SELECT col_has_check(    'production', 'product', 'safety_stock_level', 'Column production.product.safety_stock_level should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'reorder_point', 'Column production.product.reorder_point should exist');
 SELECT col_type_is(      'production', 'product', 'reorder_point', 'smallint', 'Column production.product.reorder_point should be type smallint');
 SELECT col_not_null(     'production', 'product', 'reorder_point', 'Column production.product.reorder_point should be NOT NULL');
 SELECT col_hasnt_default('production', 'product', 'reorder_point', 'Column production.product.reorder_point should not have a default');
+SELECT col_has_check(    'production', 'product', 'reorder_point', 'Column production.product.reorder_point should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'standard_cost', 'Column production.product.standard_cost should exist');
 SELECT col_type_is(      'production', 'product', 'standard_cost', 'numeric', 'Column production.product.standard_cost should be type numeric');
 SELECT col_not_null(     'production', 'product', 'standard_cost', 'Column production.product.standard_cost should be NOT NULL');
 SELECT col_hasnt_default('production', 'product', 'standard_cost', 'Column production.product.standard_cost should not have a default');
+SELECT col_has_check(    'production', 'product', 'standard_cost', 'Column production.product.standard_cost should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'list_price', 'Column production.product.list_price should exist');
 SELECT col_type_is(      'production', 'product', 'list_price', 'numeric', 'Column production.product.list_price should be type numeric');
 SELECT col_not_null(     'production', 'product', 'list_price', 'Column production.product.list_price should be NOT NULL');
 SELECT col_hasnt_default('production', 'product', 'list_price', 'Column production.product.list_price should not have a default');
+SELECT col_has_check(    'production', 'product', 'list_price', 'Column production.product.list_price should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'size', 'Column production.product.size should exist');
 SELECT col_type_is(      'production', 'product', 'size', 'character varying(5)', 'Column production.product.size should be type character varying(5)');
@@ -116,26 +130,31 @@ SELECT has_column(       'production', 'product', 'weight', 'Column production.p
 SELECT col_type_is(      'production', 'product', 'weight', 'numeric(8,2)', 'Column production.product.weight should be type numeric(8,2)');
 SELECT col_is_null(      'production', 'product', 'weight', 'Column production.product.weight should allow NULL');
 SELECT col_hasnt_default('production', 'product', 'weight', 'Column production.product.weight should not have a default');
+SELECT col_has_check(    'production', 'product', 'weight', 'Column production.product.weight should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'days_to_manufacture', 'Column production.product.days_to_manufacture should exist');
 SELECT col_type_is(      'production', 'product', 'days_to_manufacture', 'integer', 'Column production.product.days_to_manufacture should be type integer');
 SELECT col_not_null(     'production', 'product', 'days_to_manufacture', 'Column production.product.days_to_manufacture should be NOT NULL');
 SELECT col_hasnt_default('production', 'product', 'days_to_manufacture', 'Column production.product.days_to_manufacture should not have a default');
+SELECT col_has_check(    'production', 'product', 'days_to_manufacture', 'Column production.product.days_to_manufacture should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'product_line', 'Column production.product.product_line should exist');
 SELECT col_type_is(      'production', 'product', 'product_line', 'character(2)', 'Column production.product.product_line should be type character(2)');
 SELECT col_is_null(      'production', 'product', 'product_line', 'Column production.product.product_line should allow NULL');
 SELECT col_hasnt_default('production', 'product', 'product_line', 'Column production.product.product_line should not have a default');
+SELECT col_has_check(    'production', 'product', 'product_line', 'Column production.product.product_line should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'class', 'Column production.product.class should exist');
 SELECT col_type_is(      'production', 'product', 'class', 'character(2)', 'Column production.product.class should be type character(2)');
 SELECT col_is_null(      'production', 'product', 'class', 'Column production.product.class should allow NULL');
 SELECT col_hasnt_default('production', 'product', 'class', 'Column production.product.class should not have a default');
+SELECT col_has_check(    'production', 'product', 'class', 'Column production.product.class should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'style', 'Column production.product.style should exist');
 SELECT col_type_is(      'production', 'product', 'style', 'character(2)', 'Column production.product.style should be type character(2)');
 SELECT col_is_null(      'production', 'product', 'style', 'Column production.product.style should allow NULL');
 SELECT col_hasnt_default('production', 'product', 'style', 'Column production.product.style should not have a default');
+SELECT col_has_check(    'production', 'product', 'style', 'Column production.product.style should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'product_sub_category_id', 'Column production.product.product_sub_category_id should exist');
 SELECT col_type_is(      'production', 'product', 'product_sub_category_id', 'integer', 'Column production.product.product_sub_category_id should be type integer');
@@ -156,6 +175,7 @@ SELECT has_column(       'production', 'product', 'sell_end_date', 'Column produ
 SELECT col_type_is(      'production', 'product', 'sell_end_date', 'timestamp without time zone', 'Column production.product.sell_end_date should be type timestamp without time zone');
 SELECT col_is_null(      'production', 'product', 'sell_end_date', 'Column production.product.sell_end_date should allow NULL');
 SELECT col_hasnt_default('production', 'product', 'sell_end_date', 'Column production.product.sell_end_date should not have a default');
+SELECT col_has_check(    'production', 'product', ARRAY['sell_end_date'::name,'sell_start_date'::name], 'Columns production.product.[sell_end_date,sell_start_date] should have a check constraint');
 
 SELECT has_column(       'production', 'product', 'discontinued_date', 'Column production.product.discontinued_date should exist');
 SELECT col_type_is(      'production', 'product', 'discontinued_date', 'timestamp without time zone', 'Column production.product.discontinued_date should be type timestamp without time zone');
@@ -176,3 +196,4 @@ SELECT col_default_is(   'production', 'product', 'modified_date', 'timezone(''u
 
 SELECT * FROM finish();
 ROLLBACK;
+

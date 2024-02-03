@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(38);
+SELECT plan(41);
 
 SELECT has_table(
     'production', 'product_review',
     'Should have table production.product_review'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'product_review',
     'Table production.product_review should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'product_review',
+    'Table production.product_review should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'product_review'::name, ARRAY[
+    'product_review_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'product_review'::name, ARRAY[
     'product_review_id'::name,
@@ -58,6 +68,7 @@ SELECT has_column(       'production', 'product_review', 'rating', 'Column produ
 SELECT col_type_is(      'production', 'product_review', 'rating', 'integer', 'Column production.product_review.rating should be type integer');
 SELECT col_not_null(     'production', 'product_review', 'rating', 'Column production.product_review.rating should be NOT NULL');
 SELECT col_hasnt_default('production', 'product_review', 'rating', 'Column production.product_review.rating should not have a default');
+SELECT col_has_check(    'production', 'product_review', 'rating', 'Column production.product_review.rating should have a check constraint');
 
 SELECT has_column(       'production', 'product_review', 'comments', 'Column production.product_review.comments should exist');
 SELECT col_type_is(      'production', 'product_review', 'comments', 'character varying(3850)', 'Column production.product_review.comments should be type character varying(3850)');
@@ -72,3 +83,4 @@ SELECT col_default_is(   'production', 'product_review', 'modified_date', 'timez
 
 SELECT * FROM finish();
 ROLLBACK;
+

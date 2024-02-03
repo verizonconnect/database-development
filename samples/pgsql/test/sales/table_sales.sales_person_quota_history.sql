@@ -1,20 +1,31 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(25);
+SELECT plan(28);
 
 SELECT has_table(
     'sales', 'sales_person_quota_history',
     'Should have table sales.sales_person_quota_history'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'sales_person_quota_history',
     'Table sales.sales_person_quota_history should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'sales_person_quota_history',
+    'Table sales.sales_person_quota_history should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'sales_person_quota_history'::name, ARRAY[
+    'business_entity_id'::name,
+    'quota_date'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'sales_person_quota_history'::name, ARRAY[
     'business_entity_id'::name,
@@ -38,6 +49,7 @@ SELECT has_column(       'sales', 'sales_person_quota_history', 'sales_quota', '
 SELECT col_type_is(      'sales', 'sales_person_quota_history', 'sales_quota', 'numeric', 'Column sales.sales_person_quota_history.sales_quota should be type numeric');
 SELECT col_not_null(     'sales', 'sales_person_quota_history', 'sales_quota', 'Column sales.sales_person_quota_history.sales_quota should be NOT NULL');
 SELECT col_hasnt_default('sales', 'sales_person_quota_history', 'sales_quota', 'Column sales.sales_person_quota_history.sales_quota should not have a default');
+SELECT col_has_check(    'sales', 'sales_person_quota_history', 'sales_quota', 'Column sales.sales_person_quota_history.sales_quota should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_person_quota_history', 'rowguid', 'Column sales.sales_person_quota_history.rowguid should exist');
 SELECT col_type_is(      'sales', 'sales_person_quota_history', 'rowguid', 'uuid', 'Column sales.sales_person_quota_history.rowguid should be type uuid');
@@ -53,3 +65,4 @@ SELECT col_default_is(   'sales', 'sales_person_quota_history', 'modified_date',
 
 SELECT * FROM finish();
 ROLLBACK;
+

@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(60);
+SELECT plan(63);
 
 SELECT has_table(
     'production', 'document',
     'Should have table production.document'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'document',
     'Table production.document should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'document',
+    'Table production.document should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'document'::name, ARRAY[
+    'document_node'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'document'::name, ARRAY[
     'document_node'::name,
@@ -79,6 +89,7 @@ SELECT has_column(       'production', 'document', 'status', 'Column production.
 SELECT col_type_is(      'production', 'document', 'status', 'smallint', 'Column production.document.status should be type smallint');
 SELECT col_not_null(     'production', 'document', 'status', 'Column production.document.status should be NOT NULL');
 SELECT col_hasnt_default('production', 'document', 'status', 'Column production.document.status should not have a default');
+SELECT col_has_check(    'production', 'document', 'status', 'Column production.document.status should have a check constraint');
 
 SELECT has_column(       'production', 'document', 'document_summary', 'Column production.document.document_summary should exist');
 SELECT col_type_is(      'production', 'document', 'document_summary', 'text', 'Column production.document.document_summary should be type text');
@@ -104,3 +115,4 @@ SELECT col_default_is(   'production', 'document', 'modified_date', 'timezone(''
 
 SELECT * FROM finish();
 ROLLBACK;
+

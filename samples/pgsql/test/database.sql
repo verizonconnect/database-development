@@ -4,6 +4,7 @@ CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
+
 SELECT plan(32);
 
 SELECT schemas_are(ARRAY[
@@ -280,9 +281,6 @@ SELECT extensions_are('common', ARRAY[
     'tablefunc',
     'uuid-ossp'
 ]);
-
-
-
 
 SELECT * FROM finish();
 ROLLBACK;

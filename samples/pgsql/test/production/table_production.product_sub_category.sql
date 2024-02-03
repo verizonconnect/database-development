@@ -1,20 +1,25 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(26);
+SELECT plan(27);
 
 SELECT has_table(
     'production', 'product_sub_category',
     'Should have table production.product_sub_category'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'product_sub_category',
     'Table production.product_sub_category should have a primary key'
 );
+
+SELECT col_is_pk('production'::name, 'product_sub_category'::name, ARRAY[
+    'product_sub_category_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'product_sub_category'::name, ARRAY[
     'product_sub_category_id'::name,
@@ -54,3 +59,4 @@ SELECT col_default_is(   'production', 'product_sub_category', 'modified_date', 
 
 SELECT * FROM finish();
 ROLLBACK;
+

@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(41);
+SELECT plan(46);
 
 SELECT has_table(
     'production', 'work_order',
     'Should have table production.work_order'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'work_order',
     'Table production.work_order should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'work_order',
+    'Table production.work_order should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'work_order'::name, ARRAY[
+    'work_order_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'work_order'::name, ARRAY[
     'work_order_id'::name,
@@ -43,11 +53,13 @@ SELECT has_column(       'production', 'work_order', 'order_qty', 'Column produc
 SELECT col_type_is(      'production', 'work_order', 'order_qty', 'integer', 'Column production.work_order.order_qty should be type integer');
 SELECT col_not_null(     'production', 'work_order', 'order_qty', 'Column production.work_order.order_qty should be NOT NULL');
 SELECT col_hasnt_default('production', 'work_order', 'order_qty', 'Column production.work_order.order_qty should not have a default');
+SELECT col_has_check(    'production', 'work_order', 'order_qty', 'Column production.work_order.order_qty should have a check constraint');
 
 SELECT has_column(       'production', 'work_order', 'scrapped_qty', 'Column production.work_order.scrapped_qty should exist');
 SELECT col_type_is(      'production', 'work_order', 'scrapped_qty', 'smallint', 'Column production.work_order.scrapped_qty should be type smallint');
 SELECT col_not_null(     'production', 'work_order', 'scrapped_qty', 'Column production.work_order.scrapped_qty should be NOT NULL');
 SELECT col_hasnt_default('production', 'work_order', 'scrapped_qty', 'Column production.work_order.scrapped_qty should not have a default');
+SELECT col_has_check(    'production', 'work_order', 'scrapped_qty', 'Column production.work_order.scrapped_qty should have a check constraint');
 
 SELECT has_column(       'production', 'work_order', 'start_date', 'Column production.work_order.start_date should exist');
 SELECT col_type_is(      'production', 'work_order', 'start_date', 'timestamp without time zone', 'Column production.work_order.start_date should be type timestamp without time zone');
@@ -58,6 +70,7 @@ SELECT has_column(       'production', 'work_order', 'end_date', 'Column product
 SELECT col_type_is(      'production', 'work_order', 'end_date', 'timestamp without time zone', 'Column production.work_order.end_date should be type timestamp without time zone');
 SELECT col_is_null(      'production', 'work_order', 'end_date', 'Column production.work_order.end_date should allow NULL');
 SELECT col_hasnt_default('production', 'work_order', 'end_date', 'Column production.work_order.end_date should not have a default');
+SELECT col_has_check(    'production', 'work_order', ARRAY['end_date'::name,'start_date'::name], 'Columns production.work_order.[end_date,start_date] should have a check constraint');
 
 SELECT has_column(       'production', 'work_order', 'due_date', 'Column production.work_order.due_date should exist');
 SELECT col_type_is(      'production', 'work_order', 'due_date', 'timestamp without time zone', 'Column production.work_order.due_date should be type timestamp without time zone');
@@ -77,3 +90,4 @@ SELECT col_default_is(   'production', 'work_order', 'modified_date', 'timezone(
 
 SELECT * FROM finish();
 ROLLBACK;
+
