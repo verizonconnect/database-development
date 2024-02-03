@@ -1,20 +1,31 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(48);
+SELECT plan(56);
 
 SELECT has_table(
     'purchasing', 'product_vendor',
     'Should have table purchasing.product_vendor'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'purchasing', 'product_vendor',
     'Table purchasing.product_vendor should have a primary key'
 );
+
+SELECT has_check(
+    'purchasing', 'product_vendor',
+    'Table purchasing.product_vendor should have check contraint(s)'
+);
+
+SELECT col_is_pk('purchasing'::name, 'product_vendor'::name, ARRAY[
+    'product_id'::name,
+    'business_entity_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('purchasing'::name, 'product_vendor'::name, ARRAY[
     'product_id'::name,
@@ -44,16 +55,19 @@ SELECT has_column(       'purchasing', 'product_vendor', 'average_lead_time', 'C
 SELECT col_type_is(      'purchasing', 'product_vendor', 'average_lead_time', 'integer', 'Column purchasing.product_vendor.average_lead_time should be type integer');
 SELECT col_not_null(     'purchasing', 'product_vendor', 'average_lead_time', 'Column purchasing.product_vendor.average_lead_time should be NOT NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'average_lead_time', 'Column purchasing.product_vendor.average_lead_time should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'average_lead_time', 'Column purchasing.product_vendor.average_lead_time should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'standard_price', 'Column purchasing.product_vendor.standard_price should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'standard_price', 'numeric', 'Column purchasing.product_vendor.standard_price should be type numeric');
 SELECT col_not_null(     'purchasing', 'product_vendor', 'standard_price', 'Column purchasing.product_vendor.standard_price should be NOT NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'standard_price', 'Column purchasing.product_vendor.standard_price should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'standard_price', 'Column purchasing.product_vendor.standard_price should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'last_receipt_cost', 'Column purchasing.product_vendor.last_receipt_cost should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'last_receipt_cost', 'numeric', 'Column purchasing.product_vendor.last_receipt_cost should be type numeric');
 SELECT col_is_null(      'purchasing', 'product_vendor', 'last_receipt_cost', 'Column purchasing.product_vendor.last_receipt_cost should allow NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'last_receipt_cost', 'Column purchasing.product_vendor.last_receipt_cost should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'last_receipt_cost', 'Column purchasing.product_vendor.standard_price should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'last_receipt_date', 'Column purchasing.product_vendor.last_receipt_date should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'last_receipt_date', 'timestamp without time zone', 'Column purchasing.product_vendor.last_receipt_date should be type timestamp without time zone');
@@ -64,16 +78,19 @@ SELECT has_column(       'purchasing', 'product_vendor', 'min_order_qty', 'Colum
 SELECT col_type_is(      'purchasing', 'product_vendor', 'min_order_qty', 'integer', 'Column purchasing.product_vendor.min_order_qty should be type integer');
 SELECT col_not_null(     'purchasing', 'product_vendor', 'min_order_qty', 'Column purchasing.product_vendor.min_order_qty should be NOT NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'min_order_qty', 'Column purchasing.product_vendor.min_order_qty should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'min_order_qty', 'Column purchasing.product_vendor.min_order_qty should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'max_order_qty', 'Column purchasing.product_vendor.max_order_qty should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'max_order_qty', 'integer', 'Column purchasing.product_vendor.max_order_qty should be type integer');
 SELECT col_not_null(     'purchasing', 'product_vendor', 'max_order_qty', 'Column purchasing.product_vendor.max_order_qty should be NOT NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'max_order_qty', 'Column purchasing.product_vendor.max_order_qty should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'max_order_qty', 'Column purchasing.product_vendor.max_order_qty should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'on_order_qty', 'Column purchasing.product_vendor.on_order_qty should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'on_order_qty', 'integer', 'Column purchasing.product_vendor.on_order_qty should be type integer');
 SELECT col_is_null(      'purchasing', 'product_vendor', 'on_order_qty', 'Column purchasing.product_vendor.on_order_qty should allow NULL');
 SELECT col_hasnt_default('purchasing', 'product_vendor', 'on_order_qty', 'Column purchasing.product_vendor.on_order_qty should not have a default');
+SELECT col_has_check(    'purchasing', 'product_vendor', 'on_order_qty', 'Column purchasing.product_vendor.on_order_qty should have a check constraint');
 
 SELECT has_column(       'purchasing', 'product_vendor', 'unit_measure_code', 'Column purchasing.product_vendor.unit_measure_code should exist');
 SELECT col_type_is(      'purchasing', 'product_vendor', 'unit_measure_code', 'character(3)', 'Column purchasing.product_vendor.unit_measure_code should be type character(3)');
@@ -88,3 +105,4 @@ SELECT col_default_is(   'purchasing', 'product_vendor', 'modified_date', 'timez
 
 SELECT * FROM finish();
 ROLLBACK;
+

@@ -1,20 +1,31 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(24);
+SELECT plan(28);
 
 SELECT has_table(
     'human_resources', 'employee_pay_history',
     'Should have table human_resources.employee_pay_history'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'human_resources', 'employee_pay_history',
     'Table human_resources.employee_pay_history should have a primary key'
 );
+
+SELECT has_check(
+    'human_resources', 'employee_pay_history',
+    'Table human_resources.employee_pay_history should have check contraint(s)'
+);
+
+SELECT col_is_pk('human_resources'::name, 'employee_pay_history'::name, ARRAY[
+    'business_entity_id'::name,
+    'rate_change_date'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('human_resources'::name, 'employee_pay_history'::name, ARRAY[
     'business_entity_id'::name,
@@ -38,11 +49,13 @@ SELECT has_column(       'human_resources', 'employee_pay_history', 'rate', 'Col
 SELECT col_type_is(      'human_resources', 'employee_pay_history', 'rate', 'numeric', 'Column human_resources.employee_pay_history.rate should be type numeric');
 SELECT col_not_null(     'human_resources', 'employee_pay_history', 'rate', 'Column human_resources.employee_pay_history.rate should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee_pay_history', 'rate', 'Column human_resources.employee_pay_history.rate should not have a default');
+SELECT col_has_check(    'human_resources', 'employee_pay_history', 'rate', 'Column human_resources.employee_pay_history.rate should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee_pay_history', 'pay_frequency', 'Column human_resources.employee_pay_history.pay_frequency should exist');
 SELECT col_type_is(      'human_resources', 'employee_pay_history', 'pay_frequency', 'smallint', 'Column human_resources.employee_pay_history.pay_frequency should be type smallint');
 SELECT col_not_null(     'human_resources', 'employee_pay_history', 'pay_frequency', 'Column human_resources.employee_pay_history.pay_frequency should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee_pay_history', 'pay_frequency', 'Column human_resources.employee_pay_history.pay_frequency should not have a default');
+SELECT col_has_check(    'human_resources', 'employee_pay_history', 'pay_frequency', 'Column human_resources.employee_pay_history.pay_frequency should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee_pay_history', 'modified_date', 'Column human_resources.employee_pay_history.modified_date should exist');
 SELECT col_type_is(      'human_resources', 'employee_pay_history', 'modified_date', 'timestamp without time zone', 'Column human_resources.employee_pay_history.modified_date should be type timestamp without time zone');
@@ -52,3 +65,4 @@ SELECT col_default_is(   'human_resources', 'employee_pay_history', 'modified_da
 
 SELECT * FROM finish();
 ROLLBACK;
+

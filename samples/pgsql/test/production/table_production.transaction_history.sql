@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(43);
+SELECT plan(46);
 
 SELECT has_table(
     'production', 'transaction_history',
     'Should have table production.transaction_history'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'transaction_history',
     'Table production.transaction_history should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'transaction_history',
+    'Table production.transaction_history should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'transaction_history'::name, ARRAY[
+    'transaction_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'transaction_history'::name, ARRAY[
     'transaction_id'::name,
@@ -60,6 +70,7 @@ SELECT has_column(       'production', 'transaction_history', 'transaction_type'
 SELECT col_type_is(      'production', 'transaction_history', 'transaction_type', 'character(1)', 'Column production.transaction_history.transaction_type should be type character(1)');
 SELECT col_not_null(     'production', 'transaction_history', 'transaction_type', 'Column production.transaction_history.transaction_type should be NOT NULL');
 SELECT col_hasnt_default('production', 'transaction_history', 'transaction_type', 'Column production.transaction_history.transaction_type should not have a default');
+SELECT col_has_check(    'production', 'transaction_history', 'transaction_type', 'Column production.transaction_history.transaction_type should have a check constraint');
 
 SELECT has_column(       'production', 'transaction_history', 'quantity', 'Column production.transaction_history.quantity should exist');
 SELECT col_type_is(      'production', 'transaction_history', 'quantity', 'integer', 'Column production.transaction_history.quantity should be type integer');
@@ -79,3 +90,4 @@ SELECT col_default_is(   'production', 'transaction_history', 'modified_date', '
 
 SELECT * FROM finish();
 ROLLBACK;
+

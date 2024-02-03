@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(117);
+SELECT plan(125);
 
 SELECT has_table(
     'sales', 'sales_order_header',
     'Should have table sales.sales_order_header'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'sales_order_header',
     'Table sales.sales_order_header should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'sales_order_header',
+    'Table sales.sales_order_header should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'sales_order_header'::name, ARRAY[
+    'sales_order_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'sales_order_header'::name, ARRAY[
     'sales_order_id'::name,
@@ -67,17 +77,20 @@ SELECT has_column(       'sales', 'sales_order_header', 'due_date', 'Column sale
 SELECT col_type_is(      'sales', 'sales_order_header', 'due_date', 'timestamp without time zone', 'Column sales.sales_order_header.due_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'sales_order_header', 'due_date', 'Column sales.sales_order_header.due_date should be NOT NULL');
 SELECT col_hasnt_default('sales', 'sales_order_header', 'due_date', 'Column sales.sales_order_header.due_date should not have a default');
+SELECT col_has_check(    'sales', 'sales_order_header', ARRAY['due_date'::name,'order_date'::name], 'Columns sales.sales_order_header.[due_date,order_date] should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'ship_date', 'Column sales.sales_order_header.ship_date should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'ship_date', 'timestamp without time zone', 'Column sales.sales_order_header.ship_date should be type timestamp without time zone');
 SELECT col_is_null(      'sales', 'sales_order_header', 'ship_date', 'Column sales.sales_order_header.ship_date should allow NULL');
 SELECT col_hasnt_default('sales', 'sales_order_header', 'ship_date', 'Column sales.sales_order_header.ship_date should not have a default');
+SELECT col_has_check(    'sales', 'sales_order_header', ARRAY['ship_date'::name,'order_date'::name], 'Columns sales.sales_order_header.[ship_date,order_date] should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'status', 'Column sales.sales_order_header.status should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'status', 'smallint', 'Column sales.sales_order_header.status should be type smallint');
 SELECT col_not_null(     'sales', 'sales_order_header', 'status', 'Column sales.sales_order_header.status should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_order_header', 'status', 'Column sales.sales_order_header.status should have a default');
 SELECT col_default_is(   'sales', 'sales_order_header', 'status', '1', 'Column sales.sales_order_header.status default is');
+SELECT col_has_check(    'sales', 'sales_order_header', 'status', 'Column sales.sales_order_header.status should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'online_order_flag', 'Column sales.sales_order_header.online_order_flag should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'online_order_flag', 'common.flag', 'Column sales.sales_order_header.online_order_flag should be type common.flag');
@@ -150,18 +163,21 @@ SELECT col_type_is(      'sales', 'sales_order_header', 'sub_total', 'numeric', 
 SELECT col_not_null(     'sales', 'sales_order_header', 'sub_total', 'Column sales.sales_order_header.sub_total should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_order_header', 'sub_total', 'Column sales.sales_order_header.sub_total should have a default');
 SELECT col_default_is(   'sales', 'sales_order_header', 'sub_total', '0.00', 'Column sales.sales_order_header.sub_total default is');
+SELECT col_has_check(    'sales', 'sales_order_header', 'sub_total', 'Column sales.sales_order_header.sub_total should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'tax_amt', 'Column sales.sales_order_header.tax_amt should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'tax_amt', 'numeric', 'Column sales.sales_order_header.tax_amt should be type numeric');
 SELECT col_not_null(     'sales', 'sales_order_header', 'tax_amt', 'Column sales.sales_order_header.tax_amt should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_order_header', 'tax_amt', 'Column sales.sales_order_header.tax_amt should have a default');
 SELECT col_default_is(   'sales', 'sales_order_header', 'tax_amt', '0.00', 'Column sales.sales_order_header.tax_amt default is');
+SELECT col_has_check(    'sales', 'sales_order_header', 'tax_amt', 'Column sales.sales_order_header.tax_amt should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'freight', 'Column sales.sales_order_header.freight should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'freight', 'numeric', 'Column sales.sales_order_header.freight should be type numeric');
 SELECT col_not_null(     'sales', 'sales_order_header', 'freight', 'Column sales.sales_order_header.freight should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_order_header', 'freight', 'Column sales.sales_order_header.freight should have a default');
 SELECT col_default_is(   'sales', 'sales_order_header', 'freight', '0.00', 'Column sales.sales_order_header.freight default is');
+SELECT col_has_check(    'sales', 'sales_order_header', 'freight', 'Column sales.sales_order_header.freight should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_order_header', 'total_due', 'Column sales.sales_order_header.total_due should exist');
 SELECT col_type_is(      'sales', 'sales_order_header', 'total_due', 'numeric', 'Column sales.sales_order_header.total_due should be type numeric');
@@ -187,3 +203,4 @@ SELECT col_default_is(   'sales', 'sales_order_header', 'modified_date', 'timezo
 
 SELECT * FROM finish();
 ROLLBACK;
+

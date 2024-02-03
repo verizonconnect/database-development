@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(59);
+SELECT plan(63);
 
 SELECT has_table(
     'person', 'person',
     'Should have table person.person'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'person', 'person',
     'Table person.person should have a primary key'
 );
+
+SELECT has_check(
+    'person', 'person',
+    'Table person.person should have check contraint(s)'
+);
+
+SELECT col_is_pk('person'::name, 'person'::name, ARRAY[
+    'business_entity_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('person'::name, 'person'::name, ARRAY[
     'business_entity_id'::name,
@@ -41,6 +51,7 @@ SELECT has_column(       'person', 'person', 'person_type', 'Column person.perso
 SELECT col_type_is(      'person', 'person', 'person_type', 'character(2)', 'Column person.person.person_type should be type character(2)');
 SELECT col_not_null(     'person', 'person', 'person_type', 'Column person.person.person_type should be NOT NULL');
 SELECT col_hasnt_default('person', 'person', 'person_type', 'Column person.person.person_type should not have a default');
+SELECT col_has_check(    'person', 'person', 'person_type', 'Column person.person.person_type should have a check constraint');
 
 SELECT has_column(       'person', 'person', 'name_style', 'Column person.person.name_style should exist');
 SELECT col_type_is(      'person', 'person', 'name_style', 'common.name_style', 'Column person.person.name_style should be type common.name_style');
@@ -78,6 +89,7 @@ SELECT col_type_is(      'person', 'person', 'email_promotion', 'integer', 'Colu
 SELECT col_not_null(     'person', 'person', 'email_promotion', 'Column person.person.email_promotion should be NOT NULL');
 SELECT col_has_default(  'person', 'person', 'email_promotion', 'Column person.person.email_promotion should have a default');
 SELECT col_default_is(   'person', 'person', 'email_promotion', '0', 'Column person.person.email_promotion default is');
+SELECT col_has_check(    'person', 'person', 'email_promotion', 'Column person.person.email_promotion should have a check constraint');
 
 SELECT has_column(       'person', 'person', 'additional_contact_info', 'Column person.person.additional_contact_info should exist');
 SELECT col_type_is(      'person', 'person', 'additional_contact_info', 'xml', 'Column person.person.additional_contact_info should be type xml');
@@ -103,3 +115,4 @@ SELECT col_default_is(   'person', 'person', 'modified_date', 'timezone(''utc'':
 
 SELECT * FROM finish();
 ROLLBACK;
+

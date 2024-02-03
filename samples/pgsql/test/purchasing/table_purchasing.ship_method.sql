@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(32);
+SELECT plan(36);
 
 SELECT has_table(
     'purchasing', 'ship_method',
     'Should have table purchasing.ship_method'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'purchasing', 'ship_method',
     'Table purchasing.ship_method should have a primary key'
 );
+
+SELECT has_check(
+    'purchasing', 'purchase_order_header',
+    'Table purchasing.purchase_order_header should have check contraint(s)'
+);
+
+SELECT col_is_pk('purchasing'::name, 'ship_method'::name, ARRAY[
+    'ship_method_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('purchasing'::name, 'ship_method'::name, ARRAY[
     'ship_method_id'::name,
@@ -41,12 +51,14 @@ SELECT col_type_is(      'purchasing', 'ship_method', 'ship_base', 'numeric', 'C
 SELECT col_not_null(     'purchasing', 'ship_method', 'ship_base', 'Column purchasing.ship_method.ship_base should be NOT NULL');
 SELECT col_has_default(  'purchasing', 'ship_method', 'ship_base', 'Column purchasing.ship_method.ship_base should have a default');
 SELECT col_default_is(   'purchasing', 'ship_method', 'ship_base', '0.00', 'Column purchasing.ship_method.ship_base default is');
+SELECT col_has_check(    'purchasing', 'ship_method', 'ship_base', 'Column purchasing.ship_method.ship_base should have a check constraint');
 
 SELECT has_column(       'purchasing', 'ship_method', 'ship_rate', 'Column purchasing.ship_method.ship_rate should exist');
 SELECT col_type_is(      'purchasing', 'ship_method', 'ship_rate', 'numeric', 'Column purchasing.ship_method.ship_rate should be type numeric');
 SELECT col_not_null(     'purchasing', 'ship_method', 'ship_rate', 'Column purchasing.ship_method.ship_rate should be NOT NULL');
 SELECT col_has_default(  'purchasing', 'ship_method', 'ship_rate', 'Column purchasing.ship_method.ship_rate should have a default');
 SELECT col_default_is(   'purchasing', 'ship_method', 'ship_rate', '0.00', 'Column purchasing.ship_method.ship_rate default is');
+SELECT col_has_check(    'purchasing', 'ship_method', 'ship_rate', 'Column purchasing.ship_method.ship_rate should have a check constraint');
 
 SELECT has_column(       'purchasing', 'ship_method', 'rowguid', 'Column purchasing.ship_method.rowguid should exist');
 SELECT col_type_is(      'purchasing', 'ship_method', 'rowguid', 'uuid', 'Column purchasing.ship_method.rowguid should be type uuid');
@@ -62,3 +74,4 @@ SELECT col_default_is(   'purchasing', 'ship_method', 'modified_date', 'timezone
 
 SELECT * FROM finish();
 ROLLBACK;
+

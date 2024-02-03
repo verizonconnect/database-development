@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(70);
+SELECT plan(77);
 
 SELECT has_table(
     'human_resources', 'employee',
     'Should have table human_resources.employee'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'human_resources', 'employee',
     'Table human_resources.employee should have a primary key'
 );
+
+SELECT has_check(
+    'human_resources', 'employee',
+    'Table human_resources.employee should have check contraint(s)'
+);
+
+SELECT col_is_pk('human_resources'::name, 'employee'::name, ARRAY[
+    'business_entity_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('human_resources'::name, 'employee'::name, ARRAY[
     'business_entity_id'::name,
@@ -64,21 +74,25 @@ SELECT has_column(       'human_resources', 'employee', 'birth_date', 'Column hu
 SELECT col_type_is(      'human_resources', 'employee', 'birth_date', 'date', 'Column human_resources.employee.birth_date should be type date');
 SELECT col_not_null(     'human_resources', 'employee', 'birth_date', 'Column human_resources.employee.birth_date should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee', 'birth_date', 'Column human_resources.employee.birth_date should not have a default');
+SELECT col_has_check(    'human_resources', 'employee', 'birth_date', 'Column human_resources.employee.birth_date should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee', 'marital_status', 'Column human_resources.employee.marital_status should exist');
 SELECT col_type_is(      'human_resources', 'employee', 'marital_status', 'character(1)', 'Column human_resources.employee.marital_status should be type character(1)');
 SELECT col_not_null(     'human_resources', 'employee', 'marital_status', 'Column human_resources.employee.marital_status should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee', 'marital_status', 'Column human_resources.employee.marital_status should not have a default');
+SELECT col_has_check(    'human_resources', 'employee', 'marital_status', 'Column human_resources.employee.marital_status should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee', 'gender', 'Column human_resources.employee.gender should exist');
 SELECT col_type_is(      'human_resources', 'employee', 'gender', 'character(1)', 'Column human_resources.employee.gender should be type character(1)');
 SELECT col_not_null(     'human_resources', 'employee', 'gender', 'Column human_resources.employee.gender should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee', 'gender', 'Column human_resources.employee.gender should not have a default');
+SELECT col_has_check(    'human_resources', 'employee', 'gender', 'Column human_resources.employee.gender should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee', 'hire_date', 'Column human_resources.employee.hire_date should exist');
 SELECT col_type_is(      'human_resources', 'employee', 'hire_date', 'date', 'Column human_resources.employee.hire_date should be type date');
 SELECT col_not_null(     'human_resources', 'employee', 'hire_date', 'Column human_resources.employee.hire_date should be NOT NULL');
 SELECT col_hasnt_default('human_resources', 'employee', 'hire_date', 'Column human_resources.employee.hire_date should not have a default');
+SELECT col_has_check(    'human_resources', 'employee', 'hire_date', 'Column human_resources.employee.hire_date should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee', 'salaried_flag', 'Column human_resources.employee.salaried_flag should exist');
 SELECT col_type_is(      'human_resources', 'employee', 'salaried_flag', 'common.flag', 'Column human_resources.employee.salaried_flag should be type common.flag');
@@ -91,6 +105,7 @@ SELECT col_type_is(      'human_resources', 'employee', 'holiday_hours', 'smalli
 SELECT col_not_null(     'human_resources', 'employee', 'holiday_hours', 'Column human_resources.employee.holiday_hours should be NOT NULL');
 SELECT col_has_default(  'human_resources', 'employee', 'holiday_hours', 'Column human_resources.employee.holiday_hours should have a default');
 SELECT col_default_is(   'human_resources', 'employee', 'holiday_hours', '0', 'Column human_resources.employee.holiday_hours default is');
+SELECT col_has_check(    'human_resources', 'employee', 'holiday_hours', 'Column human_resources.employee.hire_date should have a check constraint');
 
 SELECT has_column(       'human_resources', 'employee', 'sick_leave_hours', 'Column human_resources.employee.sick_leave_hours should exist');
 SELECT col_type_is(      'human_resources', 'employee', 'sick_leave_hours', 'smallint', 'Column human_resources.employee.sick_leave_hours should be type smallint');
@@ -118,3 +133,4 @@ SELECT col_default_is(   'human_resources', 'employee', 'modified_date', 'timezo
 
 SELECT * FROM finish();
 ROLLBACK;
+

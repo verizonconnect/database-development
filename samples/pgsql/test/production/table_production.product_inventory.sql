@@ -1,20 +1,31 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(34);
+SELECT plan(37);
 
 SELECT has_table(
     'production', 'product_inventory',
     'Should have table production.product_inventory'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'product_inventory',
     'Table production.product_inventory should have a primary key'
 );
+
+SELECT has_check(
+    'production', 'product_inventory',
+    'Table production.product_inventory should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'product_inventory'::name, ARRAY[
+    'product_id'::name,
+    'location_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('production'::name, 'product_inventory'::name, ARRAY[
     'product_id'::name,
@@ -45,6 +56,7 @@ SELECT has_column(       'production', 'product_inventory', 'bin', 'Column produ
 SELECT col_type_is(      'production', 'product_inventory', 'bin', 'smallint', 'Column production.product_inventory.bin should be type smallint');
 SELECT col_not_null(     'production', 'product_inventory', 'bin', 'Column production.product_inventory.bin should be NOT NULL');
 SELECT col_hasnt_default('production', 'product_inventory', 'bin', 'Column production.product_inventory.bin should not have a default');
+SELECT col_has_check(    'production', 'product_inventory', 'bin', 'Column production.product_inventory.bin should have a check constraint');
 
 SELECT has_column(       'production', 'product_inventory', 'quantity', 'Column production.product_inventory.quantity should exist');
 SELECT col_type_is(      'production', 'product_inventory', 'quantity', 'smallint', 'Column production.product_inventory.quantity should be type smallint');
@@ -66,3 +78,4 @@ SELECT col_default_is(   'production', 'product_inventory', 'modified_date', 'ti
 
 SELECT * FROM finish();
 ROLLBACK;
+

@@ -1,20 +1,25 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(34);
+SELECT plan(35);
 
 SELECT has_table(
     'sales', 'customer',
     'Should have table sales.customer'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'customer',
     'Table sales.customer should have a primary key'
 );
+
+SELECT col_is_pk('sales'::name, 'customer'::name, ARRAY[
+    'customer_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'customer'::name, ARRAY[
     'customer_id'::name,
@@ -66,3 +71,4 @@ SELECT col_default_is(   'sales', 'customer', 'modified_date', 'timezone(''utc''
 
 SELECT * FROM finish();
 ROLLBACK;
+

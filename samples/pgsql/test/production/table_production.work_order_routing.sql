@@ -1,21 +1,32 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(52);
+SELECT plan(59);
 
 SELECT has_table(
     'production', 'work_order_routing',
     'Should have table production.work_order_routing'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'production', 'work_order_routing',
     'Table production.work_order_routing should have a primary key'
 );
 
+SELECT has_check(
+    'production', 'work_order_routing',
+    'Table production.work_order_routing should have check contraint(s)'
+);
+
+SELECT col_is_pk('production'::name, 'work_order_routing'::name, ARRAY[
+    'work_order_id'::name,
+    'product_id'::name,
+    'operation_sequence'::name
+],
+'Primary key definition is not as expected');
 SELECT columns_are('production'::name, 'work_order_routing'::name, ARRAY[
     'work_order_id'::name,
     'product_id'::name,
@@ -60,6 +71,7 @@ SELECT has_column(       'production', 'work_order_routing', 'scheduled_end_date
 SELECT col_type_is(      'production', 'work_order_routing', 'scheduled_end_date', 'timestamp without time zone', 'Column production.work_order_routing.scheduled_end_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'work_order_routing', 'scheduled_end_date', 'Column production.work_order_routing.scheduled_end_date should be NOT NULL');
 SELECT col_hasnt_default('production', 'work_order_routing', 'scheduled_end_date', 'Column production.work_order_routing.scheduled_end_date should not have a default');
+SELECT col_has_check(    'production', 'work_order_routing', ARRAY['scheduled_end_date'::name,'scheduled_start_date'::name], 'Columns production.work_order_routing.[scheduled_end_date,scheduled_start_date] should have a check constraint');
 
 SELECT has_column(       'production', 'work_order_routing', 'actual_start_date', 'Column production.work_order_routing.actual_start_date should exist');
 SELECT col_type_is(      'production', 'work_order_routing', 'actual_start_date', 'timestamp without time zone', 'Column production.work_order_routing.actual_start_date should be type timestamp without time zone');
@@ -70,21 +82,25 @@ SELECT has_column(       'production', 'work_order_routing', 'actual_end_date', 
 SELECT col_type_is(      'production', 'work_order_routing', 'actual_end_date', 'timestamp without time zone', 'Column production.work_order_routing.actual_end_date should be type timestamp without time zone');
 SELECT col_is_null(      'production', 'work_order_routing', 'actual_end_date', 'Column production.work_order_routing.actual_end_date should allow NULL');
 SELECT col_hasnt_default('production', 'work_order_routing', 'actual_end_date', 'Column production.work_order_routing.actual_end_date should not have a default');
+SELECT col_has_check(    'production', 'work_order_routing', ARRAY['actual_end_date'::name,'actual_start_date'::name], 'Columns production.work_order_routing.[actual_end_date,actual_start_date] should have a check constraint');
 
 SELECT has_column(       'production', 'work_order_routing', 'actual_resource_hrs', 'Column production.work_order_routing.actual_resource_hrs should exist');
 SELECT col_type_is(      'production', 'work_order_routing', 'actual_resource_hrs', 'numeric(9,4)', 'Column production.work_order_routing.actual_resource_hrs should be type numeric(9,4)');
 SELECT col_is_null(      'production', 'work_order_routing', 'actual_resource_hrs', 'Column production.work_order_routing.actual_resource_hrs should allow NULL');
 SELECT col_hasnt_default('production', 'work_order_routing', 'actual_resource_hrs', 'Column production.work_order_routing.actual_resource_hrs should not have a default');
+SELECT col_has_check(    'production', 'work_order_routing', 'actual_resource_hrs', 'Column production.work_order_routing.actual_resource_hrs should have a check constraint');
 
 SELECT has_column(       'production', 'work_order_routing', 'planned_cost', 'Column production.work_order_routing.planned_cost should exist');
 SELECT col_type_is(      'production', 'work_order_routing', 'planned_cost', 'numeric', 'Column production.work_order_routing.planned_cost should be type numeric');
 SELECT col_not_null(     'production', 'work_order_routing', 'planned_cost', 'Column production.work_order_routing.planned_cost should be NOT NULL');
 SELECT col_hasnt_default('production', 'work_order_routing', 'planned_cost', 'Column production.work_order_routing.planned_cost should not have a default');
+SELECT col_has_check(    'production', 'work_order_routing', 'planned_cost', 'Column production.work_order_routing.planned_cost should have a check constraint');
 
 SELECT has_column(       'production', 'work_order_routing', 'actual_cost', 'Column production.work_order_routing.actual_cost should exist');
 SELECT col_type_is(      'production', 'work_order_routing', 'actual_cost', 'numeric', 'Column production.work_order_routing.actual_cost should be type numeric');
 SELECT col_is_null(      'production', 'work_order_routing', 'actual_cost', 'Column production.work_order_routing.actual_cost should allow NULL');
 SELECT col_hasnt_default('production', 'work_order_routing', 'actual_cost', 'Column production.work_order_routing.actual_cost should not have a default');
+SELECT col_has_check(    'production', 'work_order_routing', 'actual_cost', 'Column production.work_order_routing.actual_cost should have a check constraint');
 
 SELECT has_column(       'production', 'work_order_routing', 'modified_date', 'Column production.work_order_routing.modified_date should exist');
 SELECT col_type_is(      'production', 'work_order_routing', 'modified_date', 'timestamp without time zone', 'Column production.work_order_routing.modified_date should be type timestamp without time zone');
@@ -94,3 +110,4 @@ SELECT col_default_is(   'production', 'work_order_routing', 'modified_date', 't
 
 SELECT * FROM finish();
 ROLLBACK;
+

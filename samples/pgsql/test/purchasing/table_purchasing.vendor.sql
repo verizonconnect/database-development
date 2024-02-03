@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(38);
+SELECT plan(41);
 
 SELECT has_table(
     'purchasing', 'vendor',
     'Should have table purchasing.vendor'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'purchasing', 'vendor',
     'Table purchasing.vendor should have a primary key'
 );
+
+SELECT has_check(
+    'purchasing', 'vendor',
+    'Table purchasing.vendor should have check contraint(s)'
+);
+
+SELECT col_is_pk('purchasing'::name, 'vendor'::name, ARRAY[
+    'business_entity_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('purchasing'::name, 'vendor'::name, ARRAY[
     'business_entity_id'::name,
@@ -46,6 +56,7 @@ SELECT has_column(       'purchasing', 'vendor', 'credit_rating', 'Column purcha
 SELECT col_type_is(      'purchasing', 'vendor', 'credit_rating', 'smallint', 'Column purchasing.vendor.credit_rating should be type smallint');
 SELECT col_not_null(     'purchasing', 'vendor', 'credit_rating', 'Column purchasing.vendor.credit_rating should be NOT NULL');
 SELECT col_hasnt_default('purchasing', 'vendor', 'credit_rating', 'Column purchasing.vendor.credit_rating should not have a default');
+SELECT col_has_check(    'purchasing', 'vendor', 'credit_rating', 'Column purchasing.vendor.credit_rating should have a check constraint');
 
 SELECT has_column(       'purchasing', 'vendor', 'preferred_vendor_status', 'Column purchasing.vendor.preferred_vendor_status should exist');
 SELECT col_type_is(      'purchasing', 'vendor', 'preferred_vendor_status', 'common.flag', 'Column purchasing.vendor.preferred_vendor_status should be type common.flag');
@@ -72,3 +83,4 @@ SELECT col_default_is(   'purchasing', 'vendor', 'modified_date', 'timezone(''ut
 
 SELECT * FROM finish();
 ROLLBACK;
+

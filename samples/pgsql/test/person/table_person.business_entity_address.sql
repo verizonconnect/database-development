@@ -1,20 +1,27 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(25);
+SELECT plan(26);
 
 SELECT has_table(
     'person', 'business_entity_address',
     'Should have table person.business_entity_address'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'person', 'business_entity_address',
     'Table person.business_entity_address should have a primary key'
 );
+
+SELECT col_is_pk('person'::name, 'business_entity_address'::name, ARRAY[
+    'business_entity_id'::name,
+    'address_id'::name,
+    'address_type_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('person'::name, 'business_entity_address'::name, ARRAY[
     'business_entity_id'::name,
@@ -53,3 +60,4 @@ SELECT col_default_is(   'person', 'business_entity_address', 'modified_date', '
 
 SELECT * FROM finish();
 ROLLBACK;
+

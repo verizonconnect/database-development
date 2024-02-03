@@ -1,20 +1,30 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(35);
+SELECT plan(38);
 
 SELECT has_table(
     'sales', 'sales_tax_rate',
     'Should have table sales.sales_tax_rate'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'sales', 'sales_tax_rate',
     'Table sales.sales_tax_rate should have a primary key'
 );
+
+SELECT has_check(
+    'sales', 'sales_tax_rate',
+    'Table sales.sales_tax_rate should have check contraint(s)'
+);
+
+SELECT col_is_pk('sales'::name, 'sales_tax_rate'::name, ARRAY[
+    'sales_tax_rate_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('sales'::name, 'sales_tax_rate'::name, ARRAY[
     'sales_tax_rate_id'::name,
@@ -41,6 +51,7 @@ SELECT has_column(       'sales', 'sales_tax_rate', 'tax_type', 'Column sales.sa
 SELECT col_type_is(      'sales', 'sales_tax_rate', 'tax_type', 'smallint', 'Column sales.sales_tax_rate.tax_type should be type smallint');
 SELECT col_not_null(     'sales', 'sales_tax_rate', 'tax_type', 'Column sales.sales_tax_rate.tax_type should be NOT NULL');
 SELECT col_hasnt_default('sales', 'sales_tax_rate', 'tax_type', 'Column sales.sales_tax_rate.tax_type should not have a default');
+SELECT col_has_check(    'sales', 'sales_tax_rate', 'tax_type', 'Column sales.sales_tax_rate.tax_type should have a check constraint');
 
 SELECT has_column(       'sales', 'sales_tax_rate', 'tax_rate', 'Column sales.sales_tax_rate.tax_rate should exist');
 SELECT col_type_is(      'sales', 'sales_tax_rate', 'tax_rate', 'numeric', 'Column sales.sales_tax_rate.tax_rate should be type numeric');
@@ -67,3 +78,4 @@ SELECT col_default_is(   'sales', 'sales_tax_rate', 'modified_date', 'timezone('
 
 SELECT * FROM finish();
 ROLLBACK;
+

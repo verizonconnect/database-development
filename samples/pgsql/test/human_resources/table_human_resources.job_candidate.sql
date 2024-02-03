@@ -1,20 +1,25 @@
-SET client_encoding = 'UTF-8';
+﻿SET client_encoding = 'UTF-8';
 SET client_min_messages = warning;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(21);
+SELECT plan(22);
 
 SELECT has_table(
     'human_resources', 'job_candidate',
     'Should have table human_resources.job_candidate'
 );
 
-SELECT hasnt_pk(
+SELECT has_pk(
     'human_resources', 'job_candidate',
     'Table human_resources.job_candidate should have a primary key'
 );
+
+SELECT col_is_pk('human_resources'::name, 'job_candidate'::name, ARRAY[
+    'job_candidate_id'::name
+],
+'Primary key definition is not as expected');
 
 SELECT columns_are('human_resources'::name, 'job_candidate'::name, ARRAY[
     'job_candidate_id'::name,
@@ -47,3 +52,4 @@ SELECT col_default_is(   'human_resources', 'job_candidate', 'modified_date', 't
 
 SELECT * FROM finish();
 ROLLBACK;
+
