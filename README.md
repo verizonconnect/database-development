@@ -29,9 +29,30 @@ No installation is necessary.
 
 ### Example CLI Usage
 
-Only MSSQL available right now. Postgres and MySQL to follow Jan 2024.
+Only MSSQL and Postgres available right now. MySQL to follow Apr 2024.
 
+#### MSSQL
+
+For MSSQL try...
 ```bash
 cd ./samples/mssql
 docker compose up
+```
+
+Post-deployment review the contents of `./samples/mssql/coverage` and `./samples/mssql/lint` respectively to view the outputs.
+
+#### MSSQL
+
+For Postgres try...
+```bash
+cd ./samples/pgsql
+docker compose up
+```
+
+Post-deployment review the contents of `./samples/pgsql/lint` to view the outputs. Piggy code coverage in the process of being added.
+
+Clean up when done
+
+```bash
+docker compose down
 ```
