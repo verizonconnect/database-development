@@ -41,7 +41,7 @@ docker compose up
 
 Post-deployment review the contents of `./samples/mssql/coverage` and `./samples/mssql/lint` respectively to view the outputs.
 
-#### MSSQL
+#### Postgres
 
 For Postgres try...
 ```bash
