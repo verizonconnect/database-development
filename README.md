@@ -19,7 +19,7 @@ The code in this project serves mainly an orchestrator and builds on the excelle
 
 Some sample DockerFiles have been provided which have some of the tooling pre-installed before the test container is started. It would be expected that these images would reside on some internal registry for distribution within an organisation but for the purpose of allowing a working example to be provided some have been included here within the /docker-buildfiles folder. One for each engine is provided for in the samples.
 
-A SQL/Database developer should not require any more knowledge than plain old sql to make use of this. It has been designed to be easy for anyone with prior SQL knowledge to be easy to pick up and use with minimal fuss. 
+A SQL/Database developer should not require any more knowledge than plain old sql to make use of this. It has been designed to be easy for anyone with prior SQL knowledge to to pick up and use with minimal fuss. 
 
 # Pre-Requisites
 Docker Desktop is required to run the samples.
