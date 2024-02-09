@@ -31,6 +31,10 @@ No installation is necessary.
 
 Only MSSQL and Postgres available right now. MySQL to follow Apr 2024.
 
+All examples will spin up a version of the adventure works database. It will remain largely devoid of data with only two or three tables populated to illustrate how reference data scripts can be treated having regard to the presence of foreign keys. With the exception of reference data all other data required to satisfy unit tests should be contained within the tests. 
+
+As effort progresses on this repo more of the reference data will be added.
+
 #### MSSQL
 
 For MSSQL try...
