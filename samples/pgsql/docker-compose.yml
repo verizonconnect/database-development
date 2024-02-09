@@ -18,15 +18,15 @@ services:
             retries: 5
             start_period: 10s
             timeout: 3s
-    #lint:
-    #    image: ${sqlfluff_image}
-    #    command: lint --write-output /lint/sqlfluff.output
-    #    volumes:
-    #        - ./src/:/sql
-    #        - ./lint/:/lint/
-    #    depends_on:
-    #        container:
-    #            condition: service_healthy
+    lint:
+        image: ${sqlfluff_image}
+        command: lint --write-output /lint/sqlfluff.output
+        volumes:
+            - ./src/:/sql
+            - ./lint/:/lint/
+        depends_on:
+            container:
+                condition: service_healthy
     flyway:
         image: ${flyway_image}
         command: migrate
@@ -42,10 +42,10 @@ services:
         volumes:
             - ./src/:/flyway/sql
         depends_on:
-            #lint:
-            #    condition: "service_completed_successfully"
-            container:
-                condition: service_healthy
+            lint:
+                condition: "service_completed_successfully"
+            #container:
+            #    condition: service_healthy
     unit_test:
         build: ${image}
         environment:
@@ -53,24 +53,17 @@ services:
             - POSTGRES_PASSWORD=${password}
             - PGPASSWORD=${password}
         volumes:
-            - ./test/:/test_cases
+            - ./test/:/var/lib/postgresql/test_cases
+            - ./coverage/:/var/lib/postgresql/coverage
         depends_on:
             flyway:
                 condition: "service_completed_successfully"
-        command: pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /test_cases/
-    #code.coverage:
-    #    build: ${image}
-    #    volumes:
-    #      - ./coverage:/opt/coverage
-    #    depends_on:
-    #        unit_test:
-    #            condition: "service_completed_successfully"
-    #    command: dotnet /opt/sqlcover/SQLServerCoverageCore.dll -c Get-CoverTSql -d ${database_name} -t ${coverage_timeout} -q "${coverage_command}" -e Export-Html -o "/opt/coverage" -k "Server=${container_name};User Id=${user};Password=${password};"
-    # Example post deployment processing
-    #unit_test.test_results:
-    #    build: ${image}
-    #    depends_on:
-    #        code.coverage:
-    #            condition: "service_completed_successfully"
-    #    command: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d ${database_name} -Q "SELECT SUM(CASE WHEN Result = 'Success' THEN 1 ELSE 0 END) AS Success, SUM(CASE WHEN Result = 'Failure' THEN 1 ELSE 0 END) AS Failure, SUM(CASE WHEN Result = 'Error' THEN 1 ELSE 0 END) AS Error FROM tSQLt.TestResult;"
+        command: >
+            bash -c "cd /var/lib/postgresql/coverage/
+            && if [ ! -e /var/lib/postgresql/coverage/config ]; then mkdir config; fi
+            && if [ ! -e /var/lib/postgresql/coverage/config/database.yml ]; then echo 'piggly:' >> /var/lib/postgresql/coverage/config/database.yml; echo '    adapter: postgresql' >> /var/lib/postgresql/coverage/config/database.yml; echo '    database: ${database_name}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    username: ${user}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    password: ${password}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    host: ${container_name}' >> /var/lib/postgresql/coverage/config/database.yml; fi
+            && piggly trace
+            && pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /var/lib/postgresql/test_cases/
+            && piggly report"
+
 

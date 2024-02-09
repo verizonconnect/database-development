@@ -16,7 +16,7 @@ BEGIN
 
     BEGIN TRY
         UPDATE [human_resources].[employee] 
-        SET [national_id_number] = @national_id_number 
+        SET  [national_id_number] = @national_id_number 
             ,[birth_date] = @birth_date 
             ,[marital_status] = @marital_status 
             ,[gender] = @gender 

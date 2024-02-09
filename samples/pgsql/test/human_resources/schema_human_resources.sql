@@ -4,7 +4,11 @@ CREATE EXTENSION IF NOT EXISTS pgtap;
 RESET client_min_messages;
 
 BEGIN;
-SELECT plan(11);
+SELECT plan(12);
+
+SELECT functions_are('human_resources', ARRAY[
+    'set_employee__hire_info'
+]);
 
 SELECT tables_are('human_resources', ARRAY[
     'department',
