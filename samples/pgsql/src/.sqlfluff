@@ -2,7 +2,7 @@
 
 # Supported dialects https://docs.sqlfluff.com/en/stable/dialects.html
 # Or run 'sqlfluff dialects'
-dialect = PostgreSQL
+dialect = postgres
 ignore=parsing,lexing
 
 # Comma separated list of rules to exclude, or None

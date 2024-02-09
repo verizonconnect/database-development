@@ -49,6 +49,7 @@ RUN git clone https://github.com/theory/pgtap.git \
     && make clean
 
 RUN mkdir ./tests
+RUN mkdir ./coverage
 
 RUN gem install piggly
-RUN mkdir /opt/coverage
+
