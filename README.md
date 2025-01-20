@@ -84,10 +84,7 @@ Naming:
         Prefix:
             Table: ''
             View: 'v_'
-            Trigger: 't_'
             Sequence: ''
-            Procedure: ''
-            Function: ''
             Constraint:
                 Primary Key: 'pk_'
                 Foreign Key: 'fk_'
