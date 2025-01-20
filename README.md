@@ -60,3 +60,109 @@ Clean up when done
 ```bash
 docker compose down
 ```
+
+# Coding Standard
+```yaml
+Database Coding Standard:
+    Scope:
+        - SQL Server
+        - MySQL
+        - Postgres
+Formatting:
+    Tab or Space: Space
+    Indentation: 4
+    User Defined Object: snake_case
+    Database Keyword: UPPER case
+    Database Function: UPPER case
+General Naming:
+    Noun Singular or Pural Form: Singular
+    Abbreviations Allowed: false
+Naming:
+    Object:
+        Description: |
+            An object refers to a table/view/constraint/sequence
+        Prefix:
+            Table: ''
+            View: 'v_'
+            Trigger: 't_'
+            Sequence: ''
+            Procedure: ''
+            Function: ''
+            Constraint:
+                Primary Key: 'pk_'
+                Foreign Key: 'fk_'
+                Check: 'ck_'
+                Unique: 'uq_'
+                Default: 'df_' #SQL Server Only
+    Index:        
+        Description: >
+            Expand the prefix list where required for any extra index types, i.e. Spatial, Gist
+        Prefix:
+            Clustered: 'i_'
+            Non-Clustered: 'i_'
+            XML: 'x_'
+            Column Store: 'cs_'
+    Programmable Object:
+        Naming Format: '(prefix_)<verb>_<noun>(__<optional>)'
+        Description: |-
+            Describes the structure of the programmable object.
+            
+            <prefix>: Some companies opt for a prefix such as fn_ or proc_ etc.
+            <verb>: Will be from a list of approved verbs defined within this document
+            <noun>: The entity upon which the function is primarily operating upon.
+            __<optional>: Allows for extra text to be provided to ensure more clarity of purpose should the verb/noun pair be insufficient.
+        Prefix:
+            Procedure: ''
+            Function: ''
+            Trigger: 'tg_'
+        Verb:
+            - get #synonym for: Select/Read
+            - set #synonym for: Update
+            - add #synonym for: Insert/Create
+            - delete #synonym for: Delete
+        Function:
+            Verb Extension: #Provide more verbs which are permitted for function naming
+                - check
+                - validate
+        Procedure:
+            Verb Extension: #Provide more verbs which are permitted for procedure naming
+                - perform
+    Column:
+        Naming Format: '<prime>(_modifier)_<class>'
+        Prime: |
+            The prime element is user defined. E.g. customer, invoice, journey, etc
+            A formal definition of available prime values is beyond the scope of this document.
+        Class:
+            ? id        # A unique identifier such as a column that is a primary key. 
+            ? status    # Flag value or some other status of any type such as publication_status.
+            ? total     # The fixed total or sum of a collection of values.
+            ? num       # Denotes the field contains any kind of number.
+            ? name      # Signifies a name such as first_name or country_name.
+            ? seq       # Contains a contiguous sequence of values.
+            ? when      # A temporal attribute. 
+                        # A column records a row modification audit column which is required to be utc then the column name will be modified_utc_when
+            ? date      # Denotes a column that contains the date ( as opposed to timestamp ).
+            ? tally     # A count
+            ? size      # The size of something such as a file size.
+            ? addr      # An address for the record could be physical or intangible such as ip_addr.
+            ? ind       # An indicator a boolean flag.
+            ? desc      # Description. Used for string attributes when describing a noun in detail. 
+            ? doc       # Document data such as json, html, xml, etc.
+            ? code      # Can be a string or number, used to represent another in an indirect way. e.g. event_code
+        Modifier:       # Define a list of approved modifiers for a given Class
+            when:
+                ? utc   # Timezone UTC
+                ? local # Without timezone
+            total:      # E.g. journey_hour_total
+                ? second
+                ? minute
+                ? hour
+                ? day
+                ? week
+                ? month
+                ? year
+                ? euro
+                ? dollar
+...
+
+```
