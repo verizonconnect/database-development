@@ -90,39 +90,39 @@ General Naming:
     Permitted Character Pattern: [a-zA-Z0-9_]
 Naming:
     Table:
-        Naming Structure: 'prefix_<object>'
+        Naming Structure: '<prefix><object>'
         Prefix: ''
     View:
-        Naming Structure: 'prefix_<object>'
-        Prefix: 'vw'
+        Naming Structure: '<prefix><object>'
+        Prefix: 'vw_'
     Sequence:
-        Naming Structure: 'prefix_<object>'
-        Prefix: 'sq'
+        Naming Structure: '<prefix><object>'
+        Prefix: 'sq_'
     Primary Key Constraint:
-        Naming Structure: 'prefix_<object>'
-        Prefix: 'pk'
+        Naming Structure: '<prefix><object>'
+        Prefix: 'pk_'
     Check Constraint:
-        Naming Structure: 'prefix_<object>__<column>'
-        Prefix: 'ck'
+        Naming Structure: '<prefix><object>__<column>'
+        Prefix: 'ck_'
     Foreign Key Constraint:
-        Naming Structure: 'prefix_<object>__<parent_object>(_<id>)'
-        Prefix: 'fk'
+        Naming Structure: '<prefix><object>__<parent_object>(_<id>)'
+        Prefix: 'fk_'
         Description: >
             <prefix>: As defined for the object type.
             <object>: The table on which the foreign key will be created.
             <parent_object>: The owning table of the foreign key.
             <id>: An optional incrementing integer value used to uniquely identify the constraint if multiple foreign keys are present where the <object> and <parent_object> are the same.
     Unique Constraint:
-        Naming Structure: 'prefix_<object>__<leading column>_<id>'
-        Prefix: 'uq'
+        Naming Structure: '<prefix><object>__<leading column>_<id>'
+        Prefix: 'uq_'
         Description: >
             <prefix>: As defined for the object type.
             <object>: The table upon which the unique constraint will be created.
             <leading column>: The leading sort column of the constraint. This is usually the most important column of the underlying index created to implement the constraint.
             <id>: An incrementing integer value used to uniquely identify the constraint. Useful if the leading column happens to be present on multiple unique constraints on a given table. 
     Default Constraint:
-        Naming Structure: 'prefix_<object>__<column>'
-        Prefix: 'df'
+        Naming Structure: '<prefix><object>__<column>'
+        Prefix: 'df_'
         Description: >
             This applies to SQL Server Only.
             
@@ -130,7 +130,7 @@ Naming:
             <object>: The table upon which the default constraint will be created.
             < olumn>: The column for which the constraint applies
     Index:
-        Naming Structure: 'prefix_<object>__<leading column>_<id>'
+        Naming Structure: '<prefix><object>__<leading column>_<id>'
         Description: >
             <prefix>: From one of the predefined prefixes permitted for an index.
             <object>: The table or view upon which the index is derived.
@@ -142,23 +142,23 @@ Naming:
             
             Expand the prefix list where required for any extra index types, i.e. Spatial, Gist
         Prefix:
-            Clustered: 'idx'
-            Non-Clustered: 'idx'
+            Clustered: 'idx_'
+            Non-Clustered: 'idx_'
             XML: 'xml_'
-            Column Store: 'cs'
+            Column Store: 'cs_'
     Programmable Object:
-        Naming Structure: '(prefix_)<verb>_<noun>(__<optional>)'
+        Naming Structure: '<prefix><verb>_<noun>(__<optional>)'
         Description: |-
-            Describes the structure of the programmable object.
+            Describes the structure of the programmable object name.
             
-            <prefix>: Optional. Some companies opt for a prefix such as fn_ or proc_ etc.
+            <prefix>: From one of the predefined prefixes permitted for an procedure/function/trigger.
             <verb>: Will be from a list of approved verbs defined within this document
             <noun>: The entity upon which the function is primarily operating upon.
             __<optional>: Allows for extra text to be provided to ensure more clarity of purpose should the verb/noun pair be insufficient.
         Prefix:
             Procedure: ''
             Function: ''
-            Trigger: ''
+            Trigger: 'tg_'
         Verb:
             - get #synonym for: Select/Read
             - set #synonym for: Update
@@ -172,7 +172,7 @@ Naming:
             Verb Extension: #Provide more verbs which are permitted for procedure naming
                 - perform
     Column:
-        Name Structure: '<prime>(_modifier)_<class>'
+        Name Structure: '<prime>(_<modifier>)_<class>'
         Prime: |
             The prime element is user defined. E.g. customer, invoice, journey, etc
             A formal definition of available prime values is beyond the scope of this document.
