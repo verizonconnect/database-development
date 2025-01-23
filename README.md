@@ -74,44 +74,91 @@ Formatting:
     User Defined Object: snake_case
     Database Keyword: UPPER case
     Database Function: UPPER case
+    Examples: |
+        Hitting <Tab> will insert 4 spaces.
+            Example of newline then <tab>
+        
+        Database name according the convention
+            adventure_works
+        
+        Sample keyword casing
+            SELECT  MIN(t.c)
+            FROM    sample.coding_standard AS t;
 General Naming:
     Noun Singular or Pural Form: Singular
     Abbreviations Allowed: false
+    Permitted Character Pattern: [a-zA-Z0-9_]
 Naming:
-    Object:
-        Description: |
-            An object refers to a table/view/constraint/sequence
-        Prefix:
-            Table: ''
-            View: 'v_'
-            Sequence: ''
-            Constraint:
-                Primary Key: 'pk_'
-                Foreign Key: 'fk_'
-                Check: 'ck_'
-                Unique: 'uq_'
-                Default: 'df_' #SQL Server Only
-    Index:        
+    Table:
+        Naming Structure: 'prefix_<object>'
+        Prefix: ''
+    View:
+        Naming Structure: 'prefix_<object>'
+        Prefix: 'vw'
+    Sequence:
+        Naming Structure: 'prefix_<object>'
+        Prefix: 'sq'
+    Primary Key Constraint:
+        Naming Structure: 'prefix_<object>'
+        Prefix: 'pk'
+    Check Constraint:
+        Naming Structure: 'prefix_<object>__<column>'
+        Prefix: 'ck'
+    Foreign Key Constraint:
+        Naming Structure: 'prefix_<object>__<parent_object>(_<id>)'
+        Prefix: 'fk'
         Description: >
+            <prefix>: As defined for the object type.
+            <object>: The table on which the foreign key will be created.
+            <parent_object>: The owning table of the foreign key.
+            <id>: An optional incrementing integer value used to uniquely identify the constraint if multiple foreign keys are present where the <object> and <parent_object> are the same.
+    Unique Constraint:
+        Naming Structure: 'prefix_<object>__<leading column>_<id>'
+        Prefix: 'uq'
+        Description: >
+            <prefix>: As defined for the object type.
+            <object>: The table upon which the unique constraint will be created.
+            <leading column>: The leading sort column of the constraint. This is usually the most important column of the underlying index created to implement the constraint.
+            <id>: An incrementing integer value used to uniquely identify the constraint. Useful if the leading column happens to be present on multiple unique constraints on a given table. 
+    Default Constraint:
+        Naming Structure: 'prefix_<object>__<column>'
+        Prefix: 'df'
+        Description: >
+            This applies to SQL Server Only.
+            
+            <prefix>: As defined for the object type.
+            <object>: The table upon which the default constraint will be created.
+            < olumn>: The column for which the constraint applies
+    Index:
+        Naming Structure: 'prefix_<object>__<leading column>_<id>'
+        Description: >
+            <prefix>: From one of the predefined prefixes permitted for an index.
+            <object>: The table or view upon which the index is derived.
+            <leading column>: The leading sort column of the index. This is usually the most important column of the index.
+            <id>: An incrementing integer value used to uniquely identify the index. Useful if the leading column happens to be present on multiple indexes on a given table. 
+            
+            Examples: idx_department__name_3
+                      xml_product_model__catalog_description_1
+            
             Expand the prefix list where required for any extra index types, i.e. Spatial, Gist
         Prefix:
-            Clustered: 'i_'
-            Non-Clustered: 'i_'
-            XML: 'x_'
-            Column Store: 'cs_'
+            Clustered: 'idx'
+            Non-Clustered: 'idx'
+            XML: 'xml_'
+            Column Store: 'cs'
     Programmable Object:
-        Naming Format: '(prefix_)<verb>_<noun>(__<optional>)'
+        Naming Structure: '(prefix_)<verb>_<noun>(__<optional>)'
         Description: |-
             Describes the structure of the programmable object.
             
-            <prefix>: Some companies opt for a prefix such as fn_ or proc_ etc.
+            <prefix>: Optional. Some companies opt for a prefix such as fn_ or proc_ etc.
             <verb>: Will be from a list of approved verbs defined within this document
             <noun>: The entity upon which the function is primarily operating upon.
             __<optional>: Allows for extra text to be provided to ensure more clarity of purpose should the verb/noun pair be insufficient.
         Prefix:
             Procedure: ''
             Function: ''
-            Trigger: 'tg_'
+            Trigger: ''
         Verb:
             - get #synonym for: Select/Read
             - set #synonym for: Update
@@ -125,7 +172,7 @@ Naming:
             Verb Extension: #Provide more verbs which are permitted for procedure naming
                 - perform
     Column:
-        Naming Format: '<prime>(_modifier)_<class>'
+        Name Structure: '<prime>(_modifier)_<class>'
         Prime: |
             The prime element is user defined. E.g. customer, invoice, journey, etc
             A formal definition of available prime values is beyond the scope of this document.
