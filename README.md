@@ -72,8 +72,8 @@ Formatting:
     Tab or Space: Space
     Indentation: 4
     User Defined Object: snake_case
-    Database Keyword: UPPER case
-    Database Function: UPPER case
+    Database Keyword Case: UPPER
+    Database Function Case: UPPER
     Examples: |
         Hitting <Tab> will insert 4 spaces.
             Example of newline then <tab>
