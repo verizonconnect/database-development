@@ -14,7 +14,7 @@ RUN apt-get update; \
     apt-get install -y dotnet-sdk-${DOTNET_VERSION} zip && \
     mkdir /opt/sqlcover && \
     mkdir /opt/tsqlt && \
-    wget --directory-prefix=/opt/sqlcover/ https://github.com/sayantandey/SQLServerCoverage/releases/download/v${SQL_SERVER_COVERAGE_VERSION}/SQLServerCoverage_3.0_linux-x64.zip && \
+    wget --directory-prefix=/opt/sqlcover/ https://github.com/sayantandey/SQLServerCoverage/releases/download/v${SQL_SERVER_COVERAGE_VERSION}/SQLServerCoverage_${SQL_SERVER_COVERAGE_VERSION}_linux-x64.zip && \
     unzip /opt/sqlcover/SQLServerCoverage_${SQL_SERVER_COVERAGE_VERSION}_linux-x64.zip -d /opt/sqlcover/ && \
     chmod 777 -R /opt/sqlcover && \
     rm /opt/sqlcover/SQLServerCoverage_${SQL_SERVER_COVERAGE_VERSION}_linux-x64.zip && \
