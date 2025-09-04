@@ -1,16 +1,13 @@
-version: '3'
-
 services:
-    container:
+    postgres:
         build: ${image}
         container_name: ${container_name}
         environment:
             - POSTGRES_USERNAME=${user}
             - POSTGRES_PASSWORD=${password}
+            - POSTGRES_DB=${database_name}
         ports:
             - ${host_port}:5432
-        volumes: 
-            - ./init/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
         restart: always
         healthcheck:
             test: ["CMD-SHELL", "psql -U ${user} -c 'SELECT 1' || exit 1"]
@@ -25,7 +22,7 @@ services:
             - ./src/:/sql
             - ./lint/:/lint/
         depends_on:
-            container:
+            postgres:
                 condition: service_healthy
     flyway:
         image: ${flyway_image}

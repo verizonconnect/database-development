@@ -1,5 +1,5 @@
 FROM postgres:13.4-alpine
-LABEL maintainer David Murphy <david.murphy@verizonconnect.com>
+LABEL maintainer=David Murphy <david.murphy@verizonconnect.com>
 
 ENV PERL_MM_USE_DEFAULT=1
 
