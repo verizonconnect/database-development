@@ -1,32 +1,34 @@
 ﻿CREATE TABLE IF NOT EXISTS human_resources.employee(
-    business_entity_id INT NOT NULL
-   ,national_id_number VARCHAR(15) NOT NULL
-   ,login_id VARCHAR(256) NOT NULL
-   ,organization_node VARCHAR NULL DEFAULT ('/')
-   ,job_title VARCHAR(50) NOT NULL
-   ,birth_date DATE NOT NULL
-   ,marital_status char(1) NOT NULL
-   ,gender char(1) NOT NULL
-   ,hire_date DATE NOT NULL
-   ,salaried_flag common.flag NOT NULL DEFAULT (true)
-   ,holiday_hours SMALLINT NOT NULL DEFAULT (0)
-   ,sick_leave_hours SMALLINT NOT NULL DEFAULT (0)
-   ,current_flag common.flag NOT NULL DEFAULT (true)
-   ,rowguid uuid NOT NULL DEFAULT (common.uuid_generate_v1())
-   ,modified_date TIMESTAMP NOT NULL DEFAULT (NOW() AT TIME ZONE 'utc')
-);
-
-COMMENT ON TABLE human_resources.employee IS 'employee information such as salary, department, and title.';
-COMMENT ON COLUMN human_resources.employee.business_entity_id IS 'Primary key for employee records.  foreign key to business_entity.business_entity_id.';
-COMMENT ON COLUMN human_resources.employee.national_id_number IS 'Unique national identification number such as a social security number.';
-COMMENT ON COLUMN human_resources.employee.login_id IS 'Network login.';
-COMMENT ON COLUMN human_resources.employee.organization_node IS 'Where the employee is located in corpo_rate hierarchy.';
-COMMENT ON COLUMN human_resources.employee.job_title IS 'Work title such as buyer or sales representative.';
-COMMENT ON COLUMN human_resources.employee.birth_date IS 'Date of birth.';
-COMMENT ON COLUMN human_resources.employee.marital_status IS 'M = married, S = single';
-COMMENT ON COLUMN human_resources.employee.gender IS 'M = male, F = female';
-COMMENT ON COLUMN human_resources.employee.hire_date IS 'employee hired on this date.';
-COMMENT ON COLUMN human_resources.employee.salaried_flag IS 'Job classification. 0 = hourly, not exempt from collective bargaining. 1 = salaried, exempt from collective bargaining.';
-COMMENT ON COLUMN human_resources.employee.holiday_hours IS 'Number of available vacation hours.';
-COMMENT ON COLUMN human_resources.employee.sick_leave_hours IS 'Number of available sick leave hours.';
-COMMENT ON COLUMN human_resources.employee.current_flag IS '0 = inactive, 1 = active';
+    business_entity_id     INT NOT NULL
+        COMMENT 'Primary key for employee records.  foreign key to business_entity.business_entity_id.',
+    national_id_number     VARCHAR(15) NOT NULL
+        COMMENT 'Unique national identification number such as a social security number.',
+    login_id               VARCHAR(256) NOT NULL
+        COMMENT 'Network login.',
+    organization_node_desc VARCHAR(255) NULL DEFAULT ('/')
+        COMMENT 'Where the employee is located in corporate hierarchy.',
+    job_title_desc         VARCHAR(50) NOT NULL
+        COMMENT 'Work title such as buyer or sales representative.',
+    birth_date             DATE NOT NULL
+        COMMENT 'Date of birth.',
+    marital_status         CHAR(1) NOT NULL
+        COMMENT 'M = married, S = single.',
+    gender_code            CHAR(1) NOT NULL
+        COMMENT 'M = male, F = female.',
+    hire_date              DATE NOT NULL
+        COMMENT 'employee hired on this date.',
+    salaried_flag          BOOLEAN NOT NULL DEFAULT TRUE
+        COMMENT 'Job classification. 0 = hourly, not exempt from collective bargaining. 1 = salaried, exempt from collective bargaining.',
+    holiday_hour_total     SMALLINT NOT NULL DEFAULT 0
+        COMMENT 'Number of available vacation hours.',
+    sick_leave_hour_total  SMALLINT NOT NULL DEFAULT 0
+        COMMENT 'Number of available sick leave hours.',
+    current_flag           BOOLEAN NOT NULL DEFAULT TRUE
+        COMMENT '0 = inactive, 1 = active.',
+    row_guid_id            VARCHAR(36) NOT NULL
+        COMMENT 'ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.',
+   ,modified_utc_when      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP 
+        COMMENT 'Date and time the record was last updated.'
+   ,created_utc_when       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        COMMENT 'Date and time the record was created.'
+) COMMENT 'Employee information such as salary, department, and title.';
