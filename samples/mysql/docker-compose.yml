@@ -1,0 +1,66 @@
+services:
+    rules-generator:
+        build: ${generate_rules_image}
+        command: ["-f", "/app/coding_standard.yml", "-o", "/src/.sqlfluff"]
+        volumes:
+          - ./lint/coding_standard.yml:/app/coding_standard.yml
+          - ./src:/src
+    mysql:
+        build: ${image}
+        container_name: ${container_name}
+        environment:
+            - MYSQL_ROOT_PASSWORD=${password}
+        ports:
+            - ${host_port}:3306
+        restart: always
+        healthcheck:
+            test: ["CMD", "mysql" ,"ping", "-h", "localhost"]
+            timeout: 20s
+            retries: 10
+    lint:
+        image: ${sqlfluff_image}
+        command: lint --write-output /lint/sqlfluff.output
+        volumes:
+            - ./src/:/sql
+            - ./lint/:/lint/
+        depends_on:
+            mysql:
+                condition: service_healthy
+    flyway:
+        image: ${flyway_image}
+        command: migrate
+        environment:
+            - FLYWAY_URL=jdbc:mysql://${container_name}:${host_port}/${database_name}?allowPublicKeyRetrieval=true
+            - FLYWAY_USER=${user}
+            - FLYWAY_PASSWORD=${password}
+            - FLYWAY_DEFAULT_SCHEMA=${default_schema}
+            - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
+            - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
+            - FLYWAY_MIXED=${mixed}
+            - FLYWAY_PLACEHOLDERS_environment_name=${environment_name}
+        volumes:
+            - ./src/:/flyway/sql
+        depends_on:
+            lint:
+                condition: "service_completed_successfully"
+    #unit_test:
+    #    build: ${image}
+    #    environment:
+    #        - POSTGRES_USERNAME=${user}
+    #        - POSTGRES_PASSWORD=${password}
+    #        - PGPASSWORD=${password}
+    #    volumes:
+    #        - ./test/:/var/lib/postgresql/test_cases
+    #        - ./coverage/:/var/lib/postgresql/coverage
+    #    depends_on:
+    #        flyway:
+    #            condition: "service_completed_successfully"
+    #    command: >
+    #        bash -c "cd /var/lib/postgresql/coverage/
+    #        && if [ ! -e /var/lib/postgresql/coverage/config ]; then mkdir config; fi
+    #        && if [ ! -e /var/lib/postgresql/coverage/config/database.yml ]; then echo 'piggly:' >> /var/lib/postgresql/coverage/config/database.yml; echo '    adapter: postgresql' >> /var/lib/postgresql/coverage/config/database.yml; echo '    database: ${database_name}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    username: ${user}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    password: ${password}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    host: ${container_name}' >> /var/lib/postgresql/coverage/config/database.yml; fi
+    #        && piggly trace
+    #        && pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /var/lib/postgresql/test_cases/
+    #        && piggly report"
+
+
