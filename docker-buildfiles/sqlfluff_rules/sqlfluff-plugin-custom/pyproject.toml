@@ -1,0 +1,12 @@
+[project]
+# Change this name in your plugin, e.g. company name or plugin purpose.
+name = "sqlfluff-plugin-custom"
+version = "0.1.0"
+requires-python = ">=3.9"
+dependencies = [
+    "sqlfluff>=3.1.0"
+]
+
+[project.entry-points.sqlfluff]
+# Change this name in your plugin, e.g. company name or plugin purpose.
+sqlfluff_custom = "sqlfluff_plugin_custom"

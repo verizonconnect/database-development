@@ -6,19 +6,34 @@ import sys
 from pathlib import Path
 import re
 
-# ... (previous functions like generate_indentation_rule, etc., remain the same)
+# As per sqlfluff docs, these are the only allowed values for capitalisation_policy
+allowed_policies = ['consistent', 'upper', 'lower', 'pascal', 'capitalise', 'snake', 'camel']
+
+# This dictionary serves as a global, reusable constant for regex patterns.
 case_patterns = {
-    'snake': '[a-z0-9_]+'
-   ,'camel': '[a-z]+[a-zA-Z0-9]*'
-   ,'pascal': '[A-Z][a-zA-Z0-9]*'
-   ,'UPPER': '[A-Z0-9_]+'
-   ,'lower': '[a-z0-9_]+'
+    'snake': '[a-z0-9_]+',
+    'camel': '[a-z]+[a-zA-Z0-9]*',
+    'pascal': '[A-Z][a-zA-Z0-9]*',
+    'upper': '[A-Z0-9_]+',
+    'lower': '[a-z0-9_]+',
+    'capitalise': '[A-Z][a-zA-Z0-9_]*'
+}
+
+# This maps the user-friendly names in the YAML to the official sqlfluff names.
+# It now includes 'consistent' as a valid option.
+yaml_to_sqlfluff_case_map = {
+    'snake': 'snake_case',
+    'camel': 'camelCase',
+    'pascal': 'PascalCase',
+    'upper': 'upper',
+    'lower': 'lower',
+    'capitalise': 'capitalise',
+    'consistent': 'consistent'
 }
 
 def generate_indentation_rule(config_data):
     """Generates the sqlfluff indentation rule from the parsed YAML."""
     formatting_rules = config_data.get('Formatting', {})
-
     try:
         indent_type = formatting_rules['Tab or Space'].lower()
         indent_size = formatting_rules['Indentation']
@@ -42,27 +57,57 @@ def generate_capitalisation_rules(config_data):
     formatting_rules = config_data.get('Formatting', {})
     config = configparser.ConfigParser()
     enabled_rules = []
-
+    
     try:
         # Keywords
         keyword_case = formatting_rules['Database Keyword Case'].lower()
+        if keyword_case not in allowed_policies:
+            print(f"Error: Invalid 'Database Keyword Case' value '{formatting_rules['Database Keyword Case']}'.", file=sys.stderr)
+            print(f"Allowed values are: {allowed_policies}", file=sys.stderr)
+            sys.exit(1)
         config['sqlfluff:rules:capitalisation.keywords'] = {'capitalisation_policy': keyword_case}
         enabled_rules.append('capitalisation.keywords')
 
         # Functions
         function_case = formatting_rules['Database Function Case'].lower()
+        if function_case not in allowed_policies:
+            print(f"Error: Invalid 'Database Function Case' value '{formatting_rules['Database Function Case']}'.", file=sys.stderr)
+            print(f"Allowed values are: {allowed_policies}", file=sys.stderr)
+            sys.exit(1)
         config['sqlfluff:rules:capitalisation.functions'] = {'capitalisation_policy': function_case}
         enabled_rules.append('capitalisation.functions')
 
         # Identifiers
-        identifier_case = formatting_rules['User Defined Object']
-        config['sqlfluff:rules:capitalisation.identifiers'] = {'extended_capitalisation_policy': identifier_case}
+        identifier_yaml_case = formatting_rules['User Defined Object']
+        sqlfluff_identifier_case = yaml_to_sqlfluff_case_map.get(identifier_yaml_case)
+        if not sqlfluff_identifier_case:
+            print(f"Error: Invalid 'User Defined Object' value '{identifier_yaml_case}'.", file=sys.stderr)
+            print(f"Allowed values are: {list(yaml_to_sqlfluff_case_map.keys())}", file=sys.stderr)
+            sys.exit(1)
+        
+        if sqlfluff_identifier_case == 'consistent':
+            config['sqlfluff:rules:capitalisation.identifiers'] = {'capitalisation_policy': sqlfluff_identifier_case}
+        else:
+            config['sqlfluff:rules:capitalisation.identifiers'] = {'extended_capitalisation_policy': sqlfluff_identifier_case}
         enabled_rules.append('capitalisation.identifiers')
 
         # Data Types
         datatype_case = formatting_rules['Data Type Case'].lower()
+        if datatype_case not in allowed_policies:
+            print(f"Error: Invalid 'Data Type Case' value '{formatting_rules['Data Type Case']}'.", file=sys.stderr)
+            print(f"Allowed values are: {allowed_policies}", file=sys.stderr)
+            sys.exit(1)
         config['sqlfluff:rules:capitalisation.datatypes'] = {'capitalisation_policy': datatype_case}
         enabled_rules.append('capitalisation.datatypes')
+        
+        # Literals
+        literals_case = formatting_rules['Literals Case'].lower()
+        if literals_case not in ['consistent', 'upper', 'lower', 'capitalise']:
+            print(f"Error: Invalid 'Literals Case' value '{formatting_rules['Literals Case']}'.", file=sys.stderr)
+            print(f"Allowed values are: 'consistent', 'upper', 'lower', 'capitalise'", file=sys.stderr)
+            sys.exit(1)
+        config['sqlfluff:rules:capitalisation.literals'] = {'capitalisation_policy': literals_case}
+        enabled_rules.append('capitalisation.literals')
 
     except KeyError as e:
         print(f"Error: Missing required key in 'Formatting' section of YAML: {e}", file=sys.stderr)
@@ -73,25 +118,19 @@ def generate_capitalisation_rules(config_data):
 def generate_layout_rules(config_data):
     """Generates additional layout rules for spacing and line length."""
     formatting_rules = config_data.get('Formatting', {})
-    layout_rules = config_data.get('Layout', {})
+    layout_rules = formatting_rules.get('Layout', {})
     config = configparser.ConfigParser()
     enabled_rules = []
 
-    # Max Line Length
     if 'Max Line Length' in formatting_rules:
         max_len = formatting_rules['Max Line Length']
         config['sqlfluff:rules:layout.line_length'] = {'max_line_length': str(max_len)}
         enabled_rules.append('layout.line_length')
     
-    # Spacing
-    spacing = layout_rules.get('Spacing', {})
-    if spacing.get('Around Operators'):
+    if layout_rules.get('Spacing', {}).get('Around Operators'):
         enabled_rules.append('layout.spacing')
 
-    # Gaps
     if 'Blank Lines Between Statements' in layout_rules:
-        # This rule in sqlfluff is about *not* having gaps within statements,
-        # but enabling it helps enforce consistent grouping.
         enabled_rules.append('layout.gaps')
         
     return config, enabled_rules
@@ -102,51 +141,47 @@ def generate_best_practice_rules(config_data):
     config = configparser.ConfigParser()
     enabled_rules = []
 
-    # Disallow SELECT *
     if not sql_rules.get('Allow Wildcards', True):
         enabled_rules.append('ambiguous.wildcard')
 
-    # Identifier Quoting
-    quoting_policy = sql_rules['Identifier Quoting'].lower()
+    quoting_policy = sql_rules.get('Identifier Quoting', 'when_needed').lower()
     if quoting_policy in ['quoted', 'unquoted']:
-        config['sqlfluff:rules:convention.quoting'] = {
-            'preferred_quoting_policy': quoting_policy
-        }
+        config['sqlfluff:rules:convention.quoting'] = {'preferred_quoting_policy': quoting_policy}
         enabled_rules.append('convention.quoting')
 
-    # Disallow Positional ORDER BY
     if not sql_rules.get('Allow Positional References', True):
         enabled_rules.append('references.positional')
         
-    # Statement Terminators
-    terminator_policy = sql_rules['Statement Terminator'].lower()
-    if terminator_policy in ['required', 'optional']:
-        config['sqlfluff:rules:structure.terminator'] = {
-            'require_final_semicolon': 'true'
-        }
+    terminator_policy = sql_rules.get('Statement Terminator', 'required').lower()
+    if terminator_policy == 'required':
+        config['sqlfluff:rules:structure.terminator'] = {'require_final_semicolon': 'true'}
         enabled_rules.append('structure.terminator')
         
     return config, enabled_rules
 
-
-# ... (previous functions for aliasing, commas, and naming conventions remain here)
 def generate_aliasing_rule(config_data):
     """Generates the sqlfluff aliasing rules from the parsed YAML."""
     sql_rules = config_data.get('SQL', {})
+    alias_rules = sql_rules.get('Alias', {})
     config = configparser.ConfigParser()
     enabled_rules = []
+    
     try:
-        alias_as = sql_rules['Alias Using AS'].lower()
-        config['sqlfluff:rules:aliasing.table'] = {'aliasing': alias_as}
-        config['sqlfluff:rules:aliasing.column'] = {'aliasing': alias_as}
-        enabled_rules.extend(['aliasing.table', 'aliasing.column'])
+        table_alias_policy = alias_rules['Table Using AS'].lower()
+        config['sqlfluff:rules:aliasing.table'] = {'aliasing': table_alias_policy}
+        enabled_rules.append('aliasing.table')
+
+        column_alias_policy = alias_rules['Column Using AS'].lower()
+        config['sqlfluff:rules:aliasing.column'] = {'aliasing': column_alias_policy}
+        enabled_rules.append('aliasing.column')
+
     except KeyError as e:
-        print(f"Error: Missing required key in 'SQL' section of YAML: {e}", file=sys.stderr)
+        print(f"Error: Missing required key in 'SQL' -> 'Alias' section of YAML: {e}", file=sys.stderr)
         sys.exit(1)
+        
     return config, enabled_rules
 
 def generate_comma_rule(config_data):
-    """Generates the sqlfluff comma placement rule from the parsed YAML."""
     sql_rules = config_data.get('SQL', {})
     config = configparser.ConfigParser()
     enabled_rules = []
@@ -160,23 +195,19 @@ def generate_comma_rule(config_data):
     return config, enabled_rules
 
 def generate_naming_rules(config_data):
-    """Generates the convention.naming rules using regex patterns."""
+    """Generates the custom.naming. rules using regex patterns."""
     naming_rules = config_data.get('Naming', {})
     formatting_rules = config_data.get('Formatting', {})
     config = configparser.ConfigParser()
     enabled_rules = []
 
     object_rule_map = {
-        'Table': 'table'
-       ,'View': 'view'
-       ,'Sequence': 'sequence'
-       ,'Primary Key Constraint': 'constraint.primary_key'
-       ,'Check Constraint': 'constraint.check'
-       ,'Foreign Key Constraint': 'constraint.foreign_key'
-       ,'Unique Constraint': 'constraint.unique'
-       ,'Default Constraint': 'constraint.default'
+        'Table': 'table', 'View': 'view', 'Sequence': 'sequence',
+        'Primary Key Constraint': 'primary_key', 'Check Constraint': 'check',
+        'Foreign Key Constraint': 'foreign_key', 'Unique Constraint': 'unique',
+        'Default Constraint': 'default',
     }
-
+    
     object_case_style = formatting_rules.get('User Defined Object')
     if not object_case_style or object_case_style not in case_patterns:
         print("Error: 'User Defined Object' case style is missing or invalid in YAML.", file=sys.stderr)
@@ -193,7 +224,7 @@ def generate_naming_rules(config_data):
                 if isinstance(prefix, str): pattern = pattern.replace('<prefix>', prefix)
                 for ph in ['<object>', '<column>', '<parent_object>', '<leading column>']: pattern = pattern.replace(ph, object_pattern)
                 pattern = pattern.replace('(<id>)', '(_[0-9]+)?').replace('<id>', '[0-9]+')
-                rule_name = f'convention.naming.{rule_suffix}'
+                rule_name = f'custom.naming.{rule_suffix}'
                 config[f'sqlfluff:rules:{rule_name}'] = {'pattern': f"^{pattern}$"}
                 enabled_rules.append(rule_name)
 
@@ -204,31 +235,46 @@ def generate_naming_rules(config_data):
         if structure and prefixes:
             prefix_pattern = f"({'|'.join(sorted(list(set(prefixes.values()))))})"
             pattern = structure.replace('<prefix>', prefix_pattern).replace('<object>', object_pattern).replace('<leading column>', object_pattern).replace('<id>', '[0-9]+')
-            rule_name = 'convention.naming.index'
+            rule_name = 'custom.naming.index'
             config[f'sqlfluff:rules:{rule_name}'] = {'pattern': f"^{pattern}$"}
             enabled_rules.append(rule_name)
 
     if 'Programmable Object' in naming_rules:
         details = naming_rules['Programmable Object']
-        structure = details.get('Naming Structure')
-        verbs_raw = [v.split('#')[0].strip() for v in details.get('Verb', [])]
+        structure_components = list(details.get('Structure Components', {'verb': None, 'noun': None}).keys())
+        separator = details.get('Component Separator', '_')
+        verbs_raw = list(details.get('Verb', {}).keys())
         prefixes = details.get('Prefix', {})
-        if structure and verbs_raw:
+
+        if verbs_raw:
             verbs = verbs_raw
-            if object_case_style == 'pascal': verbs = [v.capitalize() for v in verbs_raw]
-            elif object_case_style == 'upper': verbs = [v.upper() for v in verbs_raw]
-            verbs_pattern = f"({'|'.join(verbs)})"
+            if object_case_style in ['pascal', 'capitalise']: verbs = [v.capitalize() for v in verbs_raw]
+            elif object_case_style == 'UPPER': verbs = [v.upper() for v in verbs_raw]
+
+            verb_pattern = f"({'|'.join(verbs)})"
+            component_patterns = {'verb': verb_pattern, 'noun': object_pattern}
+
+            core_pattern_parts = [component_patterns[comp] for comp in structure_components if comp in component_patterns]
+            core_pattern = f"{separator}".join(core_pattern_parts)
+            optional_pattern = f'({separator}{object_pattern})?' if separator else f'({object_pattern})?'
+
             for po_type, rule_suffix in {'Procedure': 'procedure', 'Function': 'function', 'Trigger': 'trigger'}.items():
                 if po_type in prefixes:
                     prefix = prefixes[po_type]
-                    pattern = structure.replace('<prefix>', prefix).replace('<verb>', verbs_pattern).replace('<noun>', object_pattern).replace('(__<optional>)', f'(__{object_pattern})?')
-                    rule_name = f'convention.naming.{rule_suffix}'
-                    config[f'sqlfluff:rules:{rule_name}'] = {'pattern': f"^{pattern}$"}
+                    # FIX: Conditionally add the separator only if the prefix is not empty.
+                    if prefix:
+                        final_pattern = f"^{prefix}{separator}{core_pattern}{optional_pattern}$"
+                    else:
+                        final_pattern = f"^{core_pattern}{optional_pattern}$"
+
+                    rule_name = f'custom.naming.{rule_suffix}'
+                    config[f'sqlfluff:rules:{rule_name}'] = {'pattern': final_pattern}
                     enabled_rules.append(rule_name)
+
     return config, enabled_rules
 
 def generate_column_naming_rule(config_data):
-    """Generates the convention.naming.column rule from the parsed YAML."""
+    """Generates the custom.naming.column rule from the parsed YAML."""
     naming_rules = config_data.get('Naming', {})
     formatting_rules = config_data.get('Formatting', {})
     config = configparser.ConfigParser()
@@ -248,7 +294,7 @@ def generate_column_naming_rule(config_data):
     
     def transform_case(word, style):
         if style == 'pascal': return word.capitalize()
-        if style == 'upper': return word.upper()
+        if style == 'UPPER': return word.upper()
         return word
 
     for cls, mods_list in modifiers_dict.items():
@@ -266,7 +312,7 @@ def generate_column_naming_rule(config_data):
 
     combined_endings = f"({'|'.join(final_pattern_parts)})"
     final_pattern = f"^{prime_pattern}{combined_endings}$"
-    rule_name = 'convention.naming.column'
+    rule_name = 'custom.naming.column'
     config[f'sqlfluff:rules:{rule_name}'] = {'pattern': final_pattern}
     enabled_rules.append(rule_name)
     return config, enabled_rules
@@ -296,14 +342,14 @@ def main():
         sys.exit(1)
         
     rule_generators = [
-        generate_indentation_rule
-       ,generate_capitalisation_rules
-       ,generate_aliasing_rule
-       ,generate_comma_rule
-       ,generate_naming_rules
-       ,generate_column_naming_rule
-       ,generate_layout_rules
-       ,generate_best_practice_rules
+        generate_indentation_rule,
+        generate_capitalisation_rules,
+        generate_aliasing_rule,
+        generate_comma_rule,
+        generate_naming_rules,
+        generate_column_naming_rule,
+        generate_layout_rules,
+        generate_best_practice_rules,
     ]
     
     all_configs = []
@@ -320,11 +366,11 @@ def main():
         'rules': ','.join(sorted(list(set(all_rules))))
     }
     final_config['sqlfluff:templater:placeholder'] = {
-        'param_style': 'dollar'
-       ,'flyway:defaultSchema': 'sch'
-       ,'flyway:database': 'db'
-       ,'database_name': 'db'
-       ,'environment_name': 'build'
+        'param_style': 'dollar',
+        'flyway:defaultSchema': 'sch',
+        'flyway:database': 'db',
+        'database_name': 'db',
+        'environment_name': 'build'
     }
     
     for config_obj in all_configs:

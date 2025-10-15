@@ -5,44 +5,44 @@ services:
         volumes:
           - ./lint/coding_standard.yml:/app/coding_standard.yml
           - ./src:/src
-    mysql:
-        build: ${image}
-        container_name: ${container_name}
-        environment:
-            - MYSQL_ROOT_PASSWORD=${password}
-        ports:
-            - ${host_port}:3306
-        restart: always
-        healthcheck:
-            test: ["CMD", "mysql" ,"ping", "-h", "localhost"]
-            timeout: 20s
-            retries: 10
     lint:
         image: ${sqlfluff_image}
         command: lint --write-output /lint/sqlfluff.output
         volumes:
             - ./src/:/sql
             - ./lint/:/lint/
-        depends_on:
-            mysql:
-                condition: service_healthy
-    flyway:
-        image: ${flyway_image}
-        command: migrate
-        environment:
-            - FLYWAY_URL=jdbc:mysql://${container_name}:${host_port}/${database_name}?allowPublicKeyRetrieval=true
-            - FLYWAY_USER=${user}
-            - FLYWAY_PASSWORD=${password}
-            - FLYWAY_DEFAULT_SCHEMA=${default_schema}
-            - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
-            - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
-            - FLYWAY_MIXED=${mixed}
-            - FLYWAY_PLACEHOLDERS_environment_name=${environment_name}
-        volumes:
-            - ./src/:/flyway/sql
-        depends_on:
-            lint:
-                condition: "service_completed_successfully"
+    #    depends_on:
+    #        rules-generator:
+    #            condition: service_healthy
+    #mysql:
+    #    build: ${image}
+    #    container_name: ${container_name}
+    #    environment:
+    #        - MYSQL_ROOT_PASSWORD=${password}
+    #    ports:
+    #        - ${host_port}:3306
+    #    restart: always
+    #    healthcheck:
+    #        test: ["CMD", "mysql" ,"ping", "-h", "localhost"]
+    #        timeout: 20s
+    #        retries: 10
+    #flyway:
+    #    image: ${flyway_image}
+    #    command: migrate
+    #    environment:
+    #        - FLYWAY_URL=jdbc:mysql://${container_name}:${host_port}/${database_name}?allowPublicKeyRetrieval=true
+    #        - FLYWAY_USER=${user}
+    #        - FLYWAY_PASSWORD=${password}
+    #        - FLYWAY_DEFAULT_SCHEMA=${default_schema}
+    #        - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
+    #        - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
+    #        - FLYWAY_MIXED=${mixed}
+    #        - FLYWAY_PLACEHOLDERS_environment_name=${environment_name}
+    #    volumes:
+    #        - ./src/:/flyway/sql
+    #    depends_on:
+    #        lint:
+    #            condition: "service_completed_successfully"
     #unit_test:
     #    build: ${image}
     #    environment:
