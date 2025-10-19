@@ -6,14 +6,17 @@ services:
           - ./lint/coding_standard.yml:/app/coding_standard.yml
           - ./src:/src
     lint:
-        image: ${sqlfluff_image}
-        command: lint --write-output /lint/sqlfluff.output
+        build: ${sqlfluff_image}
+        # ⭐️ MODIFIED: Added verbosity from .env and a target path for linting.
+        command: lint ${lint_verbosity} --write-output ${lint_output_path} /sql | tee ${LINT_OUTPUT_PATH}
+        #user: "${UID}:${GID}"
         volumes:
             - ./src/:/sql
+            - ./src/.sqlfluff:/sqlfluff/.sqlfluff
             - ./lint/:/lint/
-    #    depends_on:
-    #        rules-generator:
-    #            condition: service_healthy
+        depends_on:
+            rules-generator:
+                condition: service_completed_successfully
     #mysql:
     #    build: ${image}
     #    container_name: ${container_name}

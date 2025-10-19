@@ -9,10 +9,12 @@ def get_rules() -> List[Type[BaseRule]]:
     from sqlfluff_plugin_custom.CN01 import Rule_Custom_CN01
     from sqlfluff_plugin_custom.CN02 import Rule_Custom_CN02
     from sqlfluff_plugin_custom.CN03 import Rule_Custom_CN03
+    from sqlfluff_plugin_custom.CN04 import Rule_Custom_CN04
 
     return [Rule_Custom_CN01
            ,Rule_Custom_CN02
-           ,Rule_Custom_CN03]
+           ,Rule_Custom_CN03
+           ,Rule_Custom_CN04]
 
 # This hook registers your custom configuration keywords with SQLFluff.
 @hookimpl

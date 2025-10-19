@@ -1,7 +1,7 @@
 [sqlfluff]
 dialect = mysql
 templater = placeholder
-rules = aliasing.column,aliasing.table,ambiguous.wildcard,capitalisation.datatypes,capitalisation.functions,capitalisation.identifiers,capitalisation.keywords,capitalisation.literals,convention.naming.column,convention.naming.constraint.check,convention.naming.constraint.default,convention.naming.constraint.foreign_key,convention.naming.constraint.primary_key,convention.naming.constraint.unique,convention.naming.function,convention.naming.index,convention.naming.procedure,convention.naming.sequence,convention.naming.table,convention.naming.trigger,convention.naming.view,convention.quoting,layout.commas,layout.gaps,layout.indentation,layout.line_length,layout.spacing,references.positional,structure.terminator
+rules = custom.naming.column,custom.naming.procedure,custom.naming.table,custom.naming.view,layout.indent
 
 [sqlfluff:templater:placeholder]
 param_style = dollar
@@ -10,79 +10,19 @@ flyway:database = db
 database_name = db
 environment_name = build
 
-[sqlfluff:rules:layout.indentation]
+[sqlfluff:indentation]
 indent_unit = space
 tab_space_size = 4
 
-[sqlfluff:rules:capitalisation.keywords]
-capitalisation_policy = upper
+[sqlfluff:rules:custom.naming.table]
+pattern = ^<separator>[a-z][a-z0-9_]+$
 
-[sqlfluff:rules:capitalisation.functions]
-capitalisation_policy = upper
+[sqlfluff:rules:custom.naming.view]
+pattern = ^vw<separator>[a-z][a-z0-9_]+$
 
-[sqlfluff:rules:capitalisation.identifiers]
-extended_capitalisation_policy = upper
+[sqlfluff:rules:custom.naming.procedure]
+pattern = ^(get|set|add|del|check|validate|perform)_[a-z][a-z0-9_]+(_[a-z][a-z0-9_]+)?$
 
-[sqlfluff:rules:capitalisation.datatypes]
-capitalisation_policy = upper
-
-[sqlfluff:rules:capitalisation.literals]
-capitalisation_policy = lower
-
-[sqlfluff:rules:aliasing.table]
-aliasing = explicit
-
-[sqlfluff:rules:aliasing.column]
-aliasing = implicit
-
-[sqlfluff:rules:layout.commas]
-comma_style = leading
-
-[sqlfluff:rules:convention.naming.table]
-pattern = ^[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.view]
-pattern = ^vw_[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.sequence]
-pattern = ^sq_[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.constraint.primary_key]
-pattern = ^pk_[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.constraint.check]
-pattern = ^ck_[A-Z0-9_]+__[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.constraint.foreign_key]
-pattern = ^fk_[A-Z0-9_]+__[A-Z0-9_]+(_[0-9]+)$
-
-[sqlfluff:rules:convention.naming.constraint.unique]
-pattern = ^uq_[A-Z0-9_]+__[A-Z0-9_]+_[0-9]+$
-
-[sqlfluff:rules:convention.naming.constraint]
-pattern = ^df_[A-Z0-9_]+__[A-Z0-9_]+$
-
-[sqlfluff:rules:convention.naming.index]
-pattern = ^(cs_|idx_|xml_)[A-Z0-9_]+__[A-Z0-9_]+_[0-9]+$
-
-[sqlfluff:rules:convention.naming.procedure]
-pattern = ^[A-Z0-9_]+(get|set|add|del|check|validate|perform)([A-Z0-9_]+)?$
-
-[sqlfluff:rules:convention.naming.function]
-pattern = ^fn[A-Z0-9_]+(get|set|add|del|check|validate|perform)([A-Z0-9_]+)?$
-
-[sqlfluff:rules:convention.naming.trigger]
-pattern = ^tg[A-Z0-9_]+(get|set|add|del|check|validate|perform)([A-Z0-9_]+)?$
-
-[sqlfluff:rules:convention.naming.column]
-pattern = ^[A-Z0-9_]+((_((utc|local)))?_when|(_((second|minute|hour|day|week|month|year|euro|dollar)))?_total|(_((lat|long)))?_loc|(_((h24|h12)))?_time|_id|_status|_num|_name|_seq|_date|_tally|_size|_addr|_flag|_desc|_doc|_code)$
-
-[sqlfluff:rules:layout.line_length]
-max_line_length = 100
-
-[sqlfluff:rules:convention.quoting]
-preferred_quoting_policy = unquoted
-
-[sqlfluff:rules:structure.terminator]
-require_final_semicolon = true
+[sqlfluff:rules:custom.naming.column]
+pattern = ^[a-z][a-z0-9_]+(_(utc|local|second|minute|hour|day|week|month|year|euro|dollar|lat|long|h24|h12))?_(id|status|total|num|name|seq|when|date|time|tally|size|addr|flag|desc|doc|code|loc)$
 
