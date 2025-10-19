@@ -11,11 +11,11 @@ allowed_policies = ['consistent', 'upper', 'lower', 'pascal', 'capitalise', 'sna
 
 # This dictionary serves as a global, reusable constant for regex patterns.
 case_patterns = {
-    'snake': '[a-z0-9_]+',
+    'snake': '[a-z][a-z0-9_]+',
     'camel': '[a-z]+[a-zA-Z0-9]*',
     'pascal': '[A-Z][a-zA-Z0-9]*',
-    'upper': '[A-Z0-9_]+',
-    'lower': '[a-z0-9_]+',
+    'upper': '[A-Z][A-Z0-9_]+',
+    'lower': '[a-z][a-z0-9_]+',
     'capitalise': '[A-Z][a-zA-Z0-9_]*'
 }
 
@@ -202,10 +202,14 @@ def generate_naming_rules(config_data):
     enabled_rules = []
 
     object_rule_map = {
-        'Table': 'table', 'View': 'view', 'Sequence': 'sequence',
-        'Primary Key Constraint': 'primary_key', 'Check Constraint': 'check',
-        'Foreign Key Constraint': 'foreign_key', 'Unique Constraint': 'unique',
-        'Default Constraint': 'default',
+        'Table': 'table'
+       ,'View': 'view'
+       ,'Sequence': 'sequence'
+       ,'Primary Key Constraint': 'primary_key'
+       ,'Check Constraint': 'check'
+       ,'Foreign Key Constraint': 'foreign_key'
+       ,'Unique Constraint': 'unique'
+       ,'Default Constraint': 'default'
     }
     
     object_case_style = formatting_rules.get('User Defined Object')
@@ -366,11 +370,11 @@ def main():
         'rules': ','.join(sorted(list(set(all_rules))))
     }
     final_config['sqlfluff:templater:placeholder'] = {
-        'param_style': 'dollar',
-        'flyway:defaultSchema': 'sch',
-        'flyway:database': 'db',
-        'database_name': 'db',
-        'environment_name': 'build'
+        'param_style': 'dollar'
+       ,'flyway:defaultSchema': 'sch'
+       ,'flyway:database': 'db'
+       ,'database_name': 'db'
+       ,'environment_name': 'build'
     }
     
     for config_obj in all_configs:
