@@ -1,6 +1,6 @@
 USE tap;
 BEGIN;
-CALL tap.no_plan();
+CALL tap.plan(4);
 
 -- ***************************************************************
 -- TABLE human_resources.department

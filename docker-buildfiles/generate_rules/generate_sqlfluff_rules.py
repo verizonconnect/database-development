@@ -204,6 +204,7 @@ def generate_comma_rule(config_data):
 def generate_naming_rules(config_data):
     """Generates the custom.naming. rules using regex patterns."""
     naming_rules = config_data.get('Naming', {})
+    separator = naming_rules['Component Separator']
     capitalisation_policy = config_data.get('Formatting', {}).get('Capitalisation Policy', {})
     config = configparser.ConfigParser()
     enabled_rules = []
@@ -238,6 +239,7 @@ def generate_naming_rules(config_data):
             prefix = details.get('Prefix')
             if structure:
                 pattern = structure
+                if len(prefix) == 0: pattern = pattern.replace('<prefix><separator>', prefix)
                 if isinstance(prefix, str): pattern = pattern.replace('<prefix>', prefix)
                 for ph in ['<object>', '<column>', '<parent_object>', '<leading column>', '<noun>']: pattern = pattern.replace(ph, object_pattern)
                 pattern = pattern.replace('(<separator><id>)', f'({naming_rules.get("Component Separator", "_")}[0-9]+)?').replace('<separator><id>', f'{naming_rules.get("Component Separator", "_")}[0-9]+')

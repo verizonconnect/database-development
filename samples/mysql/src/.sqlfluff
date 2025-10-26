@@ -15,7 +15,7 @@ indent_unit = space
 tab_space_size = 4
 
 [sqlfluff:rules:custom.naming.table]
-pattern = ^<separator>[a-z][a-z0-9_]+$
+pattern = ^[a-z][a-z0-9_]+$
 
 [sqlfluff:rules:custom.naming.view]
 pattern = ^vw<separator>[a-z][a-z0-9_]+$

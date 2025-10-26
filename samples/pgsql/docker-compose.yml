@@ -41,24 +41,31 @@ services:
         depends_on:
             lint:
                 condition: "service_completed_successfully"
-    unit_test:
-        build: ${image}
-        environment:
-            - POSTGRES_USERNAME=${user}
-            - POSTGRES_PASSWORD=${password}
-            - PGPASSWORD=${password}
-        volumes:
-            - ./test/:/var/lib/postgresql/test_cases
-            - ./coverage/:/var/lib/postgresql/coverage
+    cover:
+        build: ${coverage_image}
+        #command: ["pytest", "-s"]
+        command: ["python", "-c", "import sys; from src.command.base import BaseCommand; BaseCommand.main(['trace'])"]
         depends_on:
             flyway:
                 condition: "service_completed_successfully"
-        command: >
-            bash -c "cd /var/lib/postgresql/coverage/
-            && if [ ! -e /var/lib/postgresql/coverage/config ]; then mkdir config; fi
-            && if [ ! -e /var/lib/postgresql/coverage/config/database.yml ]; then echo 'piggly:' >> /var/lib/postgresql/coverage/config/database.yml; echo '    adapter: postgresql' >> /var/lib/postgresql/coverage/config/database.yml; echo '    database: ${database_name}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    username: ${user}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    password: ${password}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    host: ${container_name}' >> /var/lib/postgresql/coverage/config/database.yml; fi
-            && piggly trace
-            && pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /var/lib/postgresql/test_cases/
-            && piggly report"
+    #unit_test:
+    #    build: ${image}
+    #    environment:
+    #        - POSTGRES_USERNAME=${user}
+    #        - POSTGRES_PASSWORD=${password}
+    #        - PGPASSWORD=${password}
+    #    volumes:
+    #        - ./test/:/var/lib/postgresql/test_cases
+    #        - ./coverage/:/var/lib/postgresql/coverage
+    #    depends_on:
+    #        flyway:
+    #            condition: "service_completed_successfully"
+    #    command: >
+    #        bash -c "cd /var/lib/postgresql/coverage/
+    #        && if [ ! -e /var/lib/postgresql/coverage/config ]; then mkdir config; fi
+    #        && if [ ! -e /var/lib/postgresql/coverage/config/database.yml ]; then echo 'piggly:' >> /var/lib/postgresql/coverage/config/database.yml; echo '    adapter: postgresql' >> /var/lib/postgresql/coverage/config/database.yml; echo '    database: ${database_name}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    username: ${user}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    password: ${password}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    host: ${container_name}' >> /var/lib/postgresql/coverage/config/database.yml; fi
+    #        && piggly trace
+    #        && pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /var/lib/postgresql/test_cases/
+    #        && piggly report"
 
 

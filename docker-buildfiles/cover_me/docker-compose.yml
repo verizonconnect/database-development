@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  # This is the name of our service
+  cover:
+    # Tell Docker Compose to build the image from the
+    # Dockerfile in the current directory
+    build: .
+    
+    # This is the magic part you asked for:
+    # Mount the entire current directory ('.') on your computer
+    # into the '/app' directory inside the container.
+    volumes:
+      - .:/app
+    
+    # The command to run when the container starts.
+    # It will find and run all files in the 'tests/' folder.
+    command: ["pytest", "-s"]

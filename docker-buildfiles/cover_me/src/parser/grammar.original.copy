@@ -1,0 +1,685 @@
+import pyparsing as pp
+import re
+
+from pyparsing import (
+    CaselessKeyword, Forward, Group, ZeroOrMore, Optional, 
+    # ... all other pyparsing imports ...
+)
+from . import nodes # Import your new node classes
+
+# --- Parse Action Helper ---
+
+def create_node_action(node_class, original_text_ref):
+    """
+    A factory that creates a pyparsing parse action.
+    This action will instantiate a node from `nodes.py`.
+    """
+    def parse_action(s, loc, toks):
+        # 1. Create the node instance
+        node = node_class(s, loc, toks, original_text_ref[0])
+        
+        # 2. Set the parent, which also links all children
+        #    This is crucial for the .parent and .named() methods
+        node.parent = node 
+        
+        return node
+    return parse_action
+
+# --- Grammar Definition ---
+
+def get_parser(original_text_ref):
+    pp.ParserElement.set_default_whitespace_chars("")
+
+    # --- Suppress common elements ---
+    # Suppressing makes elements match but not appear in the results list
+    SEMI = pp.Literal(";").suppress()
+    LBRACKET = pp.Literal("[").suppress()
+    RBRACKET = pp.Literal("]").suppress()
+    LPAREN = pp.Literal("(").suppress()
+    RPAREN = pp.Literal(")").suppress()
+    COLON = pp.Literal(":").suppress()
+    COMMA = pp.Literal(",").suppress()
+    DOT = pp.Literal(".").suppress()
+
+    # --- Keywords ---
+    # We use CaselessKeyword, which automatically handles word boundaries
+    # (i.e., it won't match 'as' in 'asset').
+    # We also suppress them, as they are structural markers
+    # and we don't need their literal text in the parse results.
+    kwALIAS = pp.CaselessKeyword("alias").suppress()
+    kwALTER = pp.CaselessKeyword("alter").suppress()
+    kwARRAY = pp.CaselessKeyword("array").suppress()
+    kwAS = pp.CaselessKeyword("as").suppress()
+    kwASSIGN = pp.one_of(":= =").suppress() # Handles := and =
+    kwBEGIN = pp.CaselessKeyword("begin").suppress()
+    kwBY = pp.CaselessKeyword("by").suppress()
+    kwCASE = pp.CaselessKeyword("case").suppress()
+    kwCLOSE = pp.CaselessKeyword("close").suppress()
+    kwCOLLATE = pp.CaselessKeyword("collate").suppress()
+    kwCOMMIT = pp.CaselessKeyword("commit").suppress()
+    kwCONSTANT = pp.CaselessKeyword("constant").suppress()
+    kwCONTINUE = pp.CaselessKeyword("continue").suppress()
+    kwCOPY = pp.CaselessKeyword("copy").suppress()
+    kwCREATE = pp.CaselessKeyword("create").suppress()
+    kwCURSOR = pp.CaselessKeyword("cursor").suppress()
+    kwDEBUG = pp.CaselessKeyword("debug").suppress()
+    kwDECLARE = pp.CaselessKeyword("declare").suppress()
+    kwDEFAULT = pp.CaselessKeyword("default").suppress()
+    kwDELETE = pp.CaselessKeyword("delete").suppress()
+    kwDIAGNOSTICS = pp.CaselessKeyword("diagnostics").suppress()
+    kwDROP = pp.CaselessKeyword("drop").suppress()
+    kwELSE = pp.CaselessKeyword("else").suppress()
+    kwELSIF = pp.one_of("elsif elseif", caseless=True).suppress() # Handles both spellings
+    kwEND = pp.CaselessKeyword("end").suppress()
+    kwEXCEPTION = pp.CaselessKeyword("exception").suppress()
+    kwEXECUTE = pp.CaselessKeyword("execute").suppress()
+    kwEXIT = pp.CaselessKeyword("exit").suppress()
+    kwFETCH = pp.CaselessKeyword("fetch").suppress()
+    kwFOR = pp.CaselessKeyword("for").suppress()
+    kwFOREACH = pp.CaselessKeyword("foreach").suppress()
+    kwFROM = pp.CaselessKeyword("from").suppress()
+    kwGET = pp.CaselessKeyword("get").suppress()
+    kwIF = pp.CaselessKeyword("if").suppress()
+    kwIN = pp.CaselessKeyword("in").suppress()
+    kwINFO = pp.CaselessKeyword("info").suppress()
+    kwINSERT = pp.CaselessKeyword("insert").suppress()
+    kwINTO = pp.CaselessKeyword("into").suppress()
+    kwIS = pp.CaselessKeyword("is").suppress()
+    kwLOCK = pp.CaselessKeyword("lock").suppress()
+    kwLOG = pp.CaselessKeyword("log").suppress()
+    kwLOOP = pp.CaselessKeyword("loop").suppress()
+    kwMOVE = pp.CaselessKeyword("move").suppress()
+    kwNEXT = pp.CaselessKeyword("next").suppress()
+    kwNO = pp.CaselessKeyword("no").suppress()
+    kwNOT = pp.CaselessKeyword("not").suppress()
+    kwNOTIFY = pp.CaselessKeyword("notify").suppress()
+    kwNOTICE = pp.CaselessKeyword("notice").suppress()
+    kwNULL = pp.CaselessKeyword("null").suppress()
+    kwOPEN = pp.CaselessKeyword("open").suppress()
+    kwOR = pp.CaselessKeyword("or").suppress()
+    kwPERFORM = pp.CaselessKeyword("perform").suppress()
+    kwQUERY = pp.CaselessKeyword("query").suppress()
+    kwRAISE = pp.CaselessKeyword("raise").suppress()
+    kwRENAME = pp.CaselessKeyword("rename").suppress()
+    kwRESULTOID = pp.CaselessKeyword("result_oid").suppress()
+    kwRETURN = pp.CaselessKeyword("return").suppress()
+    kwREVERSE = pp.CaselessKeyword("reverse").suppress()
+    kwROWCOUNT = pp.CaselessKeyword("row_count").suppress()
+    kwSCROLL = pp.CaselessKeyword("scroll").suppress()
+    kwSELECT = pp.CaselessKeyword("select").suppress()
+    kwSET = pp.CaselessKeyword("set").suppress()
+    kwSTACKED = pp.CaselessKeyword("stacked").suppress()
+    kwSTART = pp.CaselessKeyword("start").suppress()
+    kwSTRICT = pp.CaselessKeyword("strict").suppress()
+    kwTHEN = pp.CaselessKeyword("then").suppress()
+    kwTO = pp.CaselessKeyword("to").suppress()
+    kwTRUNCATE = pp.CaselessKeyword("truncate").suppress()
+    kwTYPE = pp.CaselessKeyword("type").suppress()
+    kwUPDATE = pp.CaselessKeyword("update").suppress()
+    kwWARNING = pp.CaselessKeyword("warning").suppress()
+    kwWHEN = pp.CaselessKeyword("when").suppress()
+    kwWHILE = pp.CaselessKeyword("while").suppress()
+    kwWITH = pp.CaselessKeyword("with").suppress()
+
+
+    # --- Forward Declarations ---
+    # Declare names for rules that will be defined later
+    lValue = pp.Forward()
+    subNode = pp.Forward()
+    start = pp.Forward()
+    block = pp.Forward()
+    tSpace = pp.Forward()
+    statement = pp.Forward()
+    keyword = pp.Forward()
+    sqlKeyword = pp.Forward()
+    tEOF = pp.Forward()
+    tString = pp.Forward()
+    tBinary = pp.Forward()
+    tHex = pp.Forward()
+    tNumber = pp.Forward()
+    tType = pp.Forward()
+    rType = pp.Forward()
+    tLiteral = pp.Forward()
+    tIdentifier = pp.Forward()
+    tLabel = pp.Forward()
+    tLabelDefinition = pp.Forward()
+    expressionUntilSemiColon = pp.Forward()
+    expressionUntilClosingBracket = pp.Forward()
+    expressionUntilThen = pp.Forward()
+    expressionUntilWhen = pp.Forward()
+    expressionUntilLoop = pp.Forward()
+    stmtDeclare = pp.Forward()
+    varDeclaration = pp.Forward()
+    varDeclarationMisc = pp.Forward()
+    varDeclarationCursor = pp.Forward()
+    identifierList = pp.Forward()
+    blockExceptions = pp.Forward()
+    exceptionCase = pp.Forward()
+    caseWhen = pp.Forward()
+    condWhen = pp.Forward()
+    stmtContinue = pp.Forward()
+    stmtReturn = pp.Forward()
+    stmtRaise = pp.Forward()
+    stmtExecSql = pp.Forward()
+    stmtGetDiag = pp.Forward()
+    stmtNull = pp.Forward()
+    stmtAssignment = pp.Forward()
+    stmtIf = pp.Forward()
+    stmtElse = pp.Forward() # Must be Forward for recursion in stmtIf
+    stmtCase = pp.Forward()
+    stmtLoop = pp.Forward()
+    stmtWhileLoop = pp.Forward()
+    stmtForLoop = pp.Forward()
+    stmtForEachLoop = pp.Forward()
+    stmtForSql = pp.Forward()
+    stmtExit = pp.Forward()
+    stubNode = pp.Forward()
+    innerStatement = pp.Forward()
+    block_with_label = pp.Forward()
+    block_without_label = pp.Forward()
+    block = pp.Forward()
+
+    # --- Whitespace and Comments ---
+    # Define ws
+    ws = pp.Regex(r'[ \t\n\v\f\r]+').suppress() # Basic whitespace (suppressed)
+    ws_literal = pp.Regex(r'[ \t\n\v\f\r]+')    # Basic whitespace (NOT suppressed)
+    stubNode <<= pp.Empty()
+
+    # Define comments based on original grammar
+    lineComment = pp.Literal("--") + pp.rest_of_line()
+    blockComment = pp.c_style_comment # Handles /* ... */
+
+    # Define tComment (suppressed because we usually ignore comments)
+    tComment = (lineComment | blockComment).suppress()
+
+    # Define tSpace more precisely
+    tSpace <<= pp.OneOrMore(ws).suppress()
+
+    # --- Rule Definition: start ---
+    # Corresponds to: tSpace? block ';'? tSpace?
+    tEOF <<= pp.StringEnd()
+    start <<= pp.Optional(tSpace) + block + pp.Optional(SEMI) + pp.Optional(tSpace) + tEOF
+
+
+    # --- Composite Rule: keyword ---
+    # This matches any one of the specified keywords.
+    keyword <<= pp.MatchFirst([
+        kwWHEN, kwAS, kwASSIGN, kwALIAS, kwBEGIN, kwBY, kwCASE, kwARRAY,
+        kwCOLLATE, kwCONSTANT, kwCONTINUE, kwCURSOR, kwDEBUG, kwDECLARE, kwDEFAULT,
+        kwDIAGNOSTICS, kwELSE, kwELSIF, kwEND, kwEXCEPTION, kwEXECUTE, kwEXIT,
+        kwFOR, kwFROM, kwGET, kwIF, kwIN, kwINFO, kwINSERT, kwINTO,
+        kwIS, kwLOG, kwLOOP, kwNOT, kwNOTICE, kwNULL, kwFOREACH,
+        kwOR, kwRAISE, kwRENAME, kwRESULTOID, kwRETURN,
+        kwREVERSE, kwROWCOUNT, kwSCROLL, kwSTRICT, kwTHEN, kwTO, kwTYPE,
+        kwWARNING, kwWHILE
+    ])
+
+    # --- Composite Rule: sqlKeyword ---
+    # This matches any one of the specified SQL keywords.
+    sqlKeyword <<= pp.MatchFirst([
+        kwINSERT, kwSELECT, kwUPDATE, kwDELETE, kwPERFORM, kwEXECUTE,
+        kwOPEN, kwCLOSE, kwLOCK, kwFETCH, kwMOVE, kwTRUNCATE,
+        kwCREATE, kwDROP, kwALTER, kwCOMMIT, kwCOPY, kwSET,
+        kwSTART, kwNOTIFY, kwWITH
+    ])
+
+
+    # --- Strings, Numbers, Types, Literals ---
+
+    # tString
+    # This regex matches $tag$...$tag$ or $$...$$
+    dollarQuotedString = pp.Regex(r"\$([a-zA-Z_]\w*)?\$.*?\$\1\$", flags=re.DOTALL)
+    # This matches E'...' with '' as an escaped quote
+    eString = pp.Regex(r"E'(''|[^'])*'", flags=re.IGNORECASE)
+    # This matches '...' with '' as an escaped quote
+    standardString = pp.QuotedString("'", esc_quote="''")
+    tString <<= pp.MatchFirst([dollarQuotedString, eString, standardString])
+
+    # tBinary / tHex
+    tBinary <<= pp.Regex(r"b'[01]+'")
+    tHex <<= pp.Regex(r"x'[0-9a-fA-F]+'")
+
+    # tNumber
+    # Regex for: sign? . [0-9]+ exponent?
+    decimal_form1 = pp.Regex(r"[+-]?\.\d+([eE][+-]?\d+)?")
+    # Regex for: sign? [0-9]+ . [0-9]* exponent?
+    decimal_form2 = pp.Regex(r"[+-]?\d+\.\d*([eE][+-]?\d+)?")
+    # Regex for: sign? [0-9]+ .? exponent?
+    decimal_form3 = pp.Regex(r"[+-]?\d+\.?([eE][+-]?\d+)?")
+    tNumber <<= pp.MatchFirst([tBinary, tHex, decimal_form1, decimal_form2, decimal_form3])
+
+    # rType
+    rType_atom = pp.Regex(r"[^()\[\]]+")
+    rType <<= pp.Combine(pp.ZeroOrMore(
+        (LPAREN + rType + RPAREN) | (LBRACKET + rType + RBRACKET) | rType_atom
+    ))
+
+    # tType
+    # [a-z\200-\377_]
+    type_start = pp.Regex(r"[a-z\x80-\xFF_]")
+    # ( '(' rType ')' )
+    type_part1 = LPAREN + rType + RPAREN
+    # ( '[' rType ']' )
+    type_part2 = LBRACKET + rType + RBRACKET
+    # ( [a-z\200-\377_0-9$%]+ '.'? )
+    type_part3 = pp.Regex(r"[a-z\x80-\xFF_0-9$%]+\.?")
+    # ( ws !( kwAS / kwNOT / kwASSIGN / kwDEFAULT ) )
+    type_part4 = ws_literal + pp.NotAny(kwAS | kwNOT | kwASSIGN | kwDEFAULT)
+    # We Combine this all as it's treated as a single token (TDatatype)
+    tType <<= pp.Combine(
+        type_start +
+        pp.ZeroOrMore(type_part1 | type_part2 | type_part3 | type_part4)
+    )
+
+    # tLiteral
+    kwCAST = pp.CaselessKeyword("cast")
+    # (tSpace? '::' tSpace? tType)
+    string_cast_op = pp.Optional(pp.Optional(tSpace) + "::" + pp.Optional(tSpace) + tType)
+    number_cast_op = pp.Optional(pp.Optional(tSpace) + "::" + pp.Optional(tSpace) + tType)
+
+    # tString (tSpace? '::' tSpace? tType)
+    string_with_cast = tString + string_cast_op
+    # tNumber (tSpace? '::' tSpace? tType)
+    number_with_cast = tNumber + number_cast_op # <-- Corrected variable name
+
+    # 'cast' tSpace? '(' tSpace? tString tSpace kwAS tSpace tType tSpace? ')'
+    cast_string = (
+        kwCAST + pp.Optional(tSpace) + LPAREN + pp.Optional(tSpace) +
+        tString + tSpace + kwAS + tSpace + tType + pp.Optional(tSpace) + RPAREN
+    )
+    # 'cast' tSpace? '(' tSpace? tNumber tSpace kwAS tSpace tType tSpace? ')'
+    cast_number = (
+        kwCAST + pp.Optional(tSpace) + LPAREN + pp.Optional(tSpace) +
+        tNumber + tSpace + kwAS + tSpace + tType + pp.Optional(tSpace) + RPAREN
+    )
+
+    # The final rule, using MatchFirst to preserve the original order
+    tLiteral <<= pp.MatchFirst([
+        cast_string,
+        cast_number,
+        string_with_cast,  # This will match 'string'::type OR 'string'
+        number_with_cast   # This will match 123::type OR 123
+    ])
+
+
+    # --- Identifiers and Labels ---
+
+    # "quoted" identifier (e.g., "my ident")
+    # We Combine OneOrMore to handle "my" "ident" as a single token
+    quotedIdentifier = pp.Combine(pp.OneOrMore(pp.QuotedString('"')))
+
+    # unquoted identifier (e.g., my_ident)
+    # Must not be a keyword
+    unquotedIdentifier = pp.NotAny(keyword) + pp.Regex(r"[a-z\x80-\xFF_][a-z\x80-\xFF_0-9$]*")
+
+    tIdentifier <<= quotedIdentifier | unquotedIdentifier
+
+    # tLabel
+    tLabel <<= tIdentifier
+
+    # tLabelDefinition (e.g., <<my_label>>)
+    tLabelDefinition <<= (
+        pp.Literal("<<").suppress() + pp.Optional(tSpace) +
+        tLabel +
+        pp.Optional(tSpace) + pp.Literal(">>").suppress()
+    )
+
+
+    # --- Expression "Scan-Until" Rules ---
+
+    # These rules are designed to consume all text up to a terminator,
+    # while respecting strings as atomic units.
+    # We use pp.Combine to return the matched expression as a single string.
+
+    # This is a complex way to say "anything up to a semicolon"
+    # A more robust pyparsing implementation:
+
+
+    expr_atom_semicolon = tString | pp.NotAny(SEMI) + pp.Regex(r".", flags=re.DOTALL)
+    expressionUntilSemiColon <<= (
+        pp.Optional(tSpace) +
+        pp.Combine(pp.ZeroOrMore(expr_atom_semicolon)) +
+        pp.Optional(tSpace) + pp.FollowedBy(SEMI)
+    )
+
+    expr_atom_bracket = tString | pp.NotAny(RBRACKET) + pp.Regex(r".", flags=re.DOTALL)
+    expressionUntilClosingBracket <<= (
+        pp.Optional(tSpace) +
+        pp.Combine(pp.OneOrMore(expr_atom_bracket)) +
+        pp.Optional(tSpace) + pp.FollowedBy(RBRACKET)
+    )
+
+    expr_atom_then = tString | pp.NotAny(kwTHEN) + pp.Regex(r".", flags=re.DOTALL)
+    expressionUntilThen <<= (
+        pp.Optional(tSpace) +
+        pp.Combine(pp.OneOrMore(expr_atom_then)) +
+        pp.FollowedBy(pp.Optional(tSpace) + kwTHEN)
+    )
+
+    expr_atom_when = tString | pp.NotAny(kwWHEN) + pp.Regex(r".", flags=re.DOTALL)
+    expressionUntilWhen <<= (
+        pp.Optional(tSpace) +
+        pp.Combine(pp.OneOrMore(expr_atom_when)) +
+        pp.FollowedBy(tSpace + kwWHEN)
+    )
+
+    expr_atom_loop = tString | pp.NotAny(kwLOOP) + pp.Regex(r".", flags=re.DOTALL)
+    expressionUntilLoop <<= (
+        pp.Optional(tSpace) +
+        pp.Combine(pp.OneOrMore(expr_atom_loop)) +
+        pp.FollowedBy(tSpace + kwLOOP)
+    )
+
+
+    # --- Assignable Rule (lValue) ---
+    lValue <<= (
+        tIdentifier +
+        pp.ZeroOrMore(LBRACKET + expressionUntilClosingBracket + RBRACKET) +
+        pp.ZeroOrMore(DOT + lValue)
+    )
+
+    # --- Declarations, Exceptions, and Case ---
+
+    # identifierList
+    identifierList <<= tIdentifier + pp.ZeroOrMore(pp.Optional(tSpace) + COMMA + pp.Optional(tSpace) + tIdentifier)
+
+    # varDeclarationMisc
+    varDeclarationMisc <<= (
+        tIdentifier + tSpace + pp.Optional(kwCONSTANT + tSpace) +
+        tType +
+        pp.Optional(tSpace + kwCOLLATE + tIdentifier) +
+        pp.Optional(tSpace + kwNOT + tSpace + kwNULL) +
+        pp.Optional(pp.Optional(tSpace) + (kwASSIGN | kwDEFAULT) + pp.Optional(tSpace) + expressionUntilSemiColon) +
+        pp.Optional(tSpace) + SEMI + pp.Optional(tSpace)
+    )
+
+    # varDeclarationCursor
+    varDeclarationCursor <<= (
+        tIdentifier + tSpace +
+        pp.Optional(pp.Optional(kwNO + tSpace) + kwSCROLL + tSpace) +
+        kwCURSOR + tSpace +
+        expressionUntilSemiColon +
+        pp.Optional(tSpace) + SEMI + pp.Optional(tSpace)
+    )
+
+    # varDeclaration
+    varDeclaration <<= varDeclarationMisc | varDeclarationCursor
+
+    # stmtDeclare
+    stmtDeclare <<= kwDECLARE + tSpace + pp.ZeroOrMore(varDeclaration)
+
+    # exceptionCase
+    exceptionCase <<= (
+        kwWHEN + tSpace + expressionUntilThen + tSpace + 
+        kwTHEN + tSpace + stubNode + pp.ZeroOrMore(statement)
+    )
+
+    # blockExceptions
+    blockExceptions <<= kwEXCEPTION + tSpace + pp.ZeroOrMore(exceptionCase)
+
+    # caseWhen
+    caseWhen <<= (
+        kwWHEN + tSpace + expressionUntilThen + tSpace + 
+        kwTHEN + tSpace + stubNode + pp.ZeroOrMore(statement)
+    )
+
+    # condWhen
+    condWhen <<= (
+        kwWHEN + tSpace + stubNode + expressionUntilThen + tSpace + 
+        kwTHEN + tSpace + stubNode + pp.ZeroOrMore(statement)
+    )
+
+    # --- Core Block and Statement Rules ---
+
+    # stmtNull
+    stmtNull <<= kwNULL + pp.Optional(tSpace) + SEMI
+
+    # stmtContinue
+    stmtContinue_simple = (
+        stubNode +
+        kwCONTINUE + pp.Optional(tSpace + tLabel) +
+        pp.Optional(tSpace) + SEMI
+    )
+    stmtContinue_when = (
+        kwCONTINUE + pp.Optional(tSpace + tLabel) + tSpace +
+        kwWHEN + tSpace + stubNode + expressionUntilSemiColon + SEMI
+    )
+    stmtContinue <<= stmtContinue_simple | stmtContinue_when
+
+    # stmtReturn
+    return_expr = pp.MatchFirst([
+        pp.FollowedBy(SEMI), # e.g. RETURN;
+        tSpace + kwNEXT + tSpace + expressionUntilSemiColon,
+        tSpace + kwQUERY + tSpace + expressionUntilSemiColon,
+        expressionUntilSemiColon
+    ])
+    stmtReturn <<= (
+        stubNode +
+        kwRETURN + pp.Optional(return_expr, default=None) + SEMI
+    )
+
+    # stmtRaise
+    stmtRaise_level = (
+        kwRAISE + tSpace +
+        pp.MatchFirst([kwWARNING, kwNOTICE, kwINFO, kwLOG, kwDEBUG]) +
+        pp.Optional(tSpace + expressionUntilSemiColon) + SEMI
+    )
+    stmtRaise_exception = (
+        stubNode +
+        kwRAISE + pp.Optional(tSpace + kwEXCEPTION + pp.Optional(tSpace)) +
+        expressionUntilSemiColon + SEMI
+    )
+    stmtRaise <<= stmtRaise_level | stmtRaise_exception
+
+    # stmtExecSql
+    stmtExecSql <<= sqlKeyword + expressionUntilSemiColon + SEMI
+
+    # stmtGetDiag
+    stmtGetDiag <<= (
+        kwGET + tSpace + pp.Optional(kwSTACKED + tSpace) +
+        kwDIAGNOSTICS + tSpace + expressionUntilSemiColon + SEMI
+    )
+
+    # stmtAssignment
+    stmtAssignment <<= (
+        lValue + pp.Optional(tSpace) + kwASSIGN + pp.Optional(tSpace) +
+        expressionUntilSemiColon + pp.Optional(tSpace) + SEMI
+    )
+
+    # stmtElse (must be defined before stmtIf)
+    stmtElsif = (
+        kwELSIF + pp.Optional(tSpace) + stubNode + expressionUntilThen +
+        tSpace + kwTHEN + tSpace + stubNode + pp.ZeroOrMore(statement) +
+        pp.Optional(stmtElse)
+    )
+    stmtElse_final = (
+        kwELSE + tSpace + stubNode + pp.ZeroOrMore(statement)
+    )
+    stmtElse <<= stmtElsif | stmtElse_final
+
+    # stmtIf
+    stmtIf <<= (
+        kwIF + pp.Optional(tSpace) + expressionUntilThen +
+        pp.Suppress(pp.Optional(tSpace) + kwTHEN) +
+        pp.ZeroOrMore(statement) +
+        pp.Optional(pp.Optional(tSpace) + stmtElse) +
+        pp.Optional(tSpace) + kwEND + tSpace + kwIF + pp.Optional(tSpace) + SEMI
+    )
+
+    # stmtCase
+    stmtCase_simple = (
+        kwCASE + tSpace + pp.OneOrMore(pp.Optional(tSpace) +condWhen) +
+        pp.Optional(pp.Optional(tSpace) + stmtElse) +
+        pp.Optional(tSpace) + kwEND + tSpace + kwCASE + pp.Optional(tSpace) + SEMI
+    )
+    stmtCase_expr = (
+        kwCASE + tSpace + expressionUntilWhen +
+        pp.OneOrMore(pp.Optional(tSpace) +caseWhen) +
+        pp.Optional(pp.Optional(tSpace) + stmtElse) +
+        kwEND + tSpace + kwCASE + pp.Optional(tSpace) + SEMI
+    )
+    stmtCase <<= stmtCase_simple | stmtCase_expr
+
+    # stmtLoop
+    stmtLoop_labeled = (
+        tLabelDefinition + tSpace + kwLOOP + tSpace + stubNode +
+        pp.ZeroOrMore(pp.Optional(tSpace) + statement) +
+        stubNode + kwEND + tSpace + kwLOOP +
+        pp.Optional(tSpace + tLabel) + pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtLoop_unlabeled = (
+        kwLOOP + tSpace + stubNode +
+        pp.ZeroOrMore(pp.Optional(tSpace) + statement) +
+        stubNode + kwEND + tSpace + kwLOOP +
+        pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtLoop <<= stmtLoop_labeled | stmtLoop_unlabeled
+
+    # stmtWhileLoop
+    stmtWhileLoop_labeled = (
+        tLabelDefinition + tSpace + kwWHILE + pp.Optional(tSpace) + stubNode + expressionUntilLoop +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace + tLabel) + pp.Optional(tSpace) + SEMI
+    )
+    stmtWhileLoop_unlabeled = (
+        kwWHILE + pp.Optional(tSpace) + stubNode + expressionUntilLoop +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace) + SEMI
+    )
+    stmtWhileLoop <<= stmtWhileLoop_labeled | stmtWhileLoop_unlabeled
+
+    # stmtForSql
+    stmtForSql <<= sqlKeyword + tSpace + expressionUntilLoop
+
+    # stmtForLoop
+    stmtForLoop_labeled = (
+        tLabelDefinition + tSpace + kwFOR + tSpace + identifierList + tSpace + kwIN + tSpace +
+        (stmtForSql | expressionUntilLoop) +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) + stubNode +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace + tLabel) + pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtForLoop_unlabeled = (
+        kwFOR + tSpace + identifierList + tSpace + kwIN + tSpace +
+        (stmtForSql | expressionUntilLoop) +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) + stubNode +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtForLoop <<= stmtForLoop_labeled | stmtForLoop_unlabeled
+
+    # stmtForEachLoop
+    stmtForEachLoop_labeled = (
+        tLabelDefinition + tSpace + kwFOREACH + tSpace + tIdentifier + tSpace +
+        kwIN + tSpace + kwARRAY + tSpace + expressionUntilLoop +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) + stubNode +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace + tLabel) + pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtForEachLoop_unlabeled = (
+        kwFOREACH + tSpace + tIdentifier + tSpace +
+        kwIN + tSpace + kwARRAY + tSpace + expressionUntilLoop +
+        tSpace + kwLOOP + tSpace + stubNode + pp.ZeroOrMore(statement) + stubNode +
+        kwEND + tSpace + kwLOOP + pp.Optional(tSpace) + SEMI + stubNode
+    )
+    stmtForEachLoop <<= stmtForEachLoop_labeled | stmtForEachLoop_unlabeled
+
+    # stmtExit
+    stmtExit_simple = (
+        stubNode + kwEXIT + pp.Optional(tSpace + tLabel) +
+        pp.Optional(tSpace) + SEMI
+    )
+    stmtExit_when = (
+        kwEXIT + pp.Optional(tSpace + tLabel) + tSpace +
+        kwWHEN + tSpace + stubNode + expressionUntilSemiColon + SEMI
+    )
+    stmtExit <<= stmtExit_simple | stmtExit_when
+
+    # --- Core Block and Statement Rules ---
+
+    # This is the main dispatcher rule for all statements
+    innerStatement <<= pp.MatchFirst([
+        block + SEMI, # A nested block is a statement
+        stmtAssignment,
+        stmtIf,
+        stmtCase,
+        stmtLoop,
+        stmtWhileLoop,
+        stmtForLoop,
+        stmtForEachLoop,
+        stmtExit,
+        stmtContinue,
+        stmtReturn,
+        stmtRaise,
+        stmtExecSql,
+        stmtNull,
+        stmtGetDiag
+    ])
+
+    # The final statement rule, as defined in your grammar
+    statement <<= pp.Optional(tSpace) + innerStatement + pp.Optional(tSpace)
+
+    block_with_label <<= (
+        tLabelDefinition + tSpace + pp.ZeroOrMore(stmtDeclare) +
+        kwBEGIN + tSpace +
+        stubNode +
+        pp.ZeroOrMore(statement) +
+        pp.Optional(blockExceptions) +
+        kwEND +
+        pp.Optional(tSpace + tLabel) +
+        pp.Optional(tSpace)
+    )
+
+    block_without_label <<= (
+        pp.ZeroOrMore(stmtDeclare) +
+        kwBEGIN + tSpace +
+        stubNode +
+        pp.ZeroOrMore(statement) +
+        pp.Optional(blockExceptions) +
+        kwEND +
+        pp.Optional(tSpace)
+    )
+
+    block <<= block_with_label | block_without_label
+
+    block.ignore(tComment)
+
+
+    # --- Rule Naming (Optional but Helpful) ---
+    # Give names to rules for easier debugging and potentially for results structure
+    start.set_name("start")
+    block.set_name("block")
+    tSpace.set_name("tSpace")
+    keyword.set_name("keyword")
+    sqlKeyword.set_name("sqlKeyword")
+    tEOF.set_name("tEOF")
+    tString.set_name("tString")
+    tNumber.set_name("tNumber")
+    tType.set_name("tType")
+    tLiteral.set_name("tLiteral")
+    tIdentifier.set_name("tIdentifier")
+    tLabel.set_name("tLabel")
+    tLabelDefinition.set_name("tLabelDefinition")
+    lValue.set_name("lValue")
+    expressionUntilSemiColon.set_name("expressionUntilSemiColon")
+    expressionUntilClosingBracket.set_name("expressionUntilClosingBracket")
+    expressionUntilThen.set_name("expressionUntilThen")
+    expressionUntilWhen.set_name("expressionUntilWhen")
+    expressionUntilLoop.set_name("expressionUntilLoop")
+    stmtDeclare.set_name("stmtDeclare")
+    stmtIf.set_name("stmtIf")
+    varDeclaration.set_name("varDeclaration")
+    varDeclarationMisc.set_name("varDeclarationMisc")
+    varDeclarationCursor.set_name("varDeclarationCursor")
+    identifierList.set_name("identifierList")
+    blockExceptions.set_name("blockExceptions")
+    exceptionCase.set_name("exceptionCase")
+    caseWhen.set_name("caseWhen")
+    condWhen.set_name("condWhen")
+    stmtContinue.set_name("stmtContinue")
+    stmtReturn.set_name("stmtReturn")
+    stmtRaise.set_name("stmtRaise")
+    stmtExecSql.set_name("stmtExecSql")
+    stmtGetDiag.set_name("stmtGetDiag")
+    stmtNull.set_name("stmtNull")
+    innerStatement.set_name("innerStatement")
+    statement.set_name("statement")
+
+    stmtIf.setDebug(True)
