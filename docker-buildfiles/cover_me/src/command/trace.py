@@ -1,5 +1,7 @@
 import sys
 from typing import List, Any
+from functools import partial
+
 # Assuming BaseCommand is defined in a sibling module
 from .base import BaseCommand
 # Assuming existence of necessary modules/classes for compilation/runtime
@@ -15,6 +17,20 @@ from ..config import Config
 def _compile_job(compiler_instance, procedure_instance):
     """Executes the compiler against a single procedure."""
     return compiler_instance.compile(procedure_instance)
+    
+def _compile_job_safe(config_instance, procedure_instance):
+    """
+    Job function executed in the subprocess. It recreates the necessary 
+    TraceCompiler instance inside the new process's scope.
+    """
+    # 1. Import TraceCompiler locally if not globally available, but it is here.
+    from ..compiler.trace_compiler import TraceCompiler
+    
+    # 2. Instantiate the compiler in the child process
+    compiler = TraceCompiler(config_instance) 
+    
+    # 3. Execute the task
+    return compiler.compile(procedure_instance)
 
 # NOTE: Placeholder classes (Dumper, Installer, Profile, etc.) would be defined 
 # and imported here in a complete Python project.
@@ -46,7 +62,8 @@ class TraceCommand(BaseCommand):
         # Add compilation tasks to the queue using a lambda to defer execution
         for p in procedures:
             # Ruby: queue.add { compiler.compile(p) }
-            queue.add(lambda c=compiler, p=p: _compile_job(c, p)) 
+            job = partial(_compile_job_safe, config, p)
+            queue.add(job)
 
         # Ruby: Parser.parser (Force parser to load before we start forking)
         # Not required in Python, so we skip explicit force-load.

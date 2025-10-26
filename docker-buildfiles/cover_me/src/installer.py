@@ -18,25 +18,32 @@ class Installer:
         self.config = config
         self.connection = connection
 
+    def _execute_sql(self, sql: str):
+        """Executes SQL using a cursor, as required by psycopg2."""
+        # This context manager creates a cursor, executes, and closes it.
+        with self.connection.cursor() as cursor:
+            cursor.execute(sql)
+            
     def install(self, procedures: List[Any], profile: Any):
         """
         Installs the traced procedures, wrapped in a database transaction 
        .
         """
         try:
-            self.connection.exec("BEGIN")
+            self._execute_sql("BEGIN")
 
             self._install_support(profile)
 
             for p in procedures:
+                print(f"install procedure: {p}")
                 try:
                     self._trace(p, profile)
                 except ParserFailure:
                     print(sys.exc_info()[1]) # Prints the exception message
             
-            self.connection.exec("COMMIT")
+            self._execute_sql("COMMIT")
         except Exception:
-            self.connection.exec("ROLLBACK")
+            self._execute_sql("ROLLBACK")
             raise
 
     def uninstall(self, procedures: List[Any]):
@@ -45,16 +52,16 @@ class Installer:
        .
         """
         try:
-            self.connection.exec("BEGIN")
+            self._execute_sql("BEGIN")
 
             for p in procedures:
                 self._untrace(p)
                 
             self._uninstall_support()
 
-            self.connection.exec("COMMIT")
+            self._execute_sql("COMMIT")
         except Exception:
-            self.connection.exec("ROLLBACK")
+            self._execute_sql("ROLLBACK")
             raise
 
     def _trace(self, procedure: Any, profile: Any):
@@ -66,11 +73,13 @@ class Installer:
             # recompile with instrumentation
             compiler = TraceCompiler(self.config)
             result = compiler.compile(procedure)
+            
+            print(f"compiled result: {result}")
             # result keys: :tree, :tags, :code
             
             # Install the instrumented code (result[:code])
             # Assumes procedure.definition(code) returns the full CREATE OR REPLACE string
-            self.connection.exec(procedure.definition(result["code"]))
+            self._execute_sql(procedure.definition(result["code"]))
             
             profile.add(procedure, result["tags"], result)
         except Exception as e:
@@ -87,7 +96,7 @@ class Installer:
        .
         """
         # Assumes procedure.definition(source) returns the full CREATE OR REPLACE string
-        self.connection.exec(procedure.definition(procedure.source(self.config)))
+        self._execute_sql(procedure.definition(procedure.source(self.config)))
 
     def _install_support(self, profile: Any):
         """
@@ -100,7 +109,7 @@ class Installer:
         trace_prefix = self.config.trace_prefix # Assumed config value
 
         # coverage_cond function
-        self.connection.exec(f"""
+        self._execute_sql(f"""
             -- Signals that a conditional expression was executed
             CREATE OR REPLACE FUNCTION coverage_cond(message varchar, value boolean)
               RETURNS boolean AS $$
@@ -115,7 +124,7 @@ class Installer:
         """)
 
         # coverage_signal function
-        self.connection.exec(f"""
+        self._execute_sql(f"""
             -- Generic signal
             CREATE OR REPLACE FUNCTION coverage_signal(message varchar, signal varchar)
               RETURNS void AS $$
@@ -125,7 +134,7 @@ class Installer:
         """)
 
         # coverage_expr (varchar) function
-        self.connection.exec(f"""
+        self._execute_sql(f"""
             -- Signals that a (sub)expression was executed. handles '' and NULL value
             CREATE OR REPLACE FUNCTION coverage_expr(message varchar, value varchar)
               RETURNS varchar AS $$
@@ -136,7 +145,7 @@ class Installer:
         """)
 
         # coverage_expr (anyelement) function
-        self.connection.exec(f"""
+        self._execute_sql(f"""
             -- Signals that a (sub)expression was executed. handles all other types
             CREATE OR REPLACE FUNCTION coverage_expr(message varchar, value anyelement)
               RETURNS anyelement AS $$
@@ -147,7 +156,7 @@ class Installer:
         """)
 
         # coverage_branch function
-        self.connection.exec(f"""
+        self._execute_sql(f"""
             -- Signals that a branch was taken
             CREATE OR REPLACE FUNCTION coverage_branch(message varchar)
               RETURNS void AS $$
@@ -164,8 +173,8 @@ class Installer:
         # self.connection.set_notice_processor(lambda x: sys.stderr.write(x)) 
         
         # Drop tracing functions
-        self.connection.exec("DROP FUNCTION IF EXISTS coverage_cond(varchar, boolean)")
-        self.connection.exec("DROP FUNCTION IF EXISTS coverage_expr(varchar, varchar)")
-        self.connection.exec("DROP FUNCTION IF EXISTS coverage_expr(varchar, anyelement)")
-        self.connection.exec("DROP FUNCTION IF EXISTS coverage_branch(varchar)")
-        self.connection.exec("DROP FUNCTION IF EXISTS coverage_signal(varchar, varchar)")
+        self._execute_sql("DROP FUNCTION IF EXISTS coverage_cond(varchar, boolean)")
+        self._execute_sql("DROP FUNCTION IF EXISTS coverage_expr(varchar, varchar)")
+        self._execute_sql("DROP FUNCTION IF EXISTS coverage_expr(varchar, anyelement)")
+        self._execute_sql("DROP FUNCTION IF EXISTS coverage_branch(varchar)")
+        self._execute_sql("DROP FUNCTION IF EXISTS coverage_signal(varchar, varchar)")
