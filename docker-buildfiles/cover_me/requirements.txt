@@ -1,0 +1,4 @@
+pyparsing
+pytest
+psycopg2-binary
+PyYAML

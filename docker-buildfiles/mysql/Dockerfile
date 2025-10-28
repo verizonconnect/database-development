@@ -1,18 +1,10 @@
-FROM mysql:8.2.0
+FROM mysql:8.4
 LABEL maintainer David Murphy <david.murphy@verizonconnect.com>
 
-RUN apt-get update \
-    && apt-get install -y build-essential git-core libv8-dev curl \
-    && rm -rf /var/lib/apt/lists/*
+# Fix: Import the MySQL GPG key to prevent verification errors
+RUN rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
 
-# install my_prove
-RUN curl -LO http://xrl.us/cpanm \
-    && chmod +x cpanm \
-    && ./cpanm TAP::Parser::SourceHandler::MyTAP
+RUN microdnf update -y \
+    && microdnf install -y make gcc \
+    && microdnf clean all
 
-# install mytap
-RUN git clone https://github.com/hepabolu/mytap.git \
-    && cd mytap \
-    && chmod +x ./install.sh
-
-WORKDIR /mytap

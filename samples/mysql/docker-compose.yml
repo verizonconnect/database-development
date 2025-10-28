@@ -1,0 +1,74 @@
+services:
+    rules-generator:
+        build: ${generate_rules_image}
+        command: ["-f", "/app/coding_standard.yml", "-o", "/src/.sqlfluff"]
+        volumes:
+          - ./lint/coding_standard.yml:/app/coding_standard.yml
+          - ./src:/src
+    lint:
+        build: ${sqlfluff_image}
+        command: lint ${lint_verbosity} --write-output ${lint_output_path} /sql
+        volumes:
+            - ./src/:/sql
+            - ./src/.sqlfluff:/sqlfluff/.sqlfluff
+            - ./lint/:/lint/
+        depends_on:
+            rules-generator:
+                condition: service_completed_successfully
+    mysql:
+        build: ${image}
+        container_name: ${container_name}
+        command:
+        # ⭐️ MODIFIED: Changed hyphens to underscores
+        - --mysql-native-password=ON
+        volumes:
+        - ./init/000-init.sql:/docker-entrypoint-initdb.d/000-init.sql
+        environment:
+            - MYSQL_ROOT_PASSWORD=${password}
+        ports:
+            - ${host_port}:3306
+        restart: always
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${password}"]
+            timeout: 10s
+            retries: 5
+        depends_on:
+            lint:
+                condition: service_completed_successfully
+    flyway:
+        image: ${flyway_image}
+        command: migrate
+        environment:
+            - FLYWAY_URL=jdbc:mysql://${container_name}:3306/${database_name}?allowPublicKeyRetrieval=true
+            - FLYWAY_USER=${user}
+            - FLYWAY_PASSWORD=${password}
+            - FLYWAY_DEFAULT_SCHEMA=${default_schema}
+            - FLYWAY_SQL_MIGRATION_PREFIX=${sql_migration_prefix}
+            - FLYWAY_REPEATABLE_SQL_MIGRATION_PREFIX=${repeatable_sql_migration_prefix}
+            - FLYWAY_MIXED=${mixed}
+            - FLYWAY_PLACEHOLDERS_environment_name=${environment_name}
+        volumes:
+            - ./src/:/flyway/sql
+        depends_on:
+            mysql:
+                condition: service_healthy
+    tap_installer:
+        build: ${tap_installer}
+        volumes:
+            - ./test/:/opt/test_cases
+        command: >
+          bash -c "
+            mysql -h ${container_name} -u root -p${password} -e 'CREATE DATABASE IF NOT EXISTS tap;' && cd /mytap && ./install.sh -h ${container_name} -u root -p${password}
+          "
+        depends_on:
+            flyway:
+                condition: "service_completed_successfully"
+    unit_test:
+        build: ${tap_installer}
+        volumes:
+            - ./test/:/opt/test_cases
+        depends_on:
+            flyway:
+                condition: "service_completed_successfully"
+        command: >
+            bash -c "my_prove --nocount --nocolor -h ${container_name} -u ${user} -p${password} -D tap --ext .sql -r /opt/test_cases/"

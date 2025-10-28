@@ -1,0 +1,12 @@
+[sqlfluff]
+dialect = tsql
+rules = custom.naming.procedure,custom.naming.view,Custom_CN03
+
+[sqlfluff:rules:custom.naming.procedure]
+pattern = ^(get|set|add|del)_([a-z0-9_]+)?$
+
+[sqlfluff:rules:custom.naming.view]
+pattern = ^vw_([a-z0-9_]+)?$
+
+[sqlfluff:rules:custom.naming.column]
+pattern = ^[a-z0-9_]+(_when|_total|_loc|_time|_id|_status|_num|_name|_seq|_date|_tally|_size|_addr|_flag|_desc|_doc|_code)$

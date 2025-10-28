@@ -1,0 +1,9 @@
+cover_me:
+    # The host is 'localhost' because the container port (5432) is mapped to the host's 5432.
+    host: pgsql_container
+    port: 5432
+    # Connect to the target database
+    database: adventure_postgres
+    # You may need to replace these with the actual credentials used by your pgsql-postgres image.
+    username: postgres
+    password: flyway
