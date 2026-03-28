@@ -106,7 +106,7 @@ SELECT has_column(       'production', 'work_order_routing', 'modified_date', 'C
 SELECT col_type_is(      'production', 'work_order_routing', 'modified_date', 'timestamp without time zone', 'Column production.work_order_routing.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'work_order_routing', 'modified_date', 'Column production.work_order_routing.modified_date should be NOT NULL');
 SELECT col_has_default(  'production', 'work_order_routing', 'modified_date', 'Column production.work_order_routing.modified_date should have a default');
-SELECT col_default_is(   'production', 'work_order_routing', 'modified_date', 'timezone(''utc''::text, now())', 'Column production.work_order_routing.modified_date default is');
+SELECT col_default_is(   'production', 'work_order_routing', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.work_order_routing.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

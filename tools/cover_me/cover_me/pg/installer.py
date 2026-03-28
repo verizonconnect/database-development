@@ -2,7 +2,7 @@
 Install/uninstall instrumented functions and helper functions in the database.
 """
 from pathlib import Path
-from cover_me.dumper import ProcedureDef, load_cached_source, load_cached_meta
+from cover_me.models import ProcedureDef, load_cached_source, load_cached_meta
 
 
 # Helper functions installed in public schema for coverage tracking

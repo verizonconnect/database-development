@@ -70,7 +70,7 @@ SELECT has_column(       'purchasing', 'ship_method', 'modified_date', 'Column p
 SELECT col_type_is(      'purchasing', 'ship_method', 'modified_date', 'timestamp without time zone', 'Column purchasing.ship_method.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'purchasing', 'ship_method', 'modified_date', 'Column purchasing.ship_method.modified_date should be NOT NULL');
 SELECT col_has_default(  'purchasing', 'ship_method', 'modified_date', 'Column purchasing.ship_method.modified_date should have a default');
-SELECT col_default_is(   'purchasing', 'ship_method', 'modified_date', 'timezone(''utc''::text, now())', 'Column purchasing.ship_method.modified_date default is');
+SELECT col_default_is(   'purchasing', 'ship_method', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column purchasing.ship_method.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

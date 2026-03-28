@@ -74,7 +74,7 @@ SELECT has_column(       'person', 'state_province', 'modified_date', 'Column pe
 SELECT col_type_is(      'person', 'state_province', 'modified_date', 'timestamp without time zone', 'Column person.state_province.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'person', 'state_province', 'modified_date', 'Column person.state_province.modified_date should be NOT NULL');
 SELECT col_has_default(  'person', 'state_province', 'modified_date', 'Column person.state_province.modified_date should have a default');
-SELECT col_default_is(   'person', 'state_province', 'modified_date', 'timezone(''utc''::text, now())', 'Column person.state_province.modified_date default is');
+SELECT col_default_is(   'person', 'state_province', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column person.state_province.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

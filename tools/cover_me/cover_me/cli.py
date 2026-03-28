@@ -45,7 +45,7 @@ def _get_engine_modules(engine: str):
             cache_create_sql,
         )
         from cover_me.mysql.profile import parse_trace_table
-        from cover_me.dumper import cache_source, load_cached_source
+        from cover_me.models import cache_source, load_cached_source
         return {
             "dump": dump_procedures,
             "install_helpers": install_helpers,
@@ -58,11 +58,12 @@ def _get_engine_modules(engine: str):
             "parse_trace_table": parse_trace_table,
         }
     else:
-        from cover_me.dumper import dump_procedures, cache_source, load_cached_source
-        from cover_me.installer import (
+        from cover_me.pg.dumper import dump_procedures
+        from cover_me.pg.installer import (
             install_helpers, uninstall_helpers,
             install_instrumented, restore_original,
         )
+        from cover_me.models import cache_source, load_cached_source
         return {
             "dump": dump_procedures,
             "install_helpers": install_helpers,
@@ -126,18 +127,6 @@ def cmd_trace(args) -> None:
         count += 1
 
     print(f"Instrumented {count} functions")
-
-    # Verify functions exist after instrumentation
-    if engine == "mysql":
-        with conn.cursor() as cur:
-            cur.execute("SELECT routine_schema, routine_name FROM information_schema.routines "
-                        "WHERE routine_schema NOT IN ('sys','mysql','information_schema','performance_schema','tap','cover_me') "
-                        "ORDER BY routine_schema, routine_name")
-            rows = cur.fetchall()
-            print(f"Verified {len(rows)} routines in database:")
-            for r in rows:
-                print(f"  {r[0]}.{r[1]}")
-
     conn.close()
 
 

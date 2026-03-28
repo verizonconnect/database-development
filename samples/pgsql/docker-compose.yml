@@ -2,6 +2,7 @@ services:
     postgres:
         build: ${image}
         container_name: ${container_name}
+        command: ["postgres", "-c", "log_min_messages=error"]
         environment:
             - POSTGRES_USERNAME=${user}
             - POSTGRES_PASSWORD=${password}

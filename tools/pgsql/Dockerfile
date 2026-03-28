@@ -1,4 +1,4 @@
-FROM postgres:13.4-alpine
+FROM postgres:17-alpine
 LABEL maintainer david.murphy@verizonconnect.com
 
 ENV PERL_MM_USE_DEFAULT=1
@@ -11,7 +11,6 @@ RUN apk add --no-cache --update \
         expat-dev \
         git \
         gnupg \
-        heirloom-mailx \
         llvm \
         llvm-dev \
         make \
@@ -33,12 +32,12 @@ RUN rm -rf /var/cache/apk/* /tmp/*
 RUN cpan -i Module::Signature \
         TAP::Parser::SourceHandler::pgTAP \
         XML::SAX::Expat
- 
+
 # install pg_prove
 RUN cpanm TAP::Parser::SourceHandler::pgTAP
- 
+
 WORKDIR /var/lib/postgresql
- 
+
 # install pgtap
 RUN git clone https://github.com/theory/pgtap.git \
     && cd pgtap \
@@ -48,4 +47,3 @@ RUN git clone https://github.com/theory/pgtap.git \
 
 RUN mkdir ./tests
 RUN mkdir ./coverage
-

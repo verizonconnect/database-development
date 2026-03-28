@@ -63,7 +63,7 @@ SELECT has_column(       'production', 'transaction_history_archive', 'transacti
 SELECT col_type_is(      'production', 'transaction_history_archive', 'transaction_date', 'timestamp without time zone', 'Column production.transaction_history_archive.transaction_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'transaction_history_archive', 'transaction_date', 'Column production.transaction_history_archive.transaction_date should be NOT NULL');
 SELECT col_has_default(  'production', 'transaction_history_archive', 'transaction_date', 'Column production.transaction_history_archive.transaction_date should have a default');
-SELECT col_default_is(   'production', 'transaction_history_archive', 'transaction_date', 'timezone(''utc''::text, now())', 'Column production.transaction_history_archive.transaction_date default is');
+SELECT col_default_is(   'production', 'transaction_history_archive', 'transaction_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.transaction_history_archive.transaction_date default is');
 
 SELECT has_column(       'production', 'transaction_history_archive', 'transaction_type', 'Column production.transaction_history_archive.transaction_type should exist');
 SELECT col_type_is(      'production', 'transaction_history_archive', 'transaction_type', 'character(1)', 'Column production.transaction_history_archive.transaction_type should be type character(1)');
@@ -85,7 +85,7 @@ SELECT has_column(       'production', 'transaction_history_archive', 'modified_
 SELECT col_type_is(      'production', 'transaction_history_archive', 'modified_date', 'timestamp without time zone', 'Column production.transaction_history_archive.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'transaction_history_archive', 'modified_date', 'Column production.transaction_history_archive.modified_date should be NOT NULL');
 SELECT col_has_default(  'production', 'transaction_history_archive', 'modified_date', 'Column production.transaction_history_archive.modified_date should have a default');
-SELECT col_default_is(   'production', 'transaction_history_archive', 'modified_date', 'timezone(''utc''::text, now())', 'Column production.transaction_history_archive.modified_date default is');
+SELECT col_default_is(   'production', 'transaction_history_archive', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.transaction_history_archive.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

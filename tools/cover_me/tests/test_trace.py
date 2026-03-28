@@ -7,11 +7,12 @@ import pytest
 from pathlib import Path
 from unittest.mock import MagicMock, call
 
-from cover_me.dumper import (
-    ProcedureDef, _parse_row, cache_source,
+from cover_me.models import (
+    ProcedureDef, cache_source,
     load_cached_source, load_cached_meta,
 )
-from cover_me.installer import (
+from cover_me.pg.dumper import _parse_row
+from cover_me.pg.installer import (
     _build_create_function_sql, HELPER_SQL, DROP_HELPERS_SQL,
     install_helpers, uninstall_helpers,
 )

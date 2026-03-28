@@ -62,13 +62,13 @@ SELECT has_column(       'sales', 'shopping_cart_item', 'date_created', 'Column 
 SELECT col_type_is(      'sales', 'shopping_cart_item', 'date_created', 'timestamp without time zone', 'Column sales.shopping_cart_item.date_created should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'shopping_cart_item', 'date_created', 'Column sales.shopping_cart_item.date_created should be NOT NULL');
 SELECT col_has_default(  'sales', 'shopping_cart_item', 'date_created', 'Column sales.shopping_cart_item.date_created should have a default');
-SELECT col_default_is(   'sales', 'shopping_cart_item', 'date_created', 'timezone(''utc''::text, now())', 'Column sales.shopping_cart_item.date_created default is');
+SELECT col_default_is(   'sales', 'shopping_cart_item', 'date_created', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.shopping_cart_item.date_created default is');
 
 SELECT has_column(       'sales', 'shopping_cart_item', 'modified_date', 'Column sales.shopping_cart_item.modified_date should exist');
 SELECT col_type_is(      'sales', 'shopping_cart_item', 'modified_date', 'timestamp without time zone', 'Column sales.shopping_cart_item.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'shopping_cart_item', 'modified_date', 'Column sales.shopping_cart_item.modified_date should be NOT NULL');
 SELECT col_has_default(  'sales', 'shopping_cart_item', 'modified_date', 'Column sales.shopping_cart_item.modified_date should have a default');
-SELECT col_default_is(   'sales', 'shopping_cart_item', 'modified_date', 'timezone(''utc''::text, now())', 'Column sales.shopping_cart_item.modified_date default is');
+SELECT col_default_is(   'sales', 'shopping_cart_item', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.shopping_cart_item.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

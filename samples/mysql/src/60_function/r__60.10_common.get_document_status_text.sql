@@ -1,4 +1,6 @@
-CREATE FUNCTION common.get_document_status_text (v_status SMALLINT)
+CREATE FUNCTION common.get_document_status_text (
+    v_status SMALLINT
+)
 RETURNS VARCHAR(16)
 DETERMINISTIC
 NO SQL

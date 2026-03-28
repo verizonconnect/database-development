@@ -60,7 +60,7 @@ SELECT has_column(       'sales', 'store', 'modified_date', 'Column sales.store.
 SELECT col_type_is(      'sales', 'store', 'modified_date', 'timestamp without time zone', 'Column sales.store.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'store', 'modified_date', 'Column sales.store.modified_date should be NOT NULL');
 SELECT col_has_default(  'sales', 'store', 'modified_date', 'Column sales.store.modified_date should have a default');
-SELECT col_default_is(   'sales', 'store', 'modified_date', 'timezone(''utc''::text, now())', 'Column sales.store.modified_date default is');
+SELECT col_default_is(   'sales', 'store', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.store.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

@@ -213,13 +213,14 @@ cover_me/
 │   ├── __init__.py
 │   ├── cli.py                 # CLI entry point with --engine dispatch
 │   ├── instrumenter.py        # Shared tokeniser, tag model, instrument()
-│   ├── dumper.py              # Postgres: pg_proc query, ProcedureDef model, cache
-│   ├── installer.py           # Postgres: CREATE OR REPLACE, RAISE WARNING helpers
+│   ├── models.py              # Shared: ProcedureDef model, cache functions
 │   ├── profile.py             # Shared: tag profile aggregation, trace file parser
 │   ├── reporter.py            # Shared: OpenCover XML generation
 │   ├── html_reporter.py       # Shared: HTML report generation
 │   ├── pg/
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── dumper.py          # Postgres: pg_proc query, row parsing
+│   │   └── installer.py       # Postgres: CREATE OR REPLACE, RAISE WARNING helpers
 │   └── mysql/
 │       ├── __init__.py        # MySQL: information_schema query, dump_procedures()
 │       ├── installer.py       # MySQL: MyISAM trace table, DROP+CREATE, SHOW CREATE cache
@@ -228,24 +229,55 @@ cover_me/
     ├── test_instrumenter.py   # 37 tests — tokeniser + all control flow patterns
     ├── test_report.py         # 16 tests — profile, pattern matching, OpenCover XML
     ├── test_trace.py          # 12 tests — dumper, cache, installer SQL generation
-    └── test_mysql.py          # 6 tests — MySQL-specific instrumentation
+    ├── test_mysql.py          # 6 tests — MySQL-specific instrumentation
+    └── test_integration.py    # 4 tests — full cycle against real databases (skip if unavailable)
 ```
 
 ## Testing
 
+### Unit Tests
+
 ```bash
 cd tools/cover_me
 pip install -r requirements.txt
-python -m pytest tests/ -v
+python -m pytest tests/ --ignore=tests/test_integration.py -v
 ```
 
 71 tests covering:
-- Tokeniser (keyword detection, string/comment opacity, line numbers)
-- All control flow patterns (IF, ELSIF, ELSE, WHILE, FOR, LOOP, EXIT, CONTINUE, RETURN, RAISE, CASE, EXCEPTION)
+- Tokeniser (keyword detection, string/comment opacity, semicolon tokens, line numbers)
+- All control flow patterns (IF, ELSIF, ELSE, WHILE, FOR, LOOP, REPEAT, EXIT, CONTINUE, LEAVE, ITERATE, RETURN, RAISE, CASE, EXCEPTION)
 - Tag determinism (same input → same tags, different OID → different tags)
 - Profile aggregation and trace file parsing
 - OpenCover XML structure and coverage percentages
 - MySQL-specific instrumentation (trace table inserts, DECLARE handling, CASE ELSE skipping)
+
+### Integration Tests
+
+Integration tests run against real database containers and verify the full trace → exercise → report → untrace cycle.
+
+```bash
+# Start test databases
+docker run -d --name pg_test -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=test_cover_me -p 5432:5432 postgres:13-alpine
+docker run -d --name my_test -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test_cover_me -p 3306:3306 mysql:8.4
+
+# Run integration tests
+python -m pytest tests/test_integration.py -v
+
+# Run all tests (unit + integration)
+python -m pytest tests/ -v
+
+# Clean up
+docker rm -f pg_test my_test
+```
+
+Integration tests skip automatically if the database containers are not running.
+
+| Test | Engine | What It Verifies |
+| ---- | ------ | ---------------- |
+| `test_trace_and_untrace` | Postgres | Dump → cache → instrument → install → execute → restore → verify original works |
+| `test_coverage_report` | Postgres | Trace → exercise all branches → generate OpenCover XML |
+| `test_trace_and_untrace` | MySQL | Same cycle + verifies trace table records hits after execution |
+| `test_coverage_report_from_trace_table` | MySQL | Exercise all branches → parse trace table → verify visited tags → generate report |
 
 ## Dependencies
 

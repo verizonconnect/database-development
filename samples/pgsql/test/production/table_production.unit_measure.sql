@@ -41,7 +41,7 @@ SELECT has_column(       'production', 'unit_measure', 'modified_date', 'Column 
 SELECT col_type_is(      'production', 'unit_measure', 'modified_date', 'timestamp without time zone', 'Column production.unit_measure.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'unit_measure', 'modified_date', 'Column production.unit_measure.modified_date should be NOT NULL');
 SELECT col_has_default(  'production', 'unit_measure', 'modified_date', 'Column production.unit_measure.modified_date should have a default');
-SELECT col_default_is(   'production', 'unit_measure', 'modified_date', 'timezone(''utc''::text, now())', 'Column production.unit_measure.modified_date default is');
+SELECT col_default_is(   'production', 'unit_measure', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.unit_measure.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;
