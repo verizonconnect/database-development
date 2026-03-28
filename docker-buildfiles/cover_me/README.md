@@ -87,6 +87,92 @@ cover_me report  -E mysql -H localhost -p 3306 -d mydb -U root -W secret
 cover_me untrace -E mysql -H localhost -p 3306 -d mydb -U root -W secret
 ```
 
+## Standalone Usage
+
+cover_me can be used independently of the docker compose pipeline. It only needs Python 3.12+ and a connection to your database.
+
+### Install
+
+```bash
+pip install psycopg2-binary mysql-connector-python lxml
+```
+
+Or build the Docker image:
+
+```bash
+cd docker-buildfiles/cover_me
+docker build -t cover_me .
+```
+
+### Postgres — Standalone
+
+```bash
+# 1. Instrument all PL/pgSQL functions
+python -m cover_me.cli trace -E postgres -H localhost -d mydb -U postgres -W secret -c ./coverage/cache
+
+# 2. Run your tests (any test runner — pg_prove, psql, your app, etc.)
+#    Capture stderr which contains the RAISE WARNING trace output
+pg_prove --host localhost --dbname mydb -r ./tests/ 2> ./coverage/trace.txt
+
+# Or with psql:
+psql -h localhost -d mydb -U postgres -f my_test.sql 2> ./coverage/trace.txt
+
+# Or even run your application against the instrumented database — any code path
+# that executes a function will generate coverage data
+
+# 3. Generate the report
+python -m cover_me.cli report -E postgres -H localhost -d mydb -U postgres -W secret \
+    -c ./coverage/cache -f ./coverage/trace.txt -o ./coverage/opencover.xml
+
+# 4. Restore original functions
+python -m cover_me.cli untrace -E postgres -H localhost -d mydb -U postgres -W secret -c ./coverage/cache
+```
+
+### MySQL — Standalone
+
+```bash
+# 1. Instrument all stored procedures/functions
+python -m cover_me.cli trace -E mysql -H localhost -p 3306 -d mydb -U root -W secret -c ./coverage/cache
+
+# 2. Run your tests (any test runner — my_prove, mysql client, your app, etc.)
+#    No file capture needed — hits are recorded in the cover_me.trace table (MyISAM)
+my_prove -h localhost -u root -psecret -D tap --ext .sql -r ./tests/
+
+# Or with the mysql client:
+mysql -h localhost -u root -psecret < my_test.sql
+
+# Or run your application — any code path that calls an instrumented function
+# will record coverage hits in the trace table
+
+# 3. Generate the report (reads from cover_me.trace table automatically)
+python -m cover_me.cli report -E mysql -H localhost -p 3306 -d mydb -U root -W secret \
+    -c ./coverage/cache -o ./coverage/opencover.xml
+
+# 4. Restore original functions
+python -m cover_me.cli untrace -E mysql -H localhost -p 3306 -d mydb -U root -W secret -c ./coverage/cache
+```
+
+### Docker — Standalone
+
+```bash
+# Postgres
+docker run --rm --network host -v ./coverage:/coverage cover_me \
+    trace -E postgres -H localhost -d mydb -U postgres -W secret
+
+# MySQL
+docker run --rm --network host -v ./coverage:/coverage cover_me \
+    trace -E mysql -H localhost -p 3306 -d mydb -U root -W secret
+```
+
+### Key Points
+
+- **Any test runner works** — cover_me doesn't care how the functions are exercised. Use pg_prove, my_prove, psql, mysql client, or your application.
+- **Postgres trace capture** — the only requirement is redirecting stderr to a file (`2> trace.txt`) since `RAISE WARNING` outputs to stderr.
+- **MySQL trace capture** — fully automatic. The MyISAM trace table records hits regardless of how the functions are called. No file capture needed.
+- **Cache directory** — must be the same across `trace`, `report`, and `untrace` commands. It stores original function source for restoration.
+- **Safe to run on shared databases** — `untrace` restores exact original definitions. However, instrumented functions have a small performance overhead, so avoid running on production.
+- **CI/CD integration** — the OpenCover XML output (`opencover.xml`) is compatible with SonarQube, Azure DevOps, and ReportGenerator for integration into your build pipeline.
+
 ## Output
 
 ### OpenCover XML
