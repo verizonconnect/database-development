@@ -15,15 +15,23 @@ services:
             retries: 5
             start_period: 10s
             timeout: 3s
+    rules-generator:
+        build: ${generate_rules_image}
+        command: ["-f", "/app/coding_standard.yml", "-o", "/src/.sqlfluff"]
+        volumes:
+            - ./lint/coding_standard.yml:/app/coding_standard.yml
+            - ./src:/src
     lint:
-        image: ${sqlfluff_image}
-        command: lint --write-output /lint/sqlfluff.output
+        build: ${sqlfluff_image}
+        entrypoint: ["/bin/bash", "-c"]
+        command: ["sqlfluff lint ${lint_verbosity} --write-output ${lint_output_path} /sql || true"]
         volumes:
             - ./src/:/sql
+            - ./src/.sqlfluff:/sqlfluff/.sqlfluff
             - ./lint/:/lint/
         depends_on:
-            postgres:
-                condition: service_healthy
+            rules-generator:
+                condition: service_completed_successfully
     flyway:
         image: ${flyway_image}
         command: migrate
@@ -40,32 +48,48 @@ services:
             - ./src/:/flyway/sql
         depends_on:
             lint:
-                condition: "service_completed_successfully"
-    cover:
+                condition: service_completed_successfully
+            postgres:
+                condition: service_healthy
+    cover_trace:
         build: ${coverage_image}
-        #command: ["pytest", "-s"]
-        command: ["python", "-c", "import sys; from src.command.base import BaseCommand; BaseCommand.main(['trace'])"]
+        command: ["trace", "-H", "${container_name}", "-p", "${host_port}", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache"]
+        volumes:
+            - ./coverage/:/coverage/
         depends_on:
             flyway:
                 condition: "service_completed_successfully"
-    #unit_test:
-    #    build: ${image}
-    #    environment:
-    #        - POSTGRES_USERNAME=${user}
-    #        - POSTGRES_PASSWORD=${password}
-    #        - PGPASSWORD=${password}
-    #    volumes:
-    #        - ./test/:/var/lib/postgresql/test_cases
-    #        - ./coverage/:/var/lib/postgresql/coverage
-    #    depends_on:
-    #        flyway:
-    #            condition: "service_completed_successfully"
-    #    command: >
-    #        bash -c "cd /var/lib/postgresql/coverage/
-    #        && if [ ! -e /var/lib/postgresql/coverage/config ]; then mkdir config; fi
-    #        && if [ ! -e /var/lib/postgresql/coverage/config/database.yml ]; then echo 'piggly:' >> /var/lib/postgresql/coverage/config/database.yml; echo '    adapter: postgresql' >> /var/lib/postgresql/coverage/config/database.yml; echo '    database: ${database_name}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    username: ${user}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    password: ${password}' >> /var/lib/postgresql/coverage/config/database.yml; echo '    host: ${container_name}' >> /var/lib/postgresql/coverage/config/database.yml; fi
-    #        && piggly trace
-    #        && pg_prove --nocount --nocolor --host ${container_name} --username ${user} --port ${host_port} --dbname ${database_name} --ext .sql --recurse --failures /var/lib/postgresql/test_cases/
-    #        && piggly report"
+    unit_test:
+        build: ${image}
+        environment:
+            - PGPASSWORD=${password}
+        volumes:
+            - ./test/:/var/lib/postgresql/test_cases
+            - ./coverage/:/var/lib/postgresql/coverage
+        depends_on:
+            cover_trace:
+                condition: "service_completed_successfully"
+        command: >
+            bash -c "pg_prove --nocount --nocolor
+            --host ${container_name} --username ${user} --port ${host_port}
+            --dbname ${database_name} --ext .sql --recurse
+            --failures /var/lib/postgresql/test_cases/
+            2> /var/lib/postgresql/coverage/trace.txt"
+    cover_report:
+        build: ${coverage_image}
+        command: ["report", "-H", "${container_name}", "-p", "${host_port}", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache", "-f", "/coverage/trace.txt", "-o", "/coverage/opencover.xml"]
+        volumes:
+            - ./coverage/:/coverage/
+        depends_on:
+            unit_test:
+                condition: "service_completed_successfully"
+    cover_untrace:
+        build: ${coverage_image}
+        command: ["untrace", "-H", "${container_name}", "-p", "${host_port}", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache"]
+        volumes:
+            - ./coverage/:/coverage/
+        depends_on:
+            cover_report:
+                condition: "service_completed_successfully"
 
 

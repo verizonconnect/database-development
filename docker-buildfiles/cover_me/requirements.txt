@@ -1,4 +1,4 @@
-pyparsing
-pytest
 psycopg2-binary
-PyYAML
+mysql-connector-python
+lxml
+pytest

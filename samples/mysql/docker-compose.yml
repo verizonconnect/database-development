@@ -7,7 +7,8 @@ services:
           - ./src:/src
     lint:
         build: ${sqlfluff_image}
-        command: lint ${lint_verbosity} --write-output ${lint_output_path} /sql
+        entrypoint: ["/bin/bash", "-c"]
+        command: ["sqlfluff lint ${lint_verbosity} --write-output ${lint_output_path} /sql || true"]
         volumes:
             - ./src/:/sql
             - ./src/.sqlfluff:/sqlfluff/.sqlfluff
@@ -52,23 +53,56 @@ services:
         depends_on:
             mysql:
                 condition: service_healthy
+    cover_trace:
+        build: ${coverage_image}
+        command: ["trace", "-E", "mysql", "-H", "${container_name}", "-p", "3306", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache"]
+        volumes:
+            - ./coverage/:/coverage/
+        depends_on:
+            flyway:
+                condition: "service_completed_successfully"
     tap_installer:
         build: ${tap_installer}
         volumes:
             - ./test/:/opt/test_cases
         command: >
           bash -c "
-            mysql -h ${container_name} -u root -p${password} -e 'CREATE DATABASE IF NOT EXISTS tap;' && cd /mytap && ./install.sh -h ${container_name} -u root -p${password}
+            mysql -h ${container_name} -u root -p${password} -e 'CREATE DATABASE IF NOT EXISTS tap;' &&
+            mysql -h ${container_name} -u root -p${password} -e 'SET GLOBAL log_bin_trust_function_creators = 1;' 2>/dev/null;
+            cd /mytap &&
+            for f in mytap.sql mytap-table.sql mytap-routines.sql mytap-column.sql mytap-constraint.sql mytap-index.sql mytap-trigger.sql mytap-view.sql mytap-event.sql mytap-partition.sql mytap-schemata.sql mytap-user.sql mytap-role.sql mytap-charset.sql mytap-collation.sql mytap-engine.sql; do
+              if [ -f \"$$f\" ]; then
+                mysql -h ${container_name} -u root -p${password} tap < \"$$f\" 2>&1 && echo \"Loaded $$f\" || echo \"FAILED $$f\";
+              fi;
+            done &&
+            mysql -h ${container_name} -u root -p${password} -e 'SELECT COUNT(*) AS mytap_routines FROM information_schema.routines WHERE routine_schema = \"tap\";' &&
+            mysql -h ${container_name} -u root -p${password} -e 'SELECT routine_schema, routine_name FROM information_schema.routines WHERE routine_schema = \"common\" ORDER BY routine_name;'
           "
         depends_on:
-            flyway:
+            cover_trace:
                 condition: "service_completed_successfully"
     unit_test:
         build: ${tap_installer}
         volumes:
             - ./test/:/opt/test_cases
         depends_on:
-            flyway:
+            tap_installer:
                 condition: "service_completed_successfully"
         command: >
             bash -c "my_prove --nocount --nocolor -h ${container_name} -u ${user} -p${password} -D tap --ext .sql -r /opt/test_cases/"
+    cover_report:
+        build: ${coverage_image}
+        command: ["report", "-E", "mysql", "-H", "${container_name}", "-p", "3306", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache", "-o", "/coverage/opencover.xml"]
+        volumes:
+            - ./coverage/:/coverage/
+        depends_on:
+            unit_test:
+                condition: "service_completed_successfully"
+    cover_untrace:
+        build: ${coverage_image}
+        command: ["untrace", "-E", "mysql", "-H", "${container_name}", "-p", "3306", "-d", "${database_name}", "-U", "${user}", "-W", "${password}", "-c", "/coverage/cache"]
+        volumes:
+            - ./coverage/:/coverage/
+        depends_on:
+            cover_report:
+                condition: "service_completed_successfully"

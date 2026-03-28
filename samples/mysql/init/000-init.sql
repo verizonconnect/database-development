@@ -1,3 +1,11 @@
-set global host_cache_size=0;
-create database if not exists human_resources;
-alter user 'root'@'%' identified with 'mysql_native_password' by 'flyway';
+SET GLOBAL host_cache_size = 0;
+
+CREATE DATABASE IF NOT EXISTS common;
+CREATE DATABASE IF NOT EXISTS flyway;
+CREATE DATABASE IF NOT EXISTS human_resources;
+CREATE DATABASE IF NOT EXISTS person;
+CREATE DATABASE IF NOT EXISTS production;
+CREATE DATABASE IF NOT EXISTS purchasing;
+CREATE DATABASE IF NOT EXISTS sales;
+
+ALTER USER 'root'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'flyway';

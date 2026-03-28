@@ -26,9 +26,7 @@ RUN apk add --no-cache --update \
         postgresql-client \
         postgresql-dev \
         sudo \
-        wget \
-        ruby \
-        ruby-dev
+        wget
 
 RUN rm -rf /var/cache/apk/* /tmp/*
 
@@ -50,6 +48,4 @@ RUN git clone https://github.com/theory/pgtap.git \
 
 RUN mkdir ./tests
 RUN mkdir ./coverage
-
-RUN gem install piggly
 

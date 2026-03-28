@@ -1,0 +1,1179 @@
+==== sqlfluff ====
+sqlfluff:                3.4.2 python:                3.12.11
+implementation:        cpython verbosity:                   1
+dialect:              postgres templater:         placeholder
+rules:              custom.naming.column,
+                 custom.naming.procedure,
+                     custom.naming.table,
+        custom.naming.view, layout.indent
+== [/sql/20_schema/r__20.00_common.sql] PASS
+== [/sql/20_schema/r__20.00_human_resources.sql] PASS
+== [/sql/20_schema/r__20.00_person.sql] PASS
+== [/sql/20_schema/r__20.00_production.sql] PASS
+== [/sql/20_schema/r__20.00_purchasing.sql] PASS
+== [/sql/20_schema/r__20.00_sales.sql] PASS
+== [/sql/20_schema/r__20.00_scalability.sql] PASS
+== [/sql/21_extension/r__21.00_tablefunc.sql] PASS
+== [/sql/21_extension/r__21.00_uuid-oosp.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.account_number.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.flag.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.name.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.name_style.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.order_number.sql] PASS
+== [/sql/22_user_defined_type/r__22.00_common.phone.sql] PASS
+== [/sql/40_table/r__40.09_human_resources.department.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_human_resources.employee.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  15 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  16 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_human_resources.employee_department_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_human_resources.employee_pay_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_human_resources.job_candidate.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_human_resources.shift.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.address.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.address_type.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.business_entity.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.business_entity_address.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.business_entity_contact.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.contact_type.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.country_region.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.email_address.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.password.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.person.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.person_phone.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.phone_number_type.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_person.state_province.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.bill_of_materials.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.culture.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.document.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.illustration.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.location.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  15 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  16 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  17 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  18 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  19 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  20 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  21 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  22 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  23 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  24 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  25 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  26 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_category.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_cost_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_description.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_document.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_inventory.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_list_price_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_model.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_model_illustration.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_model_product_description_culture.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_photo.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_product_photo.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_review.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.product_sub_category.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.scrap_reason.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.transaction_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.transaction_history_archive.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.unit_measure.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.work_order.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_production.work_order_routing.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_purchasing.product_vendor.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_purchasing.purchase_order_detail.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_purchasing.purchase_order_header.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_purchasing.ship_method.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_purchasing.vendor.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.country_region_currency.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.credit_card.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.currency.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.currency_rate.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.customer.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.person_credit_card.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_order_detail.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_order_header.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  15 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  16 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  17 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  18 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  19 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  20 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  21 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  22 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  23 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  24 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  25 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  26 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  27 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_order_header_sales_reason.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_person.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_person_quota_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_reason.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_tax_rate.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_territory.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.sales_territory_history.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.shopping_cart_item.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.special_offer.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.special_offer_product.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/40_table/r__40.09_sales.store.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_department.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_employee.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_employee_department_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_employee_pay_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_job_candidate.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_human_resources.pk_shift.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_address.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_address_type.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_business_entity.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_business_entity_address.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_business_entity_contact.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_contact_type.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_country_region.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_email_address.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_password.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_person.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_person_phone.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_phone_number_type.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_person.pk_state_province.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_bill_of_materials.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_culture.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_document.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_illustration.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_location.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_category.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_cost_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_description.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_document.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_inventory.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_list_price_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_model_illustration.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_model_product.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_model_product_description_culture.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_photo.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_product_photo.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_review.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_product_sub_category.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_scrap_reason.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_transaction_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_transaction_history_archive.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_unit_measure.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_work_order.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_production.pk_work_order_routing.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_purchasing.pk_product_vendor.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_purchasing.pk_purchase_order_detail.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_purchasing.pk_purchase_order_header.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_purchasing.pk_ship_method.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_purchasing.pk_vendor.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_country_region_currency.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_credit_card.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_currency.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_currency_rate.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_customer.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_person_credit_card.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_order_detail.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_order_header.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_order_header_sales_reason.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_person.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_person_quota_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_reason.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_tax_rate.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_territory.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_sales_territory_history.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_shopping_cart_item.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_special_offer.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_special_offer_product.sql] PASS
+== [/sql/41_constraint_primary_key/r__41.00_sales.pk_store.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_birth_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_department_history_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_gender.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_hire_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_holiday_hours.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_marital_status.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_pay_history_pay_frequency.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_pay_history_rate.sql] PASS
+== [/sql/43_constraint_check/r__43.00_human_resources.ck_employee_sick_leave_hours.sql] PASS
+== [/sql/43_constraint_check/r__43.00_person.ck_person_email_promotion.sql] PASS
+== [/sql/43_constraint_check/r__43.00_person.ck_person_person_type.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_bill_of_materials_bom_level.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_bill_of_materials_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_bill_of_materials_per_assembly_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_bill_of_materials_product_assembly_id.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_document_status.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_location_availability.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_location_cost_rate.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_class.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_cost_history_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_cost_history_standard_cost.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_days_to_manufacture.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_inventory_bin.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_list_price.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_list_price_history_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_list_price_history_list_price.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_product_line.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_reorder_point.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_review_rating.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_safety_stock_level.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_sell_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_standard_cost.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_style.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_product_weight.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_transaction_history_archive_transaction_type.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_transaction_history_transaction_type.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_routing_actual_cost.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_routing_actual_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_routing_actual_resource_hrs.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_routing_planned_cost.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_routing_scheduled_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_production.ck_work_order_scrapped_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_average_lead_time.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_last_receipt_cost.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_max_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_min_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_on_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_product_vendor_standard_price.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_detail_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_detail_received_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_detail_rejected_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_detail_unit_price.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_header_freight.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_header_ship_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_header_status.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_header_sub_total.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_purchase_order_header_tax_amt.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_ship_method_ship_base.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_ship_method_ship_rate.sql] PASS
+== [/sql/43_constraint_check/r__43.00_purchasing.ck_vendor_credit_rating.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_detail_order_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_detail_unit_price.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_detail_unit_price_discount.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_due_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_freight.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_ship_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_status.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_sub_total.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_order_header_tax_amt.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_bonus.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_commission_pct.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_quota_history_sales_quota.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_sales_last_year.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_sales_quota.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_person_sales_ytd.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_tax_rate_tax_type.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_territory_cost_last_year.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_territory_cost_ytd.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_territory_history_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_territory_sales_last_year.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_sales_territory_sales_ytd.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_shopping_cart_item_quantity.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_special_offer_discount_pct.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_special_offer_end_date.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_special_offer_max_qty.sql] PASS
+== [/sql/43_constraint_check/r__43.00_sales.ck_special_offer_min_qty.sql] PASS
+== [/sql/60_function/r__60.00_common.get_where_used__product_id.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  73 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_accounting_end_date.sql] FAIL
+L:   8 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_accounting_start_date.sql] FAIL
+L:   8 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_contact_information.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 104 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_document_status_text.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  19 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_product_dealer_price.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  22 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_product_list_cost.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_product_standard_cost.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_purchase_order_status_text.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  20 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_sales_order_status_text.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  22 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_common.get_stock.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_human_resources.set_employee__hire_info.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  35 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_human_resources.set_employee__personal_info.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   5 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   6 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   7 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/60_function/r__60.10_production.get_bill_of_materials.sql] FAIL
+L:   3 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   8 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:   9 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  12 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  13 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  14 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  73 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+== [/sql/70_static_data/r__70.09_person.address_type.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   5 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   6 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  10 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+L:  11 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/70_static_data/r__70.09_person.country_region.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   5 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   6 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   8 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   9 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  10 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  11 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  12 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  13 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  14 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  15 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  16 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  17 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  18 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  19 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  20 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  22 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  23 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  24 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  25 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  26 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  27 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  28 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  29 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  30 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  31 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  32 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  33 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  34 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  35 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  36 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  37 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  38 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  39 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  40 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  41 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  42 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  43 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  44 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  45 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  46 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  47 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  48 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  49 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  50 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  51 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  52 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  53 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  54 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  55 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  56 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  57 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  58 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  59 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  60 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  61 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  62 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  63 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  64 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  65 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  66 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  67 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  68 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  69 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  70 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  71 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  72 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  73 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  74 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  75 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  76 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  77 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  78 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  79 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  80 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  81 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  82 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  83 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  84 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  85 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  86 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  87 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  88 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  89 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  90 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  91 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  92 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  93 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  94 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  95 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  96 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  97 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  98 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  99 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 100 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 101 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 102 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 103 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 104 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 105 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 106 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 107 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 108 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 109 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 110 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 111 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 112 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 113 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 114 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 115 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 116 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 117 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 118 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 119 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 120 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 121 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 122 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 123 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 124 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 125 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 126 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 127 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 128 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 129 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 130 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 131 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 132 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 133 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 134 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 135 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 136 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 137 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 138 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 139 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 140 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 141 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 142 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 143 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 144 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 145 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 146 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 147 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 148 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 149 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 150 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 151 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 152 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 153 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 154 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 155 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 156 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 157 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 158 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 159 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 160 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 161 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 162 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 163 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 164 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 165 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 166 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 167 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 168 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 169 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 170 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 171 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 172 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 173 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 174 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 175 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 176 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 177 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 178 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 179 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 180 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 181 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 182 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 183 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 184 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 185 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 186 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 187 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 188 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 189 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 190 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 191 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 192 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 193 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 194 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 195 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 196 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 197 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 198 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 199 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 200 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 201 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 202 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 203 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 204 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 205 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 206 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 207 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 208 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 209 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 210 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 211 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 212 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 213 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 214 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 215 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 216 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 217 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 218 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 219 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 220 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 221 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 222 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 223 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 224 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 225 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 226 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 227 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 228 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 229 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 230 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 231 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 232 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 233 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 234 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 235 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 236 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 237 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 238 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 239 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 242 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/70_static_data/r__70.09_sales.currency.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   5 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   6 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   8 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   9 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  10 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  11 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  12 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  13 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  14 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  15 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  16 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  17 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  18 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  19 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  20 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  22 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  23 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  24 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  25 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  26 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  27 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  28 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  29 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  30 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  31 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  32 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  33 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  34 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  35 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  36 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  37 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  38 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  39 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  40 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  41 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  42 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  43 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  44 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  45 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  46 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  47 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  48 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  49 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  50 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  51 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  52 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  53 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  54 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  55 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  56 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  57 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  58 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  59 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  60 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  61 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  62 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  63 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  64 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  65 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  66 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  67 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  68 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  69 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  70 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  71 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  72 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  73 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  74 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  75 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  76 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  77 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  78 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  79 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  80 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  81 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  82 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  83 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  84 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  85 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  86 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  87 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  88 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  89 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  90 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  91 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  92 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  93 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  94 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  95 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  96 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  97 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  98 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  99 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 100 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 101 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 102 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 103 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 104 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 105 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 106 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 109 | P:   1 | LT02 | Expected indent of 4 spaces. [layout.indent]
+== [/sql/70_static_data/r__70.10_sales.country_region_currency.sql] FAIL
+L:   3 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   4 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   5 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   6 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   7 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   8 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:   9 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  10 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  11 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  12 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  13 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  14 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  15 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  16 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  17 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  18 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  19 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  20 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  21 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  22 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  23 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  24 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  25 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  26 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  27 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  28 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  29 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  30 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  31 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  32 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  33 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  34 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  35 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  36 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  37 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  38 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  39 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  40 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  41 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  42 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  43 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  44 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  45 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  46 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  47 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  48 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  49 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  50 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  51 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  52 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  53 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  54 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  55 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  56 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  57 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  58 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  59 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  60 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  61 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  62 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  63 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  64 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  65 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  66 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  67 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  68 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  69 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  70 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  71 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  72 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  73 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  74 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  75 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  76 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  77 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  78 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  79 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  80 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  81 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  82 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  83 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  84 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  85 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  86 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  87 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  88 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  89 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  90 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  91 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  92 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  93 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  94 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  95 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  96 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  97 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  98 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L:  99 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 100 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 101 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 102 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 103 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 104 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 105 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 106 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 107 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 108 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 109 | P:   1 | LT02 | Line should not be indented. [layout.indent]
+L: 110 | P:   1 | LT02 | Line should not be indented. [layout.indent]

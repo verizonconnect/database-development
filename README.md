@@ -1,10 +1,10 @@
 # database-development
-Tooling for deploying, linting and testing relational database code
+Tooling for deploying, linting, testing and measuring code coverage of relational database code.
 
 # Overview
 The purpose of the tooling here is to provide a developer with a framework to develop, deploy, test and lint database code in isolation before submitting changes for a pull request. 
 
-The code in this project serves mainly an orchestrator and builds on the excellent work provided by many others.
+The code in this project serves mainly as an orchestrator and builds on the excellent work provided by many others.
 
 | Name              | Github                                           | Comment                                          |
 | ----------------- | ------------------------------------------------ | ------------------------------------------------ |
@@ -13,13 +13,13 @@ The code in this project serves mainly an orchestrator and builds on the excelle
 | PgTAP             | https://github.com/theory/pgtap                  | Postgres unit test framework                     |
 | MyTAP             | https://github.com/hepabolu/mytap                | MySQL unit test framework                        |
 | SQLServerCoverage | https://github.com/sayantandey/SQLServerCoverage | Generate TSQL Coverage Reports                   |
-| piggly            | https://github.com/kputnam/piggly                | Generate Postgres Coverage Reports (Coming Soon) |
+| cover_me          | (this repo)                                      | PL/pgSQL and MySQL code coverage (Python)        |
+| piggly            | https://github.com/kputnam/piggly                | Original PL/pgSQL coverage tool (Ruby) by kputnam — basis for cover_me |
 | sqlfluff          | https://github.com/sqlfluff/sqlfluff             | Linting and static code analysis                 |
 
+Some sample Dockerfiles have been provided which have some of the tooling pre-installed before the test container is started. It would be expected that these images would reside on some internal registry for distribution within an organisation but for the purpose of allowing a working example to be provided some have been included here within the `/docker-buildfiles` folder. One for each engine is provided for in the samples.
 
-Some sample DockerFiles have been provided which have some of the tooling pre-installed before the test container is started. It would be expected that these images would reside on some internal registry for distribution within an organisation but for the purpose of allowing a working example to be provided some have been included here within the /docker-buildfiles folder. One for each engine is provided for in the samples.
-
-A SQL/Database developer should not require any more knowledge than plain old sql to make use of this. It has been designed to be easy for anyone with prior SQL knowledge to to pick up and use with minimal fuss. 
+A SQL/Database developer should not require any more knowledge than plain old SQL to make use of this. It has been designed to be easy for anyone with prior SQL knowledge to pick up and use with minimal fuss. 
 
 # Pre-Requisites
 Docker Desktop is required to run the samples.
@@ -27,41 +27,122 @@ Docker Desktop is required to run the samples.
 # Installation
 No installation is necessary.
 
-### Example CLI Usage
+# Samples
 
-Only MSSQL and Postgres available right now. MySQL to follow Apr 2024.
+All three samples spin up a version of the Adventure Works database. Reference data is populated via repeatable flyway migrations. All other data required to satisfy unit tests is contained within the tests themselves.
 
-All examples will spin up a version of the adventure works database. It will remain largely devoid of data with only two or three tables populated to illustrate how reference data scripts can be treated having regard to the presence of foreign keys. With the exception of reference data all other data required to satisfy unit tests should be contained within the tests. 
+## Pipeline
 
-As effort progresses on this repo more of the reference data will be added.
+Each sample follows the same pipeline pattern, orchestrated via `docker compose`:
 
-#### MSSQL
+```
+rules-generator → lint → database → flyway → [cover_trace] → unit_test → [cover_report] → [cover_untrace]
+```
 
-For MSSQL try...
+| Step            | Description                                                    |
+| --------------- | -------------------------------------------------------------- |
+| rules-generator | Generates `.sqlfluff` config from `coding_standard.yml`        |
+| lint            | Runs sqlfluff with custom naming rules (non-blocking)          |
+| database        | Starts the database engine container                           |
+| flyway          | Deploys schemas, tables, constraints, functions, static data   |
+| cover_trace     | Instruments stored procedures/functions for coverage tracking  |
+| unit_test       | Runs TAP-based unit tests (tSQLt / pgTAP / MyTAP)             |
+| cover_report    | Generates OpenCover XML and HTML coverage reports              |
+| cover_untrace   | Restores original function definitions                         |
+
+## MSSQL
+
 ```bash
 cd ./samples/mssql
 docker compose up
 ```
 
-Post-deployment review the contents of `./samples/mssql/coverage` and `./samples/mssql/lint` respectively to view the outputs.
+- 6 schemas, ~60 tables, stored procedures, triggers, views
+- Unit testing via tSQLt
+- Code coverage via SQLServerCoverage → OpenCover XML
+- Linting via sqlfluff with custom naming plugin
 
-#### Postgres
+Post-deployment review `./samples/mssql/coverage` and `./samples/mssql/lint`.
 
-For Postgres try...
+## Postgres
+
 ```bash
 cd ./samples/pgsql
 docker compose up
 ```
 
-Post-deployment review the contents of `./samples/pgsql/lint` to view the outputs. Piggy code coverage in the process of being added.
+- 6 schemas, 68 tables, 14 PL/pgSQL functions
+- Unit testing via pgTAP (2575+ assertions)
+- Code coverage via cover_me → OpenCover XML + HTML
+- Linting via sqlfluff with custom naming plugin
+- Static reference data (address types, countries, currencies)
 
-Clean up when done
+Post-deployment review `./samples/pgsql/coverage/html/index.html` and `./samples/pgsql/lint`.
+
+## MySQL
+
+```bash
+cd ./samples/mysql
+docker compose up
+```
+
+- 6 databases (common, human_resources, person, production, purchasing, sales), 68 tables, 14 stored functions/procedures
+- Unit testing via MyTAP (216 assertions)
+- Code coverage via cover_me → OpenCover XML + HTML
+- Linting via sqlfluff with custom naming plugin
+
+Post-deployment review `./samples/mysql/coverage/html/index.html` and `./samples/mysql/lint`.
+
+## Clean up
 
 ```bash
 docker compose down
 ```
 
+# cover_me — Database Code Coverage Tool
+
+`cover_me` is a Python tool that provides code coverage for PostgreSQL PL/pgSQL and MySQL stored procedures and functions. It generates OpenCover XML reports and self-contained HTML reports.
+
+Located at `/docker-buildfiles/cover_me/`.
+
+### Supported Engines
+
+| Engine   | Trace Mechanism                          | Source Query                    |
+| -------- | ---------------------------------------- | ------------------------------- |
+| Postgres | `RAISE WARNING` (survives ROLLBACK)      | `pg_proc`                       |
+| MySQL    | MyISAM trace table (survives ROLLBACK)   | `information_schema.ROUTINES`   |
+
+### CLI Usage
+
+```bash
+# Postgres
+cover_me trace   -E postgres -H host -d dbname -U user -W pass
+cover_me report  -E postgres -H host -d dbname -U user -W pass -f trace.txt
+cover_me untrace -E postgres -H host -d dbname -U user -W pass
+
+# MySQL
+cover_me trace   -E mysql -H host -p 3306 -d dbname -U user -W pass
+cover_me report  -E mysql -H host -p 3306 -d dbname -U user -W pass
+cover_me untrace -E mysql -H host -p 3306 -d dbname -U user -W pass
+```
+
+### How It Works
+
+1. **trace** — Dumps function definitions, caches originals, installs helper functions, instruments each function with coverage tracking calls, replaces in database
+2. **unit_test** (external) — Runs TAP tests which exercise the instrumented functions, generating coverage hits
+3. **report** — Re-instruments cached source to regenerate deterministic tag IDs, reads coverage hits (file for Postgres, trace table for MySQL), generates OpenCover XML and HTML reports
+4. **untrace** — Restores original function definitions from cache, removes helper functions
+
+### Output
+
+- `coverage/opencover.xml` — OpenCover XML compatible with ReportGenerator, SonarQube, Azure DevOps
+- `coverage/html/index.html` — Self-contained HTML summary with per-function drill-down
+- `coverage/source/` — Exported function source files
+
 # Coding Standard
+
+The coding standard is defined in YAML and used by the rules-generator to produce sqlfluff configuration. Each sample has its own `lint/coding_standard.yml` tailored to the dialect.
+
 ```yaml
 Database Coding Standard:
     Scope:
@@ -74,139 +155,21 @@ Formatting:
     User Defined Object: snake_case
     Database Keyword Case: UPPER
     Database Function Case: UPPER
-    Examples: |
-        Hitting <Tab> will insert 4 spaces.
-            Example of newline then <tab>
-        
-        Database name according the convention
-            adventure_works
-        
-        Sample keyword casing
-            SELECT  MIN(t.c)
-            FROM    sample.coding_standard AS t;
 General Naming:
     Noun Singular or Pural Form: Singular
     Abbreviations Allowed: false
     Permitted Character Pattern: [a-zA-Z0-9_]
 Naming:
-    Table:
-        Naming Structure: '<prefix><object>'
-        Prefix: ''
-    View:
-        Naming Structure: '<prefix><object>'
-        Prefix: 'vw_'
-    Sequence:
-        Naming Structure: '<prefix><object>'
-        Prefix: 'sq_'
-    Primary Key Constraint:
-        Naming Structure: '<prefix><object>'
-        Prefix: 'pk_'
-    Check Constraint:
-        Naming Structure: '<prefix><object>__<column>'
-        Prefix: 'ck_'
-    Foreign Key Constraint:
-        Naming Structure: '<prefix><object>__<parent_object>(_<id>)'
-        Prefix: 'fk_'
-        Description: >
-            <prefix>: As defined for the object type.
-            <object>: The table on which the foreign key will be created.
-            <parent_object>: The owning table of the foreign key.
-            <id>: An optional incrementing integer value used to uniquely identify the constraint if multiple foreign keys are present where the <object> and <parent_object> are the same.
-    Unique Constraint:
-        Naming Structure: '<prefix><object>__<leading column>_<id>'
-        Prefix: 'uq_'
-        Description: >
-            <prefix>: As defined for the object type.
-            <object>: The table upon which the unique constraint will be created.
-            <leading column>: The leading sort column of the constraint. This is usually the most important column of the underlying index created to implement the constraint.
-            <id>: An incrementing integer value used to uniquely identify the constraint. Useful if the leading column happens to be present on multiple unique constraints on a given table. 
-    Default Constraint:
-        Naming Structure: '<prefix><object>__<column>'
-        Prefix: 'df_'
-        Description: >
-            This applies to SQL Server Only.
-            
-            <prefix>: As defined for the object type.
-            <object>: The table upon which the default constraint will be created.
-            < olumn>: The column for which the constraint applies
-    Index:
-        Naming Structure: '<prefix><object>__<leading column>_<id>'
-        Description: >
-            <prefix>: From one of the predefined prefixes permitted for an index.
-            <object>: The table or view upon which the index is derived.
-            <leading column>: The leading sort column of the index. This is usually the most important column of the index.
-            <id>: An incrementing integer value used to uniquely identify the index. Useful if the leading column happens to be present on multiple indexes on a given table. 
-            
-            Examples: idx_department__name_3
-                      xml_product_model__catalog_description_1
-            
-            Expand the prefix list where required for any extra index types, i.e. Spatial, Gist
-        Prefix:
-            Clustered: 'idx_'
-            Non-Clustered: 'idx_'
-            XML: 'xml_'
-            Column Store: 'cs_'
-    Programmable Object:
-        Naming Structure: '<prefix><verb>_<noun>(__<optional>)'
-        Description: |-
-            Describes the structure of the programmable object name.
-            
-            <prefix>: From one of the predefined prefixes permitted for an procedure/function/trigger.
-            <verb>: Will be from a list of approved verbs defined within this document
-            <noun>: The entity upon which the function is primarily operating upon.
-            __<optional>: Allows for extra text to be provided to ensure more clarity of purpose should the verb/noun pair be insufficient.
-        Prefix:
-            Procedure: ''
-            Function: ''
-            Trigger: 'tg_'
-        Verb:
-            - get #synonym for: Select/Read
-            - set #synonym for: Update
-            - add #synonym for: Insert/Create
-            - delete #synonym for: Delete
-        Function:
-            Verb Extension: #Provide more verbs which are permitted for function naming
-                - check
-                - validate
-        Procedure:
-            Verb Extension: #Provide more verbs which are permitted for procedure naming
-                - perform
-    Column:
-        Name Structure: '<prime>(_<modifier>)_<class>'
-        Prime: |
-            The prime element is user defined. E.g. customer, invoice, journey, etc
-            A formal definition of available prime values is beyond the scope of this document.
-        Class:
-            ? id        # A unique identifier such as a column that is a primary key. 
-            ? status    # Flag value or some other status of any type such as publication_status.
-            ? total     # The fixed total or sum of a collection of values.
-            ? num       # Denotes the field contains any kind of number.
-            ? name      # Signifies a name such as first_name or country_name.
-            ? seq       # Contains a contiguous sequence of values.
-            ? when      # A temporal attribute. 
-                        # A column records a row modification audit column which is required to be utc then the column name will be modified_utc_when
-            ? date      # Denotes a column that contains the date ( as opposed to timestamp ).
-            ? tally     # A count
-            ? size      # The size of something such as a file size.
-            ? addr      # An address for the record could be physical or intangible such as ip_addr.
-            ? ind       # An indicator a boolean flag.
-            ? desc      # Description. Used for string attributes when describing a noun in detail. 
-            ? doc       # Document data such as json, html, xml, etc.
-            ? code      # Can be a string or number, used to represent another in an indirect way. e.g. event_code
-        Modifier:       # Define a list of approved modifiers for a given Class
-            when:
-                ? utc   # Timezone UTC
-                ? local # Without timezone
-            total:      # E.g. journey_hour_total
-                ? second
-                ? minute
-                ? hour
-                ? day
-                ? week
-                ? month
-                ? year
-                ? euro
-                ? dollar
-...
-
+    Table:          no prefix, singular nouns
+    View:           vw_ prefix
+    Primary Key:    pk_ prefix
+    Check:          ck_ prefix
+    Foreign Key:    fk_ prefix
+    Index:          idx_ prefix
+    Procedure:      verb_noun pattern (get_, set_, add_, delete_)
+    Function:       verb_noun pattern (get_, set_, check_, validate_)
+    Trigger:        tg_ prefix
+    Column:         prime_modifier_class pattern (e.g. modified_utc_when)
 ```
+
+See the full coding standard in the root `coding_standard.yml` or each sample's `lint/coding_standard.yml`.

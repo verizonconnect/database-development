@@ -21,9 +21,8 @@ RUN apk add --no-cache --update \
     mysql-client
 
 # Install cpanm (Perl package manager) globally
-RUN curl -LO http://xrl.us/cpanm && \
-    chmod +x cpanm && \
-    mv cpanm /usr/local/bin/
+RUN curl -L https://cpanmin.us -o /usr/local/bin/cpanm && \
+    chmod +x /usr/local/bin/cpanm
 
 # Now, use cpanm to install the required TAP modules.
 RUN cpanm TAP::Parser::SourceHandler::MyTAP && \

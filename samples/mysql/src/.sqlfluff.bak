@@ -1,0 +1,28 @@
+[sqlfluff]
+dialect = mysql
+templater = placeholder
+rules = custom.naming.column,custom.naming.procedure,custom.naming.table,custom.naming.view,layout.indent
+
+[sqlfluff:templater:placeholder]
+param_style = dollar
+flyway:defaultschema = sch
+flyway:database = db
+database_name = db
+environment_name = build
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+[sqlfluff:rules:custom.naming.table]
+pattern = ^[a-z][a-z0-9_]+$
+
+[sqlfluff:rules:custom.naming.view]
+pattern = ^vw<separator>[a-z][a-z0-9_]+$
+
+[sqlfluff:rules:custom.naming.procedure]
+pattern = ^(get|set|add|del|check|validate|perform)_[a-z][a-z0-9_]+(_[a-z][a-z0-9_]+)?$
+
+[sqlfluff:rules:custom.naming.column]
+pattern = ^[a-z][a-z0-9_]+(_(utc|local|second|minute|hour|day|week|month|year|euro|dollar|lat|long|h24|h12))?_(id|status|total|num|name|seq|when|date|time|tally|size|addr|flag|desc|doc|code|loc)$
+
