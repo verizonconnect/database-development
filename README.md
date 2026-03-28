@@ -17,7 +17,7 @@ The code in this project serves mainly as an orchestrator and builds on the exce
 | piggly            | https://github.com/kputnam/piggly                | Original PL/pgSQL coverage tool (Ruby) by kputnam — basis for cover_me |
 | sqlfluff          | https://github.com/sqlfluff/sqlfluff             | Linting and static code analysis                 |
 
-Some sample Dockerfiles have been provided which have some of the tooling pre-installed before the test container is started. It would be expected that these images would reside on some internal registry for distribution within an organisation but for the purpose of allowing a working example to be provided some have been included here within the `/docker-buildfiles` folder. One for each engine is provided for in the samples.
+Some sample Dockerfiles have been provided which have some of the tooling pre-installed before the test container is started. It would be expected that these images would reside on some internal registry for distribution within an organisation but for the purpose of allowing a working example to be provided some have been included here within the `/tools` folder. One for each engine is provided for in the samples.
 
 A SQL/Database developer should not require any more knowledge than plain old SQL to make use of this. It has been designed to be easy for anyone with prior SQL knowledge to pick up and use with minimal fuss. 
 
@@ -103,7 +103,7 @@ docker compose down
 
 `cover_me` is a Python tool that provides code coverage for PostgreSQL PL/pgSQL and MySQL stored procedures and functions. It generates OpenCover XML reports and self-contained HTML reports.
 
-Located at `/docker-buildfiles/cover_me/`.
+Located at `/tools/cover_me/`.
 
 ### Supported Engines
 

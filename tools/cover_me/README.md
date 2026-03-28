@@ -100,7 +100,7 @@ pip install psycopg2-binary mysql-connector-python lxml
 Or build the Docker image:
 
 ```bash
-cd docker-buildfiles/cover_me
+cd tools/cover_me
 docker build -t cover_me .
 ```
 
@@ -234,7 +234,7 @@ cover_me/
 ## Testing
 
 ```bash
-cd docker-buildfiles/cover_me
+cd tools/cover_me
 pip install -r requirements.txt
 python -m pytest tests/ -v
 ```
