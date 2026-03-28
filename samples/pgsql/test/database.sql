@@ -15,7 +15,8 @@ SELECT schemas_are(ARRAY[
     'production',
     'public',
     'purchasing',
-    'sales'
+    'sales',
+    'scalability'
 ]);
 
 SELECT schema_owner_is('common','postgres');
@@ -33,6 +34,17 @@ SELECT functions_are('common', ARRAY[
     'crosstab2',
     'crosstab3',
     'crosstab4',
+    'get_accounting_end_date',
+    'get_accounting_start_date',
+    'get_contact_information',
+    'get_document_status_text',
+    'get_product_dealer_price',
+    'get_product_list_cost',
+    'get_product_standard_cost',
+    'get_purchase_order_status_text',
+    'get_sales_order_status_text',
+    'get_stock',
+    'get_where_used__product_id',
     'normal_rand',
     'uuid_generate_v1',
     'uuid_generate_v1mc',

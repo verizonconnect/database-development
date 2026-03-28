@@ -7,7 +7,8 @@ BEGIN;
 SELECT plan(12);
 
 SELECT functions_are('human_resources', ARRAY[
-    'set_employee__hire_info'
+    'set_employee__hire_info',
+    'set_employee__personal_info'
 ]);
 
 SELECT tables_are('human_resources', ARRAY[

@@ -1,13 +1,14 @@
-# Start from an official Python image
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Set the working directory inside the container
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libpq-dev gcc \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+COPY cover_me/ cover_me/
+COPY tests/ tests/
 
-# Install the Python dependencies
-RUN pip install -r requirements.txt
-
-# Set the PYTHONPATH so 'pytest' can find your 'src' folder
-ENV PYTHONPATH="/app"
+ENTRYPOINT ["python", "-m", "cover_me.cli"]

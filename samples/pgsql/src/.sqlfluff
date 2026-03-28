@@ -1,31 +1,28 @@
 [sqlfluff]
-
-# Supported dialects https://docs.sqlfluff.com/en/stable/dialects.html
-# Or run 'sqlfluff dialects'
 dialect = postgres
-ignore=parsing,lexing
-
-# Comma separated list of rules to exclude, or None
-# See https://docs.sqlfluff.com/en/stable/configuration.html#enabling-and-disabling-rules
-# AM04 (ambiguous.column_count) and ST06 (structure.column_order) are
-# two of the more controversial rules included to illustrate usage.
-exclude_rules = all 
-
-rules = None
-[sqlfluff:rules:capitalisation.keywords]
-capitalisation_policy = upper
-
-# One of [raw|jinja|python|placeholder]
 templater = placeholder
+rules = custom.naming.column,custom.naming.procedure,custom.naming.table,custom.naming.view,layout.indent
 
 [sqlfluff:templater:placeholder]
 param_style = dollar
-flyway:defaultSchema = sch
+flyway:defaultschema = sch
 flyway:database = db
 database_name = db
-environment_name=build
+environment_name = build
 
 [sqlfluff:indentation]
-# See https://docs.sqlfluff.com/en/stable/layout.html#configuring-indent-locations
 indent_unit = space
 tab_space_size = 4
+
+[sqlfluff:rules:custom.naming.table]
+pattern = ^[a-z][a-z0-9_]+$
+
+[sqlfluff:rules:custom.naming.view]
+pattern = ^vw<separator>[a-z][a-z0-9_]+$
+
+[sqlfluff:rules:custom.naming.procedure]
+pattern = ^(get|set|add|delete|check|validate|perform)_[a-z][a-z0-9_]+(_[a-z][a-z0-9_]+)?$
+
+[sqlfluff:rules:custom.naming.column]
+pattern = ^[a-z][a-z0-9_]+(_(utc|local|second|minute|hour|day|week|month|year|euro|dollar))?_(id|status|total|num|name|seq|when|date|tally|size|addr|ind|desc|doc|code)$
+

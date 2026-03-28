@@ -20,15 +20,22 @@ services:
             sqlserver:
                 condition: service_healthy
         command: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U ${user} -P ${password} -d master -Q "IF DB_ID('${database_name}') IS NULL CREATE DATABASE [${database_name}];" 
+    rules-generator:
+        build: ${generate_rules_image}
+        command: ["-f", "/app/coding_standard.yml", "-o", "/src/.sqlfluff"]
+        volumes:
+          - ./lint/coding_standard.yml:/app/coding_standard.yml
+          - ./src:/src
     lint:
-        image: ${sqlfluff_image}
-        command: lint --write-output /lint/sqlfluff.output
+        build: ${sqlfluff_image}
+        command: lint ${lint_verbosity} --write-output ${lint_output_path} /sql
         volumes:
           - ./src/:/sql
+          - ./src/.sqlfluff:/sqlfluff/.sqlfluff
           - ./lint/:/lint/
         depends_on:
-            sqlserver:
-                condition: service_healthy
+            rules-generator:
+                condition: service_completed_successfully
     flyway:
         image: ${flyway_image}
         command: migrate
