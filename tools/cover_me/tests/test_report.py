@@ -8,7 +8,7 @@ from xml.etree.ElementTree import parse as parse_xml
 from cover_me.instrumenter import Tag, TagType, instrument
 from cover_me.profile import Profile, TagProfile, _PATTERN
 from cover_me.reporter import generate_opencover
-from cover_me.dumper import ProcedureDef
+from cover_me.models import ProcedureDef
 
 
 # ---------------------------------------------------------------------------

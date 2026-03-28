@@ -2,7 +2,7 @@
 Install/uninstall instrumented procedures and helper objects in MySQL.
 """
 from pathlib import Path
-from cover_me.dumper import ProcedureDef, load_cached_source, load_cached_meta
+from cover_me.models import ProcedureDef, load_cached_source, load_cached_meta
 
 
 # MyISAM trace table — inserts survive ROLLBACK (non-transactional engine)

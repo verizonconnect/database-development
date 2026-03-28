@@ -1,3 +1,89 @@
+# MSSQL Sample
+
+Adventure Works database on SQL Server with tSQLt unit testing, sqlfluff linting, and SQLServerCoverage code coverage.
+
+## Quick Start
+
+```bash
+docker compose up
+```
+
+## What Gets Deployed
+
+- 6 schemas: `common`, `human_resources`, `person`, `production`, `purchasing`, `sales`
+- ~60 tables with primary keys, check constraints, default constraints, foreign keys, indexes
+- Stored procedures, triggers, views, functions
+- XML schema collections, user-defined types
+- Static reference data
+
+## Pipeline
+
+```
+rules-generator → lint → mssql → flyway → unit_test (tSQLt + SQLServerCoverage)
+```
+
+## Outputs
+
+| Output | Location |
+| ------ | -------- |
+| Lint report | `./lint/sqlfluff.output` |
+| Coverage XML | `./coverage/` |
+
+## Adapting to Your Database
+
+To use this as a template for your own SQL Server database, update the following files:
+
+### 1. `.env` — Connection and naming
+
+| Variable | Purpose | Change to |
+| -------- | ------- | --------- |
+| `database_name` | SQL Server database name | Your database name |
+| `user` | Database user | Usually `SA` for local dev |
+| `password` | SA password | Your password (must meet SQL Server complexity requirements) |
+| `host_port` | Port exposed to host | Any free port |
+| `container_name` | Docker container name | Unique name for your project |
+| `default_schema` | Flyway history table schema | Usually `flyway` (leave as-is) |
+| `database_compatibility` | Compatibility level | Match your target SQL Server version |
+| `database_recovery` | Recovery model | `SIMPLE` for local dev |
+| `database_data_size` | Initial data file size | `1MB` for local dev, larger for CI |
+
+### 2. `src/` — SQL source files
+
+Replace the sample SQL files with your own:
+
+| Directory | Content | Naming |
+| --------- | ------- | ------ |
+| `00_database/` | Database settings | `r__00.00_database_settings.sql` |
+| `20_schema/` | Schema creation | `r__20.00_<schema>.sql` |
+| `22_user_defined_type/` | UDTs | `r__22.00_<schema>.<type>.sql` |
+| `40_table/` | Tables | `r__40.09_<schema>.<table>.sql` |
+| `41_constraint_primary_key/` | Primary keys | `r__41.00_<schema>.pk_<name>.sql` |
+| `42_index/` | Indexes | `r__42.00_idx_<schema>__<name>.sql` |
+| `43_constraint_check/` | Check constraints | `r__43.00_<schema>.ck_<name>.sql` |
+| `44_constraint_default/` | Default constraints | `r__44.00_<schema>.df_<name>.sql` |
+| `45_constraint_foreign_key/` | Foreign keys | `r__45.00_<schema>.fk_<name>.sql` |
+| `47_function/` | Scalar/table functions | `r__47.10_<schema>.<name>.sql` |
+| `48_view/` | Views | `r__48.00_<schema>.<name>.sql` |
+| `60_procedure/` | Stored procedures | `r__60.10_<schema>.<name>.sql` |
+| `61_trigger/` | Triggers | `r__61.00_<schema>.<name>.sql` |
+| `70_static_data/` | Reference data | `r__70.09_<schema>.<table>.sql` |
+
+### 3. `test/` — Unit tests
+
+- Tests use tSQLt — see [tSQLt documentation](https://tsqlt.org/)
+- tSQLt is installed automatically via the Docker image
+
+### 4. `lint/coding_standard.yml` — Linting rules
+
+- Set `Dialect: tsql`
+- Adjust naming patterns to match your team's standard
+
+### 5. `docker-compose.yml` — No changes needed
+
+The compose file reads all configuration from `.env`.
+
+---
+
 # The Database Directory Structure
 When used in the wild it would be expected that each database would reside in an individual repo. 
 This is considered the root directory of a database for the purpose of a local build/deployment.

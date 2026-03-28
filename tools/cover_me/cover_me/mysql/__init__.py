@@ -3,7 +3,7 @@ Dump MySQL stored procedure/function definitions from information_schema.
 """
 import json
 from pathlib import Path
-from cover_me.dumper import ProcedureDef, cache_source, load_cached_source, load_cached_meta
+from cover_me.models import ProcedureDef, cache_source, load_cached_source, load_cached_meta
 
 
 DUMP_SQL = """

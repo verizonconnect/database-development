@@ -13,7 +13,7 @@ from xml.etree.ElementTree import Element, SubElement, ElementTree, indent
 
 from cover_me.instrumenter import Tag, TagType
 from cover_me.profile import Profile, TagProfile
-from cover_me.dumper import ProcedureDef
+from cover_me.models import ProcedureDef
 
 
 def _group_by_schema(procedures: list[ProcedureDef]) -> dict[str, list[ProcedureDef]]:

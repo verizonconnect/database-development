@@ -45,7 +45,7 @@ def _get_engine_modules(engine: str):
             cache_create_sql,
         )
         from cover_me.mysql.profile import parse_trace_table
-        from cover_me.dumper import cache_source, load_cached_source
+        from cover_me.models import cache_source, load_cached_source
         return {
             "dump": dump_procedures,
             "install_helpers": install_helpers,
@@ -58,11 +58,12 @@ def _get_engine_modules(engine: str):
             "parse_trace_table": parse_trace_table,
         }
     else:
-        from cover_me.dumper import dump_procedures, cache_source, load_cached_source
-        from cover_me.installer import (
+        from cover_me.pg.dumper import dump_procedures
+        from cover_me.pg.installer import (
             install_helpers, uninstall_helpers,
             install_instrumented, restore_original,
         )
+        from cover_me.models import cache_source, load_cached_source
         return {
             "dump": dump_procedures,
             "install_helpers": install_helpers,

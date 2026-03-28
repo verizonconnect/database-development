@@ -49,6 +49,7 @@ class TokenType(Enum):
     BLOCK_COMMENT = "block_comment"
     LINE_COMMENT = "line_comment"
     KEYWORD = "keyword"
+    SEMICOLON = "semicolon"
     OTHER = "other"
 
 
@@ -65,6 +66,7 @@ _KEYWORDS = {
     "begin", "end", "if", "then", "elsif", "elseif", "else",
     "loop", "while", "for", "foreach", "exit", "continue",
     "when", "case", "return", "raise", "exception", "declare",
+    "do", "repeat", "until", "leave", "iterate",
 }
 
 # Regex for dollar-quoted strings: $tag$ ... $tag$
@@ -142,6 +144,12 @@ def tokenise(source: str) -> list[Token]:
                 continue
             tokens.append(Token(TokenType.KEYWORD, m.group(0).lower(), pos, _line_at_offset(source, pos)))
             pos = m.end()
+            continue
+
+        # Semicolon — own token type for clean statement boundary detection
+        if source[pos] == ';':
+            tokens.append(Token(TokenType.SEMICOLON, ';', pos, _line_at_offset(source, pos)))
+            pos += 1
             continue
 
         # Accumulate other characters
@@ -260,7 +268,7 @@ def instrument(source: str, oid: str, engine: str = "postgres") -> InstrumentRes
         # If we just saw END, the next keyword (IF/LOOP/CASE) is part of
         # the END statement — pass it through without instrumenting
         if after_end and tok.type == TokenType.KEYWORD and tok.value in (
-            "if", "loop", "case", "for", "while", "foreach"
+            "if", "loop", "case", "for", "while", "foreach", "repeat"
         ):
             after_end = False
             if tok.value == "case":
@@ -285,35 +293,20 @@ def instrument(source: str, oid: str, engine: str = "postgres") -> InstrumentRes
             # Skip past all DECLARE lines before injecting the branch tracker
             if engine == "mysql":
                 # In MySQL, DECLARE must precede executable statements.
-                # The tokeniser lumps DECLARE + body into KEYWORD + OTHER tokens.
-                # We need to pass through DECLARE blocks, then inject.
+                # Skip past all DECLARE statements before injecting.
                 while i < len(tokens):
                     if tokens[i].type == TokenType.OTHER and not tokens[i].value.strip():
                         result_parts.append(tokens[i].value)
                         i += 1
                         continue
                     if tokens[i].type == TokenType.KEYWORD and tokens[i].value == "declare":
-                        result_parts.append(tokens[i].value)
-                        i += 1
-                        # The next OTHER token contains the DECLARE body + possibly more code
-                        if i < len(tokens) and tokens[i].type == TokenType.OTHER:
-                            text = tokens[i].value
-                            # Find the end of the DECLARE statement (first ;)
-                            semi_pos = text.find(";")
-                            if semi_pos >= 0:
-                                # Output up to and including the semicolon
-                                result_parts.append(text[:semi_pos + 1])
-                                # Put the remainder back as the current token's value
-                                tokens[i] = Token(
-                                    type=tokens[i].type,
-                                    value=text[semi_pos + 1:],
-                                    start=tokens[i].start + semi_pos + 1,
-                                    line=tokens[i].line,
-                                )
-                                # Don't advance i — re-check this token
-                            else:
-                                result_parts.append(text)
-                                i += 1
+                        # Pass through DECLARE and everything until semicolon
+                        while i < len(tokens):
+                            result_parts.append(tokens[i].value)
+                            is_semi = tokens[i].type == TokenType.SEMICOLON
+                            i += 1
+                            if is_semi:
+                                break
                         continue
                     break
                 result_parts.append("\n  ")
@@ -385,11 +378,11 @@ def instrument(source: str, oid: str, engine: str = "postgres") -> InstrumentRes
             result_parts.append(raise_branch(tag_id))
             continue
 
-        # --- WHILE condition LOOP ---
+        # --- WHILE condition LOOP/DO ---
         if tok.type == TokenType.KEYWORD and tok.value == "while":
             result_parts.append(tok.value)
             i += 1
-            cond_text, i = _collect_until_keyword(i, {"loop"})
+            cond_text, i = _collect_until_keyword(i, {"loop", "do"})
             cond_stripped = cond_text.strip()
             if cond_stripped:
                 tag_id = _make_tag_id(oid, tok.line, "while")
@@ -398,8 +391,8 @@ def instrument(source: str, oid: str, engine: str = "postgres") -> InstrumentRes
                 result_parts.append(leading_ws + wrap_cond(tag_id, cond_stripped) + " ")
             else:
                 result_parts.append(cond_text)
-            # Consume the LOOP keyword (already found by _collect_until_keyword)
-            if i < len(tokens) and tokens[i].type == TokenType.KEYWORD and tokens[i].value == "loop":
+            # Consume the LOOP or DO keyword
+            if i < len(tokens) and tokens[i].type == TokenType.KEYWORD and tokens[i].value in ("loop", "do"):
                 result_parts.append(tokens[i].value)
                 i += 1
             continue
@@ -456,12 +449,24 @@ def instrument(source: str, oid: str, engine: str = "postgres") -> InstrumentRes
             result_parts.append(raise_branch(tag_id))
             continue
 
-        # --- EXIT / CONTINUE ---
-        if tok.type == TokenType.KEYWORD and tok.value in ("exit", "continue"):
+        # --- EXIT / CONTINUE / LEAVE / ITERATE ---
+        if tok.type == TokenType.KEYWORD and tok.value in ("exit", "continue", "leave", "iterate"):
             tag_id = _make_tag_id(oid, tok.line, tok.value)
             tags.append(Tag(tag_id, TagType.BRANCH, tok.line, f"{tok.value.upper()} statement"))
             result_parts.append(raise_branch(tag_id) + tok.value)
             i += 1
+            continue
+
+        # --- REPEAT (MySQL do-while) ---
+        if tok.type == TokenType.KEYWORD and tok.value == "repeat":
+            tag_id = _make_tag_id(oid, tok.line, "repeat")
+            tags.append(Tag(tag_id, TagType.LOOP, tok.line, "REPEAT loop"))
+            result_parts.append(tok.value)
+            i += 1
+            if i < len(tokens) and tokens[i].type == TokenType.OTHER and not tokens[i].value.strip():
+                result_parts.append(tokens[i].value)
+                i += 1
+            result_parts.append(raise_branch(tag_id))
             continue
 
         # --- RETURN ---
