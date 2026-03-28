@@ -80,7 +80,7 @@ SELECT has_column(       'purchasing', 'purchase_order_header', 'order_date', 'C
 SELECT col_type_is(      'purchasing', 'purchase_order_header', 'order_date', 'timestamp without time zone', 'Column purchasing.purchase_order_header.order_date should be type timestamp without time zone');
 SELECT col_not_null(     'purchasing', 'purchase_order_header', 'order_date', 'Column purchasing.purchase_order_header.order_date should be NOT NULL');
 SELECT col_has_default(  'purchasing', 'purchase_order_header', 'order_date', 'Column purchasing.purchase_order_header.order_date should have a default');
-SELECT col_default_is(   'purchasing', 'purchase_order_header', 'order_date', 'timezone(''utc''::text, now())', 'Column purchasing.purchase_order_header.order_date default is');
+SELECT col_default_is(   'purchasing', 'purchase_order_header', 'order_date', '(now() AT TIME ZONE ''utc''::text)', 'Column purchasing.purchase_order_header.order_date default is');
 
 SELECT has_column(       'purchasing', 'purchase_order_header', 'ship_date', 'Column purchasing.purchase_order_header.ship_date should exist');
 SELECT col_type_is(      'purchasing', 'purchase_order_header', 'ship_date', 'timestamp without time zone', 'Column purchasing.purchase_order_header.ship_date should be type timestamp without time zone');
@@ -118,7 +118,7 @@ SELECT has_column(       'purchasing', 'purchase_order_header', 'modified_date',
 SELECT col_type_is(      'purchasing', 'purchase_order_header', 'modified_date', 'timestamp without time zone', 'Column purchasing.purchase_order_header.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'purchasing', 'purchase_order_header', 'modified_date', 'Column purchasing.purchase_order_header.modified_date should be NOT NULL');
 SELECT col_has_default(  'purchasing', 'purchase_order_header', 'modified_date', 'Column purchasing.purchase_order_header.modified_date should have a default');
-SELECT col_default_is(   'purchasing', 'purchase_order_header', 'modified_date', 'timezone(''utc''::text, now())', 'Column purchasing.purchase_order_header.modified_date default is');
+SELECT col_default_is(   'purchasing', 'purchase_order_header', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column purchasing.purchase_order_header.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

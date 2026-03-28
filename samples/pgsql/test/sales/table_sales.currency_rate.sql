@@ -66,7 +66,7 @@ SELECT has_column(       'sales', 'currency_rate', 'modified_date', 'Column sale
 SELECT col_type_is(      'sales', 'currency_rate', 'modified_date', 'timestamp without time zone', 'Column sales.currency_rate.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'currency_rate', 'modified_date', 'Column sales.currency_rate.modified_date should be NOT NULL');
 SELECT col_has_default(  'sales', 'currency_rate', 'modified_date', 'Column sales.currency_rate.modified_date should have a default');
-SELECT col_default_is(   'sales', 'currency_rate', 'modified_date', 'timezone(''utc''::text, now())', 'Column sales.currency_rate.modified_date default is');
+SELECT col_default_is(   'sales', 'currency_rate', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.currency_rate.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

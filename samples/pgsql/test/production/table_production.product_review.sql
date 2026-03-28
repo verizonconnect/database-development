@@ -57,7 +57,7 @@ SELECT has_column(       'production', 'product_review', 'review_date', 'Column 
 SELECT col_type_is(      'production', 'product_review', 'review_date', 'timestamp without time zone', 'Column production.product_review.review_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'product_review', 'review_date', 'Column production.product_review.review_date should be NOT NULL');
 SELECT col_has_default(  'production', 'product_review', 'review_date', 'Column production.product_review.review_date should have a default');
-SELECT col_default_is(   'production', 'product_review', 'review_date', 'timezone(''utc''::text, now())', 'Column production.product_review.review_date default is');
+SELECT col_default_is(   'production', 'product_review', 'review_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.product_review.review_date default is');
 
 SELECT has_column(       'production', 'product_review', 'email_address', 'Column production.product_review.email_address should exist');
 SELECT col_type_is(      'production', 'product_review', 'email_address', 'character varying(50)', 'Column production.product_review.email_address should be type character varying(50)');
@@ -79,7 +79,7 @@ SELECT has_column(       'production', 'product_review', 'modified_date', 'Colum
 SELECT col_type_is(      'production', 'product_review', 'modified_date', 'timestamp without time zone', 'Column production.product_review.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'product_review', 'modified_date', 'Column production.product_review.modified_date should be NOT NULL');
 SELECT col_has_default(  'production', 'product_review', 'modified_date', 'Column production.product_review.modified_date should have a default');
-SELECT col_default_is(   'production', 'product_review', 'modified_date', 'timezone(''utc''::text, now())', 'Column production.product_review.modified_date default is');
+SELECT col_default_is(   'production', 'product_review', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.product_review.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

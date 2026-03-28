@@ -67,7 +67,7 @@ SELECT has_column(       'sales', 'customer', 'modified_date', 'Column sales.cus
 SELECT col_type_is(      'sales', 'customer', 'modified_date', 'timestamp without time zone', 'Column sales.customer.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'customer', 'modified_date', 'Column sales.customer.modified_date should be NOT NULL');
 SELECT col_has_default(  'sales', 'customer', 'modified_date', 'Column sales.customer.modified_date should have a default');
-SELECT col_default_is(   'sales', 'customer', 'modified_date', 'timezone(''utc''::text, now())', 'Column sales.customer.modified_date default is');
+SELECT col_default_is(   'sales', 'customer', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.customer.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

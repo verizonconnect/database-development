@@ -49,7 +49,7 @@ SELECT has_column(       'person', 'person_phone', 'modified_date', 'Column pers
 SELECT col_type_is(      'person', 'person_phone', 'modified_date', 'timestamp without time zone', 'Column person.person_phone.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'person', 'person_phone', 'modified_date', 'Column person.person_phone.modified_date should be NOT NULL');
 SELECT col_has_default(  'person', 'person_phone', 'modified_date', 'Column person.person_phone.modified_date should have a default');
-SELECT col_default_is(   'person', 'person_phone', 'modified_date', 'timezone(''utc''::text, now())', 'Column person.person_phone.modified_date default is');
+SELECT col_default_is(   'person', 'person_phone', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column person.person_phone.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

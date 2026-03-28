@@ -98,7 +98,7 @@ SELECT has_column(       'sales', 'sales_territory', 'modified_date', 'Column sa
 SELECT col_type_is(      'sales', 'sales_territory', 'modified_date', 'timestamp without time zone', 'Column sales.sales_territory.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'sales', 'sales_territory', 'modified_date', 'Column sales.sales_territory.modified_date should be NOT NULL');
 SELECT col_has_default(  'sales', 'sales_territory', 'modified_date', 'Column sales.sales_territory.modified_date should have a default');
-SELECT col_default_is(   'sales', 'sales_territory', 'modified_date', 'timezone(''utc''::text, now())', 'Column sales.sales_territory.modified_date default is');
+SELECT col_default_is(   'sales', 'sales_territory', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column sales.sales_territory.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

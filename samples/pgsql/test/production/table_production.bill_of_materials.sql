@@ -59,7 +59,7 @@ SELECT has_column(       'production', 'bill_of_materials', 'start_date', 'Colum
 SELECT col_type_is(      'production', 'bill_of_materials', 'start_date', 'timestamp without time zone', 'Column production.bill_of_materials.start_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'bill_of_materials', 'start_date', 'Column production.bill_of_materials.start_date should be NOT NULL');
 SELECT col_has_default(  'production', 'bill_of_materials', 'start_date', 'Column production.bill_of_materials.start_date should have a default');
-SELECT col_default_is(   'production', 'bill_of_materials', 'start_date', 'timezone(''utc''::text, now())', 'Column production.bill_of_materials.start_date default is');
+SELECT col_default_is(   'production', 'bill_of_materials', 'start_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.bill_of_materials.start_date default is');
 
 SELECT has_column(       'production', 'bill_of_materials', 'end_date', 'Column production.bill_of_materials.end_date should exist');
 SELECT col_type_is(      'production', 'bill_of_materials', 'end_date', 'timestamp without time zone', 'Column production.bill_of_materials.end_date should be type timestamp without time zone');
@@ -89,7 +89,7 @@ SELECT has_column(       'production', 'bill_of_materials', 'modified_date', 'Co
 SELECT col_type_is(      'production', 'bill_of_materials', 'modified_date', 'timestamp without time zone', 'Column production.bill_of_materials.modified_date should be type timestamp without time zone');
 SELECT col_not_null(     'production', 'bill_of_materials', 'modified_date', 'Column production.bill_of_materials.modified_date should be NOT NULL');
 SELECT col_has_default(  'production', 'bill_of_materials', 'modified_date', 'Column production.bill_of_materials.modified_date should have a default');
-SELECT col_default_is(   'production', 'bill_of_materials', 'modified_date', 'timezone(''utc''::text, now())', 'Column production.bill_of_materials.modified_date default is');
+SELECT col_default_is(   'production', 'bill_of_materials', 'modified_date', '(now() AT TIME ZONE ''utc''::text)', 'Column production.bill_of_materials.modified_date default is');
 
 SELECT * FROM finish();
 ROLLBACK;

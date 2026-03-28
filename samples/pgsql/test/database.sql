@@ -24,7 +24,7 @@ SELECT schema_owner_is('flyway','postgres');
 SELECT schema_owner_is('human_resources','postgres');
 SELECT schema_owner_is('person','postgres');
 SELECT schema_owner_is('production','postgres');
-SELECT schema_owner_is('public','postgres');
+SELECT schema_owner_is('public','pg_database_owner');
 SELECT schema_owner_is('purchasing','postgres');
 SELECT schema_owner_is('sales','postgres');
 
