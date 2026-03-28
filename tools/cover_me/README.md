@@ -213,13 +213,14 @@ cover_me/
 │   ├── __init__.py
 │   ├── cli.py                 # CLI entry point with --engine dispatch
 │   ├── instrumenter.py        # Shared tokeniser, tag model, instrument()
-│   ├── dumper.py              # Postgres: pg_proc query, ProcedureDef model, cache
-│   ├── installer.py           # Postgres: CREATE OR REPLACE, RAISE WARNING helpers
+│   ├── models.py              # Shared: ProcedureDef model, cache functions
 │   ├── profile.py             # Shared: tag profile aggregation, trace file parser
 │   ├── reporter.py            # Shared: OpenCover XML generation
 │   ├── html_reporter.py       # Shared: HTML report generation
 │   ├── pg/
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   ├── dumper.py          # Postgres: pg_proc query, row parsing
+│   │   └── installer.py       # Postgres: CREATE OR REPLACE, RAISE WARNING helpers
 │   └── mysql/
 │       ├── __init__.py        # MySQL: information_schema query, dump_procedures()
 │       ├── installer.py       # MySQL: MyISAM trace table, DROP+CREATE, SHOW CREATE cache
@@ -228,7 +229,8 @@ cover_me/
     ├── test_instrumenter.py   # 37 tests — tokeniser + all control flow patterns
     ├── test_report.py         # 16 tests — profile, pattern matching, OpenCover XML
     ├── test_trace.py          # 12 tests — dumper, cache, installer SQL generation
-    └── test_mysql.py          # 6 tests — MySQL-specific instrumentation
+    ├── test_mysql.py          # 6 tests — MySQL-specific instrumentation
+    └── test_integration.py    # 4 tests — full cycle against real databases (skip if unavailable)
 ```
 
 ## Testing

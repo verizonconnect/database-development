@@ -127,18 +127,6 @@ def cmd_trace(args) -> None:
         count += 1
 
     print(f"Instrumented {count} functions")
-
-    # Verify functions exist after instrumentation
-    if engine == "mysql":
-        with conn.cursor() as cur:
-            cur.execute("SELECT routine_schema, routine_name FROM information_schema.routines "
-                        "WHERE routine_schema NOT IN ('sys','mysql','information_schema','performance_schema','tap','cover_me') "
-                        "ORDER BY routine_schema, routine_name")
-            rows = cur.fetchall()
-            print(f"Verified {len(rows)} routines in database:")
-            for r in rows:
-                print(f"  {r[0]}.{r[1]}")
-
     conn.close()
 
 

@@ -20,8 +20,8 @@ services:
         build: ${image}
         container_name: ${container_name}
         command:
-        # ⭐️ MODIFIED: Changed hyphens to underscores
         - --mysql-native-password=ON
+        - --log-bin-trust-function-creators=1
         volumes:
         - ./init/000-init.sql:/docker-entrypoint-initdb.d/000-init.sql
         environment:
