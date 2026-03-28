@@ -124,7 +124,14 @@ def install_instrumented(connection, proc: ProcedureDef, instrumented_source: st
             return True
         except Exception as e:
             connection.rollback()
-            print(f"  WARNING: Could not instrument {proc.qualified_name}: {e}", flush=True)
+            # DROP already committed (DDL is auto-commit in MySQL)
+            # Restore the original to avoid leaving the function missing
+            try:
+                cur.execute(create_sql)
+                connection.commit()
+                print(f"  WARNING: Could not instrument {proc.qualified_name}: {e} (original restored)", flush=True)
+            except Exception:
+                print(f"  WARNING: Could not instrument {proc.qualified_name}: {e} (RESTORE FAILED)", flush=True)
             return False
 
 
